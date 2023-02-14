@@ -2,6 +2,7 @@ import Head from "next/head";
 import { Inter } from "@next/font/google";
 import Image from "next/image";
 import Link from "next/link";
+import axios from "axios";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,7 +18,7 @@ export default function Home({ data, poems, authorName }: any) {
       </Head>
       <main className="bg-violet-200 m-20 p-10 rounded-xl lg:max-w-[50%]">
         <div className="flex gap-x-6 ">
-          <div className="basis-1/3 ">
+          {/* <div className="basis-1/3 ">
             {data.originalimage ? (
               <Image
                 src={data.originalimage.source}
@@ -30,7 +31,7 @@ export default function Home({ data, poems, authorName }: any) {
               <p>No Image</p>
             )}
             <h1 className={`${inter.className} font-semibold`}>{authorName}</h1>
-          </div>
+          </div> */}
           <div className="basis-2/3">
             <p className="italic mb-4 font-semibold">{data.description}</p>
             <p className="text-xl text-slate-700">{data.extract}</p>
@@ -52,27 +53,28 @@ export default function Home({ data, poems, authorName }: any) {
   );
 }
 
-export const getStaticPaths = async () => {
-  let response = await fetch("https://poetrydb.org/author", {
-    method: "GET",
-  });
-  let data = await response.json();
+// export const getStaticPaths = async () => {
+//   let response = await fetch("https://poetrydb.org/author", {
+//     method: "GET",
+//   });
+//   // let data = await response.json();
+//   let data = await axios.get("https://poetrydb.org/author");
 
-  let pathNames = data.authors.map((author: any) => {
-    return {
-      params: {
-        authorName: author,
-      },
-    };
-  });
+//   let pathNames = data.data.authors.map((author: any) => {
+//     return {
+//       params: {
+//         authorName: author,
+//       },
+//     };
+//   });
 
-  return {
-    paths: pathNames,
-    fallback: true,
-  };
-};
+//   return {
+//     paths: pathNames,
+//     fallback: true,
+//   };
+// };
 
-export const getStaticProps = async (context: any) => {
+export const getServerSideProps = async (context: any) => {
   let { params } = context;
 
   let authorName = "";
@@ -106,28 +108,34 @@ export const getStaticProps = async (context: any) => {
     authorName = params.authorName;
   }
 
-  let authorResponse = await fetch(
-    `https://en.wikipedia.org/api/rest_v1/page/summary/${authorName}`,
-    {
-      method: "GET",
-    }
-  );
-  let authorData = await authorResponse.json();
+  // let authorResponse = await fetch(
+  //   `https://en.wikipedia.org/api/rest_v1/page/summary/${authorName}`,
+  //   {
+  //     method: "GET",
+  //   }
+  // );
+  // let authorData = await authorResponse.json();
 
-  let authorPoems = await fetch(
-    `https://poetrydb.org/author/${params.authorName}`,
-    {
-      method: "GET",
-    }
+  // let authorPoems = await fetch(
+  //   `https://poetrydb.org/author/${params.authorName}`,
+  //   {
+  //     method: "GET",
+  //   }
+  // );
+
+  let authorData = await axios.get(
+    `https://en.wikipedia.org/api/rest_v1/page/summary/${authorName}`
   );
-  let authorPoemsData = await authorPoems.json();
+  let authorPoemsData = await axios.get(
+    `https://poetrydb.org/author/${params.authorName}`
+  );
 
   console.log(authorName);
 
   return {
     props: {
-      data: authorData,
-      poems: authorPoemsData,
+      data: authorData.data,
+      poems: authorPoemsData.data,
       authorName: params.authorName,
     },
   };

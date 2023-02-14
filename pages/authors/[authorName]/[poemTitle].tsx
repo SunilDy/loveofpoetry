@@ -209,26 +209,31 @@ export default function Home({ poem, poemName, authorData }: any) {
 export const getServerSideProps = async (context: any) => {
   let { params } = context;
 
-  let poemRes = await fetch(`https://poetrydb.org/title/${params.poemTitle}`, {
-    method: "GET",
-  });
-  let poem = await poemRes.json();
+  // let poemRes = await fetch(`https://poetrydb.org/title/${params.poemTitle}`, {
+  //   method: "GET",
+  // });
+  // let poem = await poemRes.json();
 
-  let authorResponse = await fetch(
-    `https://en.wikipedia.org/api/rest_v1/page/summary/${params.authorName}`,
-    {
-      method: "GET",
-    }
-  );
-  let authorData = await authorResponse.json();
+  // let authorResponse = await fetch(
+  //   `https://en.wikipedia.org/api/rest_v1/page/summary/${params.authorName}`,
+  //   {
+  //     method: "GET",
+  //   }
+  // );
+  // let authorData = await authorResponse.json();
 
   // console.log(authorData);
 
+  let poem = await axios.get(`https://poetrydb.org/title/${params.poemTitle}`);
+  let authorData = await axios.get(
+    `https://en.wikipedia.org/api/rest_v1/page/summary/${params.authorName}`
+  );
+
   return {
     props: {
-      poem,
+      poem: poem.data,
       poemName: params.poemTitle,
-      authorData,
+      authorData: authorData.data,
     },
   };
 };
