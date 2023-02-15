@@ -23,7 +23,7 @@ const Search = () => {
   } = useQuery(`search-poem-${searchValue}`, getPoetry, {
     refetchOnWindowFocus: false,
     // @ts-ignore
-    enabled: searchValue || searchValue?.length > 0,
+    enabled: searchValue?.length > 0,
   });
 
   useEffect(() => {
@@ -85,7 +85,7 @@ const Search = () => {
             ))}
           </div>
         ) : (
-          <p className="text-white mx-10 mb-20">Nothing found!</p>
+          <p className="text-white mx-10 mb-20 text-center">Nothing found!</p>
         )}
       </div>
       {/* Poems */}
