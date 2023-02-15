@@ -90,6 +90,8 @@ const Navbar = () => {
         {/* Menu */}
         <div className="xsm:visible xsm:w-full lg:collapse lg:w-0 flex-1 text-right">
           <Menu
+            align="end"
+            offsetY={10}
             menuButton={
               <MenuButton className="bg-white rounded px-2 m-3">
                 <svg
@@ -108,11 +110,14 @@ const Navbar = () => {
             }
             transition
             menuStyle={{
-              backgroundColor: "#ffffff97",
-              color: "white",
+              backgroundColor: "white",
+              color: "hotpink",
+              fontWeight: "bold",
             }}
           >
-            <MenuItem>Authors</MenuItem>
+            <MenuItem>
+              <Link href={"/authors"}>Authors</Link>
+            </MenuItem>
             <MenuItem>Search</MenuItem>
             <MenuItem>User Profile</MenuItem>
           </Menu>
