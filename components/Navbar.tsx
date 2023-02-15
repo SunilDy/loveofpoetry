@@ -22,9 +22,9 @@ const Navbar = () => {
   return (
     <nav
       className={`
-      flex items-center gap-x-2
+      flex items-center lg:gap-x-2
       xsm:py-2 lg:py-8 
-      xsm:px-6 md:px-16 lg:px-20 xl:px-32 
+      xsm:px-2 md:px-16 lg:px-20 xl:px-32 
       justify-between text-white backdrop-blur-3xl z-50 sticky top-0 border-b-2 border-white border-opacity-10`}
     >
       {/* Primary Links */}
@@ -54,7 +54,7 @@ const Navbar = () => {
         </Link>
       </div>
       {/* Search Bar */}
-      <div className="justify-center">
+      <div className="justify-center flex-grow-0">
         <input
           placeholder="Search Poetry"
           value={searchValue}
@@ -86,7 +86,7 @@ const Navbar = () => {
         </Link>
       </div>
       {/* Menu */}
-      <div className="xsm:visible lg:collapse">
+      <div className="xsm:visible lg:collapse flex-1">
         <Menu
           menuButton={
             <MenuButton className="bg-white rounded px-2 m-3">
