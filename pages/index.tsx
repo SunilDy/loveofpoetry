@@ -93,7 +93,7 @@ export default function Home({ poem }: any) {
   );
 }
 
-export const getStaticProps = async () => {
+export const getServerSideProps = async () => {
   let randomPoem = await axios.get(`https://poetrydb.org//random`);
 
   return {
