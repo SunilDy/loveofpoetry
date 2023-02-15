@@ -8,7 +8,6 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useQuery } from "react-query";
-import { Oval } from "react-loader-spinner";
 import Comments from "@/components/Comments";
 
 const alegreya = Alegreya({ subsets: ["latin"] });
@@ -34,7 +33,7 @@ export default function Home({ poem, poemName, authorData }: any) {
     isFetched: areCommentsFetched,
     refetch: refetchComments,
   } = useQuery(`comments-${poemName}`, getComments, {
-    refetchOnWindowFocus: false,
+    refetchOnWindowFocus: true,
   });
 
   useEffect(() => {
@@ -121,33 +120,66 @@ export default function Home({ poem, poemName, authorData }: any) {
                 height={300}
                 width={300}
               />
-              {/* Author Details */}
-              <div className="flex items-center my-10 w-[60%] mx-auto">
-                {authorData.thumbnail ? (
-                  <Image
-                    className="w-20 aspect-square object-cover object-center rounded-full mr-4 self-start"
-                    src={authorData.thumbnail.source}
-                    alt={authorData.title}
-                    height={300}
-                    width={300}
-                  />
-                ) : (
-                  <p>No Image</p>
-                )}
-                <div className="">
-                  <Link href={`/authors/${authorData.title}`}>
-                    <p
-                      className={`${alegreya.className} text-md underline underline-offset-4 decoration-white`}
-                    >
-                      {authorData.title}
-                      {/* TODO: add link svg */}
+              {/* Author Details ===========*/}
+              <div
+                className={`my-10 mx-auto
+              xsm:w-[90%] md:w-[80%] lg:w-[70%] xl:w-[60%]
+              `}
+              >
+                {/* Author Image */}
+                <div className="flex mb-4 pb-4 border-b-2 border-slate-200 border-opacity-25">
+                  {authorData.thumbnail ? (
+                    <Image
+                      className="xsm:w-14 lg:w-20 aspect-square object-cover object-center rounded-full mr-4 self-start"
+                      src={authorData.thumbnail.source}
+                      alt={authorData.title}
+                      height={300}
+                      width={300}
+                    />
+                  ) : (
+                    <p>No Image</p>
+                  )}
+                  <div>
+                    <Link href={`/authors/${authorData.title}`}>
+                      <p
+                        className={`${alegreya.className} text-md underline underline-offset-4 decoration-white`}
+                      >
+                        {authorData.title}
+                        {/* TODO: add link svg */}
+                      </p>
+                    </Link>
+                    <p className={`${alegreya.className} text-md`}>
+                      {authorData.description}
                     </p>
-                  </Link>
+                    <Link href="/">
+                      <p
+                        className={`${alegreya.className} text-md flex items-center`}
+                      >
+                        See more works
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                          fill="currentColor"
+                          className="w-4 h-4 ml-1"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M15.75 2.25H21a.75.75 0 01.75.75v5.25a.75.75 0 01-1.5 0V4.81L8.03 17.03a.75.75 0 01-1.06-1.06L19.19 3.75h-3.44a.75.75 0 010-1.5zm-10.5 4.5a1.5 1.5 0 00-1.5 1.5v10.5a1.5 1.5 0 001.5 1.5h10.5a1.5 1.5 0 001.5-1.5V10.5a.75.75 0 011.5 0v8.25a3 3 0 01-3 3H5.25a3 3 0 01-3-3V8.25a3 3 0 013-3h8.25a.75.75 0 010 1.5H5.25z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      </p>
+                    </Link>
+                  </div>
+                </div>
+                {/* Author extract */}
+                <div className="">
                   <p className={`${alegreya.className} text-md`}>
                     {authorData.extract}
                   </p>
                 </div>
               </div>
+              {/* Author Details ===========*/}
             </div>
           </div>
 

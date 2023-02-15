@@ -15,18 +15,20 @@ const Comments = (props: CommentsProps) => {
 
   if (fetchingComments || loadingComments || !areCommentsFetched) {
     return (
-      <Oval
-        height={60}
-        width={60}
-        color="#fff"
-        wrapperStyle={{}}
-        wrapperClass=""
-        visible={true}
-        ariaLabel="oval-loading"
-        secondaryColor="tr"
-        strokeWidth={2}
-        strokeWidthSecondary={2}
-      />
+      <div className="flex justify-center">
+        <Oval
+          height={60}
+          width={60}
+          color="#fff"
+          wrapperStyle={{}}
+          wrapperClass=""
+          visible={true}
+          ariaLabel="oval-loading"
+          secondaryColor="tr"
+          strokeWidth={2}
+          strokeWidthSecondary={2}
+        />
+      </div>
     );
   }
 

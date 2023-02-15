@@ -1,10 +1,11 @@
 import Head from "next/head";
-import { Inter } from "@next/font/google";
 import Image from "next/image";
 import Link from "next/link";
 import axios from "axios";
+import LineBreak from "@/public/linebreak.svg";
+import { Alegreya } from "@next/font/google";
 
-const inter = Inter({ subsets: ["latin"] });
+const alegreya = Alegreya({ subsets: ["latin"] });
 
 export default function Home({ data, poems, authorName }: any) {
   console.log(data);
@@ -16,37 +17,75 @@ export default function Home({ data, poems, authorName }: any) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="bg-violet-200 m-20 p-10 rounded-xl lg:max-w-[50%]">
-        <div className="flex gap-x-6 ">
-          {/* <div className="basis-1/3 ">
-            {data.originalimage ? (
-              <Image
-                src={data.originalimage.source}
-                alt={data.title}
-                height={800}
-                width={800}
-                className="w-full rounded-xl"
-              />
-            ) : (
-              <p>No Image</p>
-            )}
-            <h1 className={`${inter.className} font-semibold`}>{authorName}</h1>
-          </div> */}
-          <div className="basis-2/3">
-            <p className="italic mb-4 font-semibold">{data.description}</p>
-            <p className="text-xl text-slate-700">{data.extract}</p>
+      <main>
+        <div
+          className={`
+            xsm:w-[90%] md:w-[80%] lg:w-[70%] xl:w-[60%] 
+            mx-auto flex flex-col items-center mb-32 z-30 rounded-xl text-white
+            xsm:mt-10 md-16 lg:mt-24 h-auto
+            `}
+        >
+          {/* Author name and Linebreak ======= */}
+          <h1
+            className={`${alegreya.className} font-bold mt-8 mb-2
+              xsm:text-[2em] md:text-[3em] lg:text-[4em]
+              `}
+          >
+            {authorName}
+          </h1>
+          <Image
+            className="w-40 mb-10"
+            src={LineBreak}
+            alt={"linebreak"}
+            height={300}
+            width={300}
+          />
+          {/* Author name and Linebreak ======= */}
+
+          <div
+            className={`bg-rose-100 border-2 border-slate-100 border-opacity-40 bg-opacity-20 z-30 rounded-xl shadow-2xl w-full py-10
+            md:flex items-center h-auto p-10
+        `}
+          >
+            {/* Author Image */}
+            <div className="m-10 flex justify-center">
+              {data.originalimage ? (
+                <div className="grid grid-cols-1 grid-rows-1">
+                  <div className="z-40 col-span-full row-span-full border-2 border-white border-opacity-40 rounded-xl xsm:w-40 sm:w-60 md:w-40 h-full"></div>
+                  <Image
+                    src={data.originalimage.source}
+                    alt={data.title}
+                    height={800}
+                    width={800}
+                    className={`z-50 xsm:w-40 sm:w-60 md:w-40 rounded-xl col-span-full row-span-full 
+                    hover:translate-x-0 hover:translate-y-0 -translate-x-5 -translate-y-5
+                    transition-transform
+                    `}
+                  />
+                </div>
+              ) : (
+                <p>No Image</p>
+              )}
+            </div>
+            {/* Author Image =======*/}
+            {/* Author Details */}
+            <div className="flex-1">
+              <p className="italic mb-4 font-semibold">{data.description}</p>
+              <p className="text-xl">{data.extract}</p>
+            </div>
+            {/* Author Details ======*/}
           </div>
-        </div>
-        {/* Poems */}
-        <div className="mt-10">
-          <h1 className="text-xl font-bold">Poems By The Author</h1>
-          {poems.map((poem: any, i: number) => (
-            <Link href={`${authorName}/${poem.title}`} key={i}>
-              <p className={`${inter.className} font-semibold text-slate-700`}>
-                {poem.title}
-              </p>
-            </Link>
-          ))}
+          {/* Poems */}
+          <div className="mt-10 self-start">
+            <h1 className="text-xl font-bold underline underline-offset-4 mb-4">
+              Poems By The Author
+            </h1>
+            {poems.map((poem: any, i: number) => (
+              <Link href={`${authorName}/${poem.title}`} key={i}>
+                <p className={`font-semibold`}>{poem.title}</p>
+              </Link>
+            ))}
+          </div>
         </div>
       </main>
     </>
@@ -70,7 +109,7 @@ export default function Home({ data, poems, authorName }: any) {
 
 //   return {
 //     paths: pathNames,
-//     fallback: true,
+//     fallback: false,
 //   };
 // };
 
