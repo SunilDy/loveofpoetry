@@ -99,7 +99,7 @@ export default function Home({ poem, poemName, authorData }: any) {
               height={300}
               width={300}
             />
-            <div className="bg-rose-100 border-2 border-slate-100 border-opacity-40 bg-opacity-20 mx-auto flex flex-col items-center  z-30 rounded-xl shadow-2xl w-full py-10">
+            <div className="bg-rose-100 border-2 border-slate-100 border-opacity-40 bg-opacity-20 mx-auto flex flex-col items-center  z-30 rounded-xl shadow-2xl w-full py-10 xsm:px-6 md:px-10">
               {/* <p className="italic font-xs slate-600 mb-4">
                 By: {poem[0].author}
               </p> */}
@@ -140,18 +140,15 @@ export default function Home({ poem, poemName, authorData }: any) {
                     <p>No Image</p>
                   )}
                   <div>
-                    <Link href={`/authors/${authorData.title}`}>
-                      <p
-                        className={`${alegreya.className} text-md underline underline-offset-4 decoration-white`}
-                      >
-                        {authorData.title}
-                        {/* TODO: add link svg */}
-                      </p>
-                    </Link>
+                    <p
+                      className={`${alegreya.className} text-md underline underline-offset-4 decoration-white`}
+                    >
+                      {authorData.title}
+                    </p>
                     <p className={`${alegreya.className} text-md`}>
                       {authorData.description}
                     </p>
-                    <Link href="/">
+                    <Link href={`/authors/${authorData.title}`}>
                       <p
                         className={`${alegreya.className} text-md flex items-center`}
                       >
@@ -240,21 +237,6 @@ export default function Home({ poem, poemName, authorData }: any) {
 
 export const getServerSideProps = async (context: any) => {
   let { params } = context;
-
-  // let poemRes = await fetch(`https://poetrydb.org/title/${params.poemTitle}`, {
-  //   method: "GET",
-  // });
-  // let poem = await poemRes.json();
-
-  // let authorResponse = await fetch(
-  //   `https://en.wikipedia.org/api/rest_v1/page/summary/${params.authorName}`,
-  //   {
-  //     method: "GET",
-  //   }
-  // );
-  // let authorData = await authorResponse.json();
-
-  // console.log(authorData);
 
   let poem = await axios.get(`https://poetrydb.org/title/${params.poemTitle}`);
   let authorData = await axios.get(

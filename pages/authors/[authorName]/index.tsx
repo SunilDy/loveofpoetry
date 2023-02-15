@@ -8,7 +8,6 @@ import { Alegreya } from "@next/font/google";
 const alegreya = Alegreya({ subsets: ["latin"] });
 
 export default function Home({ data, poems, authorName }: any) {
-  console.log(data);
   return (
     <>
       <Head>
@@ -43,7 +42,7 @@ export default function Home({ data, poems, authorName }: any) {
           {/* Author name and Linebreak ======= */}
 
           <div
-            className={`bg-rose-100 border-2 border-slate-100 border-opacity-40 bg-opacity-20 z-30 rounded-xl shadow-2xl w-full py-10
+            className={`bg-rose-100 border-2 border-slate-100 border-opacity-40 bg-opacity-20 z-30 rounded-xl shadow-2xl w-full
             md:flex items-center h-auto p-10
         `}
           >
@@ -153,29 +152,12 @@ export const getServerSideProps = async (context: any) => {
     authorName = params.authorName;
   }
 
-  // let authorResponse = await fetch(
-  //   `https://en.wikipedia.org/api/rest_v1/page/summary/${authorName}`,
-  //   {
-  //     method: "GET",
-  //   }
-  // );
-  // let authorData = await authorResponse.json();
-
-  // let authorPoems = await fetch(
-  //   `https://poetrydb.org/author/${params.authorName}`,
-  //   {
-  //     method: "GET",
-  //   }
-  // );
-
   let authorData = await axios.get(
     `https://en.wikipedia.org/api/rest_v1/page/summary/${authorName}`
   );
   let authorPoemsData = await axios.get(
     `https://poetrydb.org/author/${params.authorName}`
   );
-
-  console.log(authorName);
 
   return {
     props: {

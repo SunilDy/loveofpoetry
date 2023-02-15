@@ -16,6 +16,10 @@ module.exports = {
       colors: {
         primary: "#E6C7BF",
       },
+      gridTemplateColumns: {
+        new4: "repeat(auto-fit, minmax(400px, 1fr))",
+        new4xsm: "repeat(auto-fit, minmax(200px, 1fr))",
+      },
     },
   },
   plugins: [],

@@ -1,11 +1,51 @@
 import Head from "next/head";
 import { Inter } from "@next/font/google";
 import Link from "next/link";
+import { useState, useEffect } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export default function Home({ data }: any) {
-  console.log(data);
+type NameBlock = {
+  alphabet: string;
+  matchingNames: string[];
+};
+
+export default function Home({ data, nameBlocks }: any) {
+  const [searchValue, setSearchValue] = useState("");
+  const [nameBlocksState, setNameBlocksState] = useState(nameBlocks);
+
+  useEffect(() => {
+    if (searchValue.length < 1) {
+      setNameBlocksState(nameBlocks);
+    }
+    // console.log(nameBlocksState);
+  }, [nameBlocksState, searchValue, nameBlocks]);
+
+  // console.log(nameBlocks);
+
+  const handleSearchChange = (e: any) => {
+    setSearchValue(e.target.value);
+
+    let updatedNameBlockState = nameBlocks
+      .map((nameBlock: any) => {
+        const matchingNames = nameBlock.matchingNames.filter(
+          (matchingName: string) => {
+            return matchingName
+              .toLowerCase()
+              .includes(searchValue.toLowerCase());
+          }
+        );
+        if (matchingNames.length > 0) {
+          return { alphabet: nameBlock.alphabet, matchingNames };
+        } else {
+          return null;
+        }
+      })
+      .filter(Boolean);
+
+    setNameBlocksState(updatedNameBlockState);
+  };
+
   return (
     <>
       <Head>
@@ -14,13 +54,62 @@ export default function Home({ data }: any) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="m-6">
-        <h1 className={`${inter.className} text-3xl font-bold`}>Authors</h1>
-        {data.authors.map((author: any, i: number) => (
-          <Link key={i} href={`/authors/${author}`}>
-            <p className="text-lg">{author}</p>
-          </Link>
-        ))}
+      <main className="m-6 text-white min-h-[100vh]">
+        {/* Search block =========== */}
+
+        <div className="flex justify-center items-center w-full xsm:my-10 md:my-14 lg:my-20">
+          <input
+            placeholder="Filter author name"
+            value={searchValue}
+            onChange={(e) => handleSearchChange(e)}
+            className={`
+              xsm:py-1 md:py-3 px-4
+              border-4 border-white border-opacity-40 rounded-md outline-none
+              lg:text-3xl md:text-xl xsm:text-lg
+              bg-transparent
+              text-white placeholder:text-white
+              xsm:w-[80%] md:w-fit
+            `}
+          />
+        </div>
+
+        {/* Search block =========== */}
+
+        {/* Author names block ================*/}
+        <div className="w-[80%] mx-auto">
+          <h1 className={`${inter.className} text-3xl font-bold mb-6`}>
+            Authors
+          </h1>
+          {/* <div className="grid grid-cols-new4 gap-y-6"> */}
+          <div
+            className={`
+          xsm:columns-1 sm:columns-2 md:columns-2 lg:columns-3 xl:columns-4
+          `}
+          >
+            {nameBlocksState.length > 0 ? (
+              nameBlocksState.map((nameBlock: NameBlock, i: number) => (
+                <div key={i} className="w-full mb-6">
+                  <div className="w-[50%] border-b-2 border-slate-50 ">
+                    <p className="text-xl mb-2 font-bold">
+                      {nameBlock.alphabet}
+                    </p>
+                  </div>
+                  <>
+                    {nameBlock.matchingNames.map((name: string, i: number) => (
+                      <Link key={i} href={`/authors/${name}`}>
+                        <p>{name}</p>
+                      </Link>
+                    ))}
+                  </>
+                </div>
+              ))
+            ) : (
+              <p>No items</p>
+            )}
+          </div>
+        </div>
+
+        {/* Author names block =================*/}
       </main>
     </>
   );
@@ -31,12 +120,66 @@ export const getStaticProps = async () => {
     method: "GET",
   });
 
+  const alphabets = [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J",
+    "K",
+    "L",
+    "M",
+    "N",
+    "O",
+    "P",
+    "Q",
+    "R",
+    "S",
+    "T",
+    "U",
+    "V",
+    "W",
+    "X",
+    "Y",
+    "Z",
+  ];
+
   let data = await response.json();
-  // console.log(data);
+
+  let nameBlocks = [];
+
+  for (let i = 0; i < alphabets.length; i++) {
+    let pushItem = {
+      alphabet: alphabets[i],
+      matchingNames: [],
+    };
+    nameBlocks.push(pushItem);
+  }
+
+  for (let i = 0; i < alphabets.length; i++) {
+    for (let j = 0; j < data.authors.length; j++) {
+      if (
+        data.authors[j].toLowerCase().charAt(0) === alphabets[i].toLowerCase()
+      ) {
+        // @ts-ignore
+        nameBlocks[i].matchingNames.push(data.authors[j]);
+      }
+    }
+  }
+
+  nameBlocks = nameBlocks.filter((nameBlock) => {
+    return nameBlock.matchingNames.length !== 0;
+  });
 
   return {
     props: {
       data,
+      nameBlocks,
     },
   };
 };
