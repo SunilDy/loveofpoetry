@@ -79,6 +79,7 @@ const Navbar = () => {
            font-semibold`}
           // onFocus={() => router.push("/search")}
           onKeyDown={(e) => handleSearchKeyDown(e)}
+          type="search"
         />
       </div>
       {/* User */}
@@ -129,7 +130,9 @@ const Navbar = () => {
             <MenuItem>
               <Link href={"/authors"}>Authors</Link>
             </MenuItem>
-            <MenuItem>Search</MenuItem>
+            <MenuItem>
+              <Link href={`/search?name=${searchValue}`}>Search</Link>
+            </MenuItem>
             <MenuItem>User Profile</MenuItem>
           </Menu>
         </div>
