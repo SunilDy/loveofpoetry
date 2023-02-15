@@ -4,6 +4,7 @@ import Link from "next/link";
 import axios from "axios";
 import LineBreak from "@/public/linebreak.svg";
 import { Alegreya } from "@next/font/google";
+import PlaceHolder from "@/public/placeholder/ph2.png";
 
 const alegreya = Alegreya({ subsets: ["latin"] });
 
@@ -63,7 +64,19 @@ export default function Home({ data, poems, authorName }: any) {
                   />
                 </div>
               ) : (
-                <p>No Image</p>
+                <div className="grid grid-cols-1 grid-rows-1">
+                  <div className="z-40 col-span-full row-span-full border-2 border-white border-opacity-40 rounded-xl xsm:w-40 sm:w-60 md:w-40 h-full"></div>
+                  <Image
+                    src={PlaceHolder}
+                    alt={data.title}
+                    height={800}
+                    width={800}
+                    className={`z-50 xsm:w-40 sm:w-60 md:w-40 rounded-xl col-span-full row-span-full 
+                    hover:translate-x-0 hover:translate-y-0 -translate-x-5 -translate-y-5
+                    transition-transform
+                    `}
+                  />
+                </div>
               )}
             </div>
             {/* Author Image =======*/}
@@ -148,6 +161,8 @@ export const getServerSideProps = async (context: any) => {
     authorName = "Thomas Campbell (poet)";
   } else if (params.authorName === "William Browne") {
     authorName = "William Browne (poet)";
+  } else if (params.authorName === "Charlotte Smith") {
+    authorName = "Charlotte Smith (writer)";
   } else {
     authorName = params.authorName;
   }

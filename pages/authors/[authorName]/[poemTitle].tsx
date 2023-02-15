@@ -9,6 +9,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useQuery } from "react-query";
 import Comments from "@/components/Comments";
+import PlaceHolder from "@/public/placeholder/ph2.png";
 
 const alegreya = Alegreya({ subsets: ["latin"] });
 
@@ -137,7 +138,13 @@ export default function Home({ poem, poemName, authorData }: any) {
                       width={300}
                     />
                   ) : (
-                    <p>No Image</p>
+                    <Image
+                      className="xsm:w-14 lg:w-20 aspect-square object-cover object-center rounded-full mr-4 self-start"
+                      src={PlaceHolder}
+                      alt={authorData.title}
+                      height={300}
+                      width={300}
+                    />
                   )}
                   <div>
                     <p
