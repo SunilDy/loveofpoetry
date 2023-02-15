@@ -1,18 +1,29 @@
-import { useState } from "react";
-import { Pacifico } from "@next/font/google";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { Montserrat } from "@next/font/google";
 import { Menu, MenuItem, MenuButton } from "@szhsin/react-menu";
 import "@szhsin/react-menu/dist/index.css";
 import "@szhsin/react-menu/dist/transitions/slide.css";
+import { useRouter } from "next/router";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
 const Navbar = () => {
   const [searchValue, setSearchValue] = useState("");
   const { data: session } = useSession();
-  // console.log(session);
+  const router = useRouter();
+  console.log(router);
+
+  useEffect(() => {
+    if (router.pathname.includes("/search")) {
+      setSearchValue("");
+    }
+  }, [router]);
+
+  const handleSearchKeyDown = (e: any) => {
+    if (e.key === "Enter") router.push(`/search?name=${searchValue}`);
+  };
 
   const menuClassName = () =>
     `box-border z-50 text-sm bg-white p-1.5 border rounded-md shadow-lg select-none focus:outline-none min-w-[9rem]`;
@@ -66,6 +77,8 @@ const Navbar = () => {
           grow focus:outline-none 
           xsm:text-sm md:text-lg lg:text-xl mx-auto
            font-semibold`}
+          // onFocus={() => router.push("/search")}
+          onKeyDown={(e) => handleSearchKeyDown(e)}
         />
       </div>
       {/* User */}

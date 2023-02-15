@@ -35,7 +35,7 @@ export default function Home({ poem }: any) {
             className={`${montserrat.className} text-xl text-center font-light w-[60%] mx-auto`}
           >
             Discover, Browse and Study from endless collection of poetry
-            collection from our site. We got you all covered.
+            collection from our site. We have got you all covered.
           </h1>
         </div>
         {/* Hero =============== */}
