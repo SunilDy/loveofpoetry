@@ -30,7 +30,7 @@ const Navbar = () => {
       {/* Primary Links */}
       <div
         className={`flex items-center
-        xsm:gap-x-2 md:gap-x-4 lg:gap-x-6 
+        xsm:gap-x-0 md:gap-x-4 lg:gap-x-6 
         xsm:text-md md:text-lg lg:text-xl
         basis-1/4`}
       >
@@ -43,7 +43,10 @@ const Navbar = () => {
             Poetry<span className="text-pink-300">.</span>
           </h1>
         </Link>
-        <Link href={"/authors"} className="xsm:collapse lg:visible">
+        <Link
+          href={"/authors"}
+          className="xsm:collapse xsm:w-0 lg:visible lg:w-fit"
+        >
           <h1
             className={` 
             xsm:text-md md:text-lg lg:text-xl 
