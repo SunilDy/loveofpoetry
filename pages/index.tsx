@@ -1,9 +1,15 @@
 import Head from "next/head";
-import { Inter } from "@next/font/google";
+import { Alegreya } from "@next/font/google";
+import axios from "axios";
+import Image from "next/image";
+import LineBreak from "@/public/linebreak.svg";
+import { Montserrat } from "@next/font/google";
 
-const inter = Inter({ subsets: ["latin"] });
+const montserrat = Montserrat({ subsets: ["latin"] });
+const alegreya = Alegreya({ subsets: ["latin"] });
 
-export default function Home() {
+export default function Home({ poem }: any) {
+  console.log(poem);
   return (
     <>
       <Head>
@@ -13,8 +19,86 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <h1 className={`${inter.className}`}>Hello</h1>
+        {/* Hero =============== */}
+        <div className="text-white my-32 px-10">
+          <h1
+            className={`${montserrat.className} text-4xl text-center font-extrabold`}
+          >
+            The love for poetry is never ending. 🤍
+          </h1>
+          <h1
+            className={`${montserrat.className} text-2xl text-center font-bold mt-4`}
+          >
+            And we uderstand that.
+          </h1>
+          <h1
+            className={`${montserrat.className} text-xl text-center font-light w-[60%] mx-auto`}
+          >
+            Discover, Browse and Study from endless collection of poetry
+            collection from our site. We got you all covered.
+          </h1>
+        </div>
+        {/* Hero =============== */}
+        {/* Random Poem ============= */}
+        <div className="xsm:mt-10 md:mt-16 lg:mt-24 text-white">
+          <h1
+            className={`${montserrat.className} text-xl text-center font-normal w-[60%] mx-auto mb-4`}
+          >
+            Here&apos;s a recommended poetry to get you started.
+          </h1>
+          <div
+            className={`
+          xsm:w-[90%] md:w-[80%] lg:w-[70%] xl:w-[60%] 
+          mx-auto flex flex-col items-center mb-32 z-30 rounded-xl text-white
+          bg-rose-100 border-2 border-slate-100 border-opacity-40 bg-opacity-20 shadow-2xl w-full 
+          xsm:py-0 lg:py-10 
+          xsm:px-6 md:px-10`}
+          >
+            <h1
+              className={`${alegreya.className} font-bold mt-8 mb-2
+              xsm:text-lg md:text-2xl lg:text-3xl text-center
+              `}
+            >
+              {poem[0].title}
+            </h1>
+            <Image
+              className="xsm:w-28 md:w-40 mb-10"
+              src={LineBreak}
+              alt={"linebreak"}
+              height={300}
+              width={300}
+            />
+            {poem[0].lines.map((line: string, i: number) => (
+              <p
+                className={`${alegreya.className} 
+                xsm:text-md md:text-lg lg:text-xl 
+                mb-1`}
+                key={i}
+              >
+                {line}
+              </p>
+            ))}
+            <Image
+              className="xsm:w-28 md:w-40 my-10"
+              src={LineBreak}
+              alt={"linebreak"}
+              height={300}
+              width={300}
+            />
+          </div>
+        </div>
+        {/* Random Poem ============= */}
       </main>
     </>
   );
 }
+
+export const getStaticProps = async () => {
+  let randomPoem = await axios.get(`https://poetrydb.org//random`);
+
+  return {
+    props: {
+      poem: randomPoem.data,
+    },
+  };
+};

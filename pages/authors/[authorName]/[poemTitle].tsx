@@ -13,7 +13,7 @@ import PlaceHolder from "@/public/placeholder/ph2.png";
 
 const alegreya = Alegreya({ subsets: ["latin"] });
 
-export default function Home({ poem, poemName, authorData }: any) {
+export default function Home({ poem, poemName, authorData, authorName }: any) {
   //   console.log(authorData.thumbnail.source);
 
   const getComments = async () => {
@@ -88,7 +88,7 @@ export default function Home({ poem, poemName, authorData }: any) {
           >
             <h1
               className={`${alegreya.className} font-bold mt-8 mb-2
-              xsm:text-[2em] md:text-[3em] lg:text-[4em]
+              xsm:text-[2em] md:text-[3em] lg:text-[4em] text-center
               `}
             >
               {poemName}
@@ -150,12 +150,12 @@ export default function Home({ poem, poemName, authorData }: any) {
                     <p
                       className={`${alegreya.className} text-md underline underline-offset-4 decoration-white`}
                     >
-                      {authorData.title}
+                      {authorName}
                     </p>
                     <p className={`${alegreya.className} text-md`}>
                       {authorData.description}
                     </p>
-                    <Link href={`/authors/${authorData.title}`}>
+                    <Link href={`/authors/${authorName}`}>
                       <p
                         className={`${alegreya.className} text-md flex items-center`}
                       >
@@ -255,6 +255,7 @@ export const getServerSideProps = async (context: any) => {
       poem: poem.data,
       poemName: params.poemTitle,
       authorData: authorData.data,
+      authorName: params.authorName,
     },
   };
 };

@@ -7,8 +7,6 @@ import { Menu, MenuItem, MenuButton } from "@szhsin/react-menu";
 import "@szhsin/react-menu/dist/index.css";
 import "@szhsin/react-menu/dist/transitions/slide.css";
 
-// const lobster = Lobster({ subsets: ["latin"], weight: ["400"] });
-const lobster = Pacifico({ subsets: ["latin"], weight: ["400"] });
 const montserrat = Montserrat({ subsets: ["latin"] });
 
 const Navbar = () => {
