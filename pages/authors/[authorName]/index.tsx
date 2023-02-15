@@ -71,7 +71,13 @@ export default function Home({ data, poems, authorName }: any) {
             {/* Author Details */}
             <div className="flex-1">
               <p className="italic mb-4 font-semibold">{data.description}</p>
-              <p className="text-xl">{data.extract}</p>
+              <p
+                className={`${alegreya.className} 
+                xsm:text-md md:text-lg lg:text-xl 
+                mb-1`}
+              >
+                {data.extract}
+              </p>
             </div>
             {/* Author Details ======*/}
           </div>

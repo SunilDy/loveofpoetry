@@ -106,7 +106,7 @@ export default function Home({ poem, poemName, authorData }: any) {
               {poem[0].lines.map((line: string, i: number) => (
                 <p
                   className={`${alegreya.className} 
-                xsm:text-sm md:text-lg lg:text-xl 
+                xsm:text-md md:text-lg lg:text-xl 
                 mb-1`}
                   key={i}
                 >
