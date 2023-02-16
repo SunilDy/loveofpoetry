@@ -24,5 +24,10 @@ export const authOptions: NextAuthOptions = {
   ],
   adapter: MongoDBAdapter(clientPromise),
   secret: "BestKeptSecret",
+  callbacks: {
+    async signIn({ user, account, profile, email, credentials }) {
+      return true;
+    },
+  },
 };
 export default NextAuth(authOptions);
