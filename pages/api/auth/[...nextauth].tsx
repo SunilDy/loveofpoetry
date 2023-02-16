@@ -29,7 +29,7 @@ export const authOptions: NextAuthOptions = {
   //   async signIn({ user, account, profile, email, credentials }) {
   //     return true;
   //   },
-  // },
+  // }
   session: {
     strategy: "database",
     maxAge: 30 * 24 * 60 * 60,
