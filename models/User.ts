@@ -1,6 +1,6 @@
 import { Schema, model, models } from 'mongoose';
 
-const CollectionSchema = new Schema({
+export const CollectionSchema = new Schema({
   name: String,
   titles: [String]
 })
@@ -12,9 +12,25 @@ const UserSchema = new Schema({
   emailVerified: Boolean,
   refresh_token_expires_in: String,
   likedPoems: [String],
-  collections: [CollectionSchema]
+  collections: {
+    type: [CollectionSchema]
+  }
 });
 
 const User = models.users || model('users', UserSchema);
 
 export default User;
+
+export type UserType = {
+  name: string;
+  email: string;
+  image: string;
+  emailVerified: boolean;
+  refresh_token_expires_in: string;
+  likedPoems: string[]
+  collections: {
+    _id: string;
+    name: string;
+    titles: string[]
+  }[]
+}

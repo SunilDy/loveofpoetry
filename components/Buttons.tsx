@@ -2,12 +2,14 @@ type PrimaryButtonProps = {
   children: React.ReactNode;
   handleOnClick: () => void;
   classNames?: string;
+  buttonClassNames?: string;
 };
 
 export const PrimaryButton = ({
   children,
   handleOnClick,
   classNames,
+  buttonClassNames,
 }: PrimaryButtonProps) => {
   return (
     <div className={`${classNames}`}>
@@ -17,6 +19,8 @@ export const PrimaryButton = ({
               px-2 p-1 rounded-md
               hover:scale-95
               transition-transform
+              lg:text-md xsm:text-sm
+              ${buttonClassNames}
             `}
         onClick={handleOnClick}
       >
@@ -30,6 +34,7 @@ export const SecondaryButton = ({
   children,
   handleOnClick,
   classNames,
+  buttonClassNames,
 }: PrimaryButtonProps) => {
   return (
     <div className={`${classNames}`}>
@@ -40,6 +45,8 @@ export const SecondaryButton = ({
               hover:scale-95
               transition-transform
               border-2 border-white border-opacity-30
+              lg:text-md xsm:text-sm
+              ${buttonClassNames}
             `}
         onClick={handleOnClick}
       >

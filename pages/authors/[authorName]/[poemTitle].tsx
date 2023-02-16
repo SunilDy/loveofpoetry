@@ -12,6 +12,15 @@ import Comments from "@/components/Comments";
 import PlaceHolder from "@/public/placeholder/ph2.png";
 import { PrimaryButton, SecondaryButton } from "@/components/Buttons";
 import toast, { Toaster } from "react-hot-toast";
+import Modal from "@/components/Modal";
+import { Fragment } from "react";
+import { Menu, Transition } from "@headlessui/react";
+import { ChevronDownIcon } from "@heroicons/react/20/solid";
+import { Oval } from "react-loader-spinner";
+
+function classNames(...classes: any[]) {
+  return classes.filter(Boolean).join(" ");
+}
 
 const alegreya = Alegreya({ subsets: ["latin"] });
 const montserrat = Montserrat({ subsets: ["latin"] });
@@ -23,8 +32,25 @@ export default function Home({ poem, poemName, authorData, authorName }: any) {
     });
   };
 
+  const getCollectionNames = async () => {
+    return await axios.get("/api/collection/get", {
+      withCredentials: true,
+    });
+  };
+
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [newCollectionValue, setNewCollectionValue] = useState("");
+  const [isAddingToCollection, setisAddingToCollection] = useState(false);
+  const [selectedCollection, setSelectedCollection] = useState("Favorite");
+  const [collectionsState, setCollectionsState] = useState([
+    {
+      name: "Favorite",
+      titles: [],
+    },
+  ]);
+
   const { data: session } = useSession();
   const router = useRouter();
 
@@ -38,6 +64,10 @@ export default function Home({ poem, poemName, authorData, authorName }: any) {
     refetchOnWindowFocus: true,
   });
 
+  const { data: collectionsRes } = useQuery(`collections`, getCollectionNames, {
+    refetchOnWindowFocus: true,
+  });
+
   useEffect(() => {
     if (commentsRes?.data.poem) {
       if (commentsRes.data.poem.comments.length < 1) {
@@ -46,7 +76,20 @@ export default function Home({ poem, poemName, authorData, authorName }: any) {
         setComments(commentsRes.data.poem.comments);
       }
     }
-  }, [commentsRes, comments]);
+
+    if (collectionsRes?.data) {
+      setCollectionsState(collectionsRes.data.collections);
+    }
+    console.log("collectionsState", collectionsState);
+    console.log("collectionsRes", collectionsRes);
+    // console.log("selectedCollection", selectedCollection);
+  }, [
+    commentsRes,
+    comments,
+    collectionsRes,
+    collectionsState,
+    selectedCollection,
+  ]);
 
   const handleAddComment = async () => {
     if (session?.user) {
@@ -148,6 +191,100 @@ export default function Home({ poem, poemName, authorData, authorName }: any) {
       });
   };
 
+  const handleAddToCollection = async () => {
+    setisAddingToCollection(true);
+    let collectionName = "";
+    if (newCollectionValue.length < 1) collectionName = selectedCollection;
+    else collectionName = newCollectionValue;
+    console.log(collectionName);
+
+    axios
+      .post(
+        `/api/collection/add`,
+        {
+          poemTitle: poemName,
+          collectionName,
+        },
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        console.log(res.data);
+        if (res.data.status === "ok") {
+          setisAddingToCollection(false);
+          setIsModalOpen(!isModalOpen);
+          if (res.data.poemAlreadyInList) {
+            toast.custom((t) => (
+              <div
+                className={`${
+                  t.visible ? "animate-enter" : "animate-leave"
+                } w-fit shadow-2xl rounded-lg pointer-events-auto flex items-center ring-1 ring-black ring-opacity-5 p-4 text-white
+                backdrop-blur-3xl
+                `}
+              >
+                <div className="">
+                  <h1
+                    className={`${montserrat.className} xsm:text-xs md:text-sm lg:text-lg font-bold`}
+                  >
+                    Poem is already in the collection!
+                  </h1>
+                </div>
+                <div>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    className="xsm:w-4 xsm:h-4 lg:w-6 lg:h-6 xsm:mx-1 lg:mx-2 cursor-pointer"
+                    onClick={() => toast.dismiss(t.id)}
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-1.72 6.97a.75.75 0 10-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 101.06 1.06L12 13.06l1.72 1.72a.75.75 0 101.06-1.06L13.06 12l1.72-1.72a.75.75 0 10-1.06-1.06L12 10.94l-1.72-1.72z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </div>
+              </div>
+            ));
+          } else {
+            toast.custom((t) => (
+              <div
+                className={`${
+                  t.visible ? "animate-enter" : "animate-leave"
+                } w-fit shadow-2xl rounded-lg pointer-events-auto flex items-center ring-1 ring-black ring-opacity-5 p-4 text-white
+                backdrop-blur-3xl
+                `}
+              >
+                <div className="">
+                  <h1
+                    className={`${montserrat.className} xsm:text-xs md:text-sm lg:text-lg font-bold`}
+                  >
+                    Poem added to your collection.
+                  </h1>
+                </div>
+                <div>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    className="xsm:w-4 xsm:h-4 lg:w-6 lg:h-6 xsm:mx-1 lg:mx-2 cursor-pointer"
+                    onClick={() => toast.dismiss(t.id)}
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-1.72 6.97a.75.75 0 10-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 101.06 1.06L12 13.06l1.72 1.72a.75.75 0 101.06-1.06L13.06 12l1.72-1.72a.75.75 0 10-1.06-1.06L12 10.94l-1.72-1.72z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </div>
+              </div>
+            ));
+          }
+        }
+      });
+  };
+
   return (
     <>
       <Head>
@@ -206,11 +343,141 @@ export default function Home({ poem, poemName, authorData, authorName }: any) {
                 <SecondaryButton handleOnClick={handleLikePoem}>
                   Like
                 </SecondaryButton>
-                <SecondaryButton handleOnClick={() => {}}>
+                <SecondaryButton
+                  handleOnClick={() => setIsModalOpen(!isModalOpen)}
+                >
                   Add To Collection
                 </SecondaryButton>
                 <PrimaryButton handleOnClick={() => {}}>Study</PrimaryButton>
               </div>
+              {/* Add to collection MODAL */}
+              {isModalOpen && (
+                <Modal>
+                  <div
+                    className={`
+                    rounded-xl text-white
+                    bg-rose-100 border-2 border-slate-100 border-opacity-40 bg-opacity-20 shadow-2xl
+                    p-4 w-fit
+                  `}
+                  >
+                    {/* Header */}
+                    <div className="border-b-2 border-white border-opacity-40 mb-4">
+                      <h1 className="xsm:text-sm md:text-md lg:text-lg mb-2 font-bold">
+                        Add To Collection
+                      </h1>
+                    </div>
+                    {/* Dropdown */}
+                    <div className="sm:flex justify-between items-center mb-4 gap-x-2">
+                      <h1 className="basis-1/3">Collection:</h1>
+                      <Menu
+                        as="div"
+                        className="relative inline-block text-left w-full basis-2/3"
+                      >
+                        <div>
+                          <Menu.Button
+                            className={`inline-flex justify-between rounded-md 
+                          border-2 border-white border-opacity-40 w-full
+                          bg-transparent focus:outline-none
+                          px-4 py-1 text-sm font-medium 
+                          text-white shadow-sm
+                          `}
+                          >
+                            {selectedCollection || "Options"}
+                            <ChevronDownIcon
+                              className="-mr-1 ml-2 h-5 w-5"
+                              aria-hidden="true"
+                            />
+                          </Menu.Button>
+                        </div>
+
+                        <Transition
+                          as={Fragment}
+                          enter="transition ease-out duration-100"
+                          enterFrom="transform opacity-0 scale-95"
+                          enterTo="transform opacity-100 scale-100"
+                          leave="transition ease-in duration-75"
+                          leaveFrom="transform opacity-100 scale-100"
+                          leaveTo="transform opacity-0 scale-95"
+                        >
+                          <Menu.Items className="absolute right-0 z-10 mt-2 w-full origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                            <div className="py-1">
+                              {collectionsState.map(
+                                (collection: any, i: number) => (
+                                  <Menu.Item key={i}>
+                                    {({ active }) => (
+                                      <button
+                                        className={classNames(
+                                          active
+                                            ? "bg-slate-200 bg-opacity-60 text-[hotpink]"
+                                            : "text-[hotpink]",
+                                          "block px-4 py-2 text-sm w-full text-left"
+                                        )}
+                                        onClick={() =>
+                                          setSelectedCollection(collection.name)
+                                        }
+                                      >
+                                        {collection.name}
+                                      </button>
+                                    )}
+                                  </Menu.Item>
+                                )
+                              )}
+                            </div>
+                          </Menu.Items>
+                        </Transition>
+                      </Menu>
+                    </div>
+                    {/* New Collection */}
+                    <div className="sm:flex justify-between items-center mb-4 gap-x-2">
+                      <h1 className="basis-1/3">New Collection:</h1>
+                      <input
+                        placeholder="Choose Collection"
+                        value={newCollectionValue}
+                        onChange={(e) => setNewCollectionValue(e.target.value)}
+                        className={`
+                      xsm:py-1 md:py-2 px-4
+                      border-2 border-white border-opacity-40 rounded-md outline-none
+                      text-sm
+                      bg-transparent
+                      text-white placeholder:text-white
+                      ${montserrat.className}
+                      basis-2/3
+                    `}
+                      />
+                    </div>
+                    {/* Buttons*/}
+                    <div className="flex justify-end items-center mb-4 gap-x-2">
+                      <PrimaryButton
+                        handleOnClick={handleAddToCollection}
+                        buttonClassNames={`font-semibold px-4`}
+                      >
+                        {isAddingToCollection ? (
+                          <Oval
+                            height={15}
+                            width={15}
+                            color="#A855F7"
+                            visible={true}
+                            ariaLabel="oval-loading"
+                            secondaryColor="tr"
+                            strokeWidth={4}
+                            strokeWidthSecondary={4}
+                          />
+                        ) : (
+                          <p>Add</p>
+                        )}
+                      </PrimaryButton>
+                      <SecondaryButton
+                        handleOnClick={() => setIsModalOpen(!isModalOpen)}
+                      >
+                        Close
+                      </SecondaryButton>
+                    </div>
+                    {/* Buttons*/}
+                  </div>
+                </Modal>
+              )}
+              {/* Add to collection MODAL */}
+
               {/* Buttons */}
               {/* Author Details ===========*/}
               <div
