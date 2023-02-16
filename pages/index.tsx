@@ -72,7 +72,7 @@ export default function Home({ poem }: any) {
               <p
                 className={`${alegreya.className} 
                 xsm:text-md md:text-lg lg:text-xl 
-                mb-1`}
+                text-center mb-3`}
                 key={i}
               >
                 {line}

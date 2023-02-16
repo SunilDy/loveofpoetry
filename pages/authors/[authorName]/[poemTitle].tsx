@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { Alegreya } from "@next/font/google";
+import { Alegreya, Montserrat } from "@next/font/google";
 import Image from "next/image";
 import Link from "next/link";
 import LineBreak from "@/public/linebreak.svg";
@@ -10,12 +10,13 @@ import { useRouter } from "next/router";
 import { useQuery } from "react-query";
 import Comments from "@/components/Comments";
 import PlaceHolder from "@/public/placeholder/ph2.png";
+import { PrimaryButton, SecondaryButton } from "@/components/Buttons";
+import toast, { Toaster } from "react-hot-toast";
 
 const alegreya = Alegreya({ subsets: ["latin"] });
+const montserrat = Montserrat({ subsets: ["latin"] });
 
 export default function Home({ poem, poemName, authorData, authorName }: any) {
-  //   console.log(authorData.thumbnail.source);
-
   const getComments = async () => {
     return await axios.post("/api/comment/get", {
       poemName,
@@ -38,7 +39,6 @@ export default function Home({ poem, poemName, authorData, authorName }: any) {
   });
 
   useEffect(() => {
-    // console.log("comments", comments);
     if (commentsRes?.data.poem) {
       if (commentsRes.data.poem.comments.length < 1) {
         setComments(null);
@@ -46,8 +46,6 @@ export default function Home({ poem, poemName, authorData, authorName }: any) {
         setComments(commentsRes.data.poem.comments);
       }
     }
-    // console.log("comments", comments);
-    // console.log("length", comments.length);
   }, [commentsRes, comments]);
 
   const handleAddComment = async () => {
@@ -66,6 +64,88 @@ export default function Home({ poem, poemName, authorData, authorName }: any) {
     } else {
       router.push("/login");
     }
+  };
+
+  const handleLikePoem = async () => {
+    axios
+      .post(
+        "/api/poem/like",
+        {
+          poemTitle: poemName,
+        },
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        if (res.data.message === "updated") {
+          toast.custom((t) => (
+            <div
+              className={`${
+                t.visible ? "animate-enter" : "animate-leave"
+              } w-fit shadow-2xl rounded-lg pointer-events-auto flex items-center ring-1 ring-black ring-opacity-5 p-4 text-white
+              backdrop-blur-3xl
+              `}
+            >
+              <div className="">
+                <h1
+                  className={`${montserrat.className} xsm:text-xs md:text-sm lg:text-lg font-bold`}
+                >
+                  Poem added to your your liked-list!
+                </h1>
+              </div>
+              <div>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  className="xsm:w-4 xsm:h-4 lg:w-6 lg:h-6 xsm:mx-1 lg:mx-2 cursor-pointer"
+                  onClick={() => toast.dismiss(t.id)}
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-1.72 6.97a.75.75 0 10-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 101.06 1.06L12 13.06l1.72 1.72a.75.75 0 101.06-1.06L13.06 12l1.72-1.72a.75.75 0 10-1.06-1.06L12 10.94l-1.72-1.72z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
+            </div>
+          ));
+        } else if (res.data.message === "exists") {
+          toast.custom((t) => (
+            <div
+              className={`${
+                t.visible ? "animate-enter" : "animate-leave"
+              } w-fit shadow-2xl rounded-lg pointer-events-auto flex items-center ring-1 ring-black ring-opacity-5 p-4 text-white
+              backdrop-blur-3xl
+              `}
+            >
+              <div className="">
+                <h1
+                  className={`${montserrat.className} xsm:text-xs md:text-sm lg:text-lg font-bold`}
+                >
+                  Poem is already in your list of liked poems!
+                </h1>
+              </div>
+              <div>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  className="xsm:w-4 xsm:h-4 lg:w-6 lg:h-6 xsm:mx-1 lg:mx-2 cursor-pointer"
+                  onClick={() => toast.dismiss(t.id)}
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-1.72 6.97a.75.75 0 10-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 101.06 1.06L12 13.06l1.72 1.72a.75.75 0 101.06-1.06L13.06 12l1.72-1.72a.75.75 0 10-1.06-1.06L12 10.94l-1.72-1.72z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
+            </div>
+          ));
+        }
+      });
   };
 
   return (
@@ -121,6 +201,17 @@ export default function Home({ poem, poemName, authorData, authorName }: any) {
                 height={300}
                 width={300}
               />
+              {/* Buttons */}
+              <div className="flex gap-x-4 mb-10">
+                <SecondaryButton handleOnClick={handleLikePoem}>
+                  Like
+                </SecondaryButton>
+                <SecondaryButton handleOnClick={() => {}}>
+                  Add To Collection
+                </SecondaryButton>
+                <PrimaryButton handleOnClick={() => {}}>Study</PrimaryButton>
+              </div>
+              {/* Buttons */}
               {/* Author Details ===========*/}
               <div
                 className={`my-10 mx-auto
@@ -184,6 +275,9 @@ export default function Home({ poem, poemName, authorData, authorName }: any) {
                 </div>
               </div>
               {/* Author Details ===========*/}
+              <PrimaryButton handleOnClick={() => router.back()}>
+                Go Back
+              </PrimaryButton>
             </div>
           </div>
 
@@ -213,17 +307,9 @@ export default function Home({ poem, poemName, authorData, authorName }: any) {
                 p-2 w-full
                 `}
             />
-            <button
-              className={`
-              bg-white text-purple-500
-              px-2 p-1 rounded-md
-              hover:scale-95
-              transition-transform
-            `}
-              onClick={handleAddComment}
-            >
+            <PrimaryButton handleOnClick={handleAddComment}>
               Comment
-            </button>
+            </PrimaryButton>
           </div>
 
           {/* Comments */}
@@ -237,6 +323,7 @@ export default function Home({ poem, poemName, authorData, authorName }: any) {
           </div>
         </div>
         {/* Comments Section =================*/}
+        <Toaster position="bottom-center" reverseOrder={false} />
       </main>
     </>
   );

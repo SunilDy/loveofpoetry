@@ -13,7 +13,6 @@ const Navbar = () => {
   const [searchValue, setSearchValue] = useState("");
   const { data: session } = useSession();
   const router = useRouter();
-  console.log(router);
 
   useEffect(() => {
     if (router.pathname.includes("/search")) {

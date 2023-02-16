@@ -4,6 +4,10 @@ import { useQuery } from "react-query";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { Oval } from "react-loader-spinner";
+import { PrimaryButton } from "@/components/Buttons";
+import { Montserrat } from "@next/font/google";
+
+const montserrat = Montserrat({ subsets: ["latin"] });
 
 const Search = () => {
   const router = useRouter();
@@ -49,6 +53,7 @@ const Search = () => {
               bg-transparent
               text-white placeholder:text-white
               xsm:w-[80%] md:w-full
+              ${montserrat.className}
             `}
         />
       </div>
@@ -74,18 +79,32 @@ const Search = () => {
             {searchRes.data.map((poem: any, i: number) => (
               <Link href={`/authors/${poem.author}/${poem.title}`} key={i}>
                 <p
-                  className={`font-bold xsm:lg:text-md lg:text-lg border-b-2 border-white border-opacity-20 mb-2`}
+                  className={`font-bold xsm:lg:text-md lg:text-lg border-b-2 border-white border-opacity-20 mb-2 ${montserrat.className}`}
                 >
                   {poem.title} by{" "}
-                  <span className="italic text-slate-200 font-light">
+                  <span className={`italic text-slate-200 font-light`}>
                     {poem.author}
                   </span>
                 </p>
               </Link>
             ))}
+            <PrimaryButton
+              handleOnClick={() => router.back()}
+              classNames={`flex justify-center mt-10`}
+            >
+              Go Back
+            </PrimaryButton>
           </div>
         ) : (
-          <p className="text-white mx-10 mb-20 text-center">Nothing found!</p>
+          <div className="mx-10 mb-20 text-center">
+            <p className="text-white mb-4">Nothing found!</p>
+            <PrimaryButton
+              handleOnClick={() => router.back()}
+              classNames={`flex justify-center`}
+            >
+              Go Back
+            </PrimaryButton>
+          </div>
         )}
       </div>
       {/* Poems */}

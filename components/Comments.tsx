@@ -32,12 +32,7 @@ const Comments = (props: CommentsProps) => {
     );
   }
 
-  console.log(comments);
-  //   if (comments) {
-  // let date = format(comments[0]?.date, "yyyy-MM-dd");
   let date = format(parseISO("2023-02-14T16:51:42.409Z"), "yyyy-LL-dd");
-  console.log(date);
-  //   }
 
   return (
     <>

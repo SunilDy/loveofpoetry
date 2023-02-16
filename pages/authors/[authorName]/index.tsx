@@ -5,10 +5,13 @@ import axios from "axios";
 import LineBreak from "@/public/linebreak.svg";
 import { Alegreya } from "@next/font/google";
 import PlaceHolder from "@/public/placeholder/ph2.png";
+import { PrimaryButton } from "@/components/Buttons";
+import { useRouter } from "next/router";
 
 const alegreya = Alegreya({ subsets: ["latin"] });
 
 export default function Home({ data, poems, authorName }: any) {
+  const router = useRouter();
   return (
     <>
       <Head>
@@ -103,6 +106,12 @@ export default function Home({ data, poems, authorName }: any) {
                 <p className={`font-semibold`}>{poem.title}</p>
               </Link>
             ))}
+            <PrimaryButton
+              handleOnClick={() => router.back()}
+              classNames={`mt-4`}
+            >
+              Go Back
+            </PrimaryButton>
           </div>
         </div>
       </main>

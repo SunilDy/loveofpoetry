@@ -2,6 +2,11 @@ import Head from "next/head";
 import { Inter } from "@next/font/google";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { Montserrat } from "@next/font/google";
+import { useRouter } from "next/router";
+import { PrimaryButton } from "@/components/Buttons";
+
+const montserrat = Montserrat({ subsets: ["latin"] });
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -13,6 +18,7 @@ type NameBlock = {
 export default function Home({ data, nameBlocks }: any) {
   const [searchValue, setSearchValue] = useState("");
   const [nameBlocksState, setNameBlocksState] = useState(nameBlocks);
+  const router = useRouter();
 
   useEffect(() => {
     if (searchValue.length < 1) {
@@ -69,6 +75,7 @@ export default function Home({ data, nameBlocks }: any) {
               bg-transparent
               text-white placeholder:text-white
               xsm:w-[80%] md:w-fit
+              ${montserrat.className}
             `}
           />
         </div>
@@ -77,7 +84,7 @@ export default function Home({ data, nameBlocks }: any) {
 
         {/* Author names block ================*/}
         <div className="w-[80%] mx-auto">
-          <h1 className={`${inter.className} text-3xl font-bold mb-6`}>
+          <h1 className={`${montserrat.className} text-3xl font-bold mb-6`}>
             Authors
           </h1>
           {/* <div className="grid grid-cols-new4 gap-y-6"> */}
@@ -90,23 +97,35 @@ export default function Home({ data, nameBlocks }: any) {
               nameBlocksState.map((nameBlock: NameBlock, i: number) => (
                 <div key={i} className="w-full mb-6">
                   <div className="w-[50%] border-b-2 border-slate-50 ">
-                    <p className="text-xl mb-2 font-bold">
+                    <p
+                      className={`${montserrat.className} text-xl mb-2 font-bold`}
+                    >
                       {nameBlock.alphabet}
                     </p>
                   </div>
                   <>
                     {nameBlock.matchingNames.map((name: string, i: number) => (
                       <Link key={i} href={`/authors/${name}`}>
-                        <p>{name}</p>
+                        <p className={`${montserrat.className}`}>{name}</p>
                       </Link>
                     ))}
                   </>
                 </div>
               ))
             ) : (
-              <p>No items</p>
+              <div>
+                <p className={`${montserrat.className} text-lg`}>
+                  Nothing Found!
+                </p>
+              </div>
             )}
           </div>
+          <PrimaryButton
+            handleOnClick={() => router.back()}
+            classNames={` mt-10`}
+          >
+            Go Back
+          </PrimaryButton>
         </div>
 
         {/* Author names block =================*/}
