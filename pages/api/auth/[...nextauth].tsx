@@ -3,6 +3,7 @@ import GithubProvider from "next-auth/providers/github";
 import type { NextAuthOptions } from "next-auth";
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
 import clientPromise from "lib/mongodb";
+import { randomUUID, randomBytes } from "crypto";
 
 export const authOptions: NextAuthOptions = {
   // Configure one or more authentication providers
@@ -24,9 +25,17 @@ export const authOptions: NextAuthOptions = {
   ],
   adapter: MongoDBAdapter(clientPromise),
   secret: "BestKeptSecret",
-  callbacks: {
-    async signIn({ user, account, profile, email, credentials }) {
-      return true;
+  // callbacks: {
+  //   async signIn({ user, account, profile, email, credentials }) {
+  //     return true;
+  //   },
+  // },
+  session: {
+    strategy: "database",
+    maxAge: 30 * 24 * 60 * 60,
+    updateAge: 24 * 60 * 60,
+    generateSessionToken: () => {
+      return randomUUID?.() ?? randomBytes(32).toString("hex");
     },
   },
 };
