@@ -16,12 +16,12 @@ export const PrimaryButton = ({
       <button
         className={`
               bg-white text-purple-500
-              px-2 p-1 rounded-md
+              md:px-2 p-1 rounded-md
               hover:scale-95
               transition-transform
               lg:text-md xsm:text-sm
               border-2 border-white
-              font-semibold
+              md:font-semibold
               ${buttonClassNames}
             `}
         onClick={handleOnClick}
@@ -43,12 +43,12 @@ export const SecondaryButton = ({
       <button
         className={`
               bg-transparent text-white
-              px-2 p-1 rounded-md
+              md:px-2 p-1 rounded-md
               hover:scale-95
               transition-transform
               border-2 border-white border-opacity-30
               lg:text-md xsm:text-sm
-              font-semibold
+              md:font-semibold
               ${buttonClassNames}
             `}
         onClick={handleOnClick}
