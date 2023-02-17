@@ -4,6 +4,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { SessionProvider } from "next-auth/react";
 import { QueryClient, QueryClientProvider } from "react-query";
+import ErrorBoundary from "@/components/ErrorBoundary";
 
 export default function App({
   Component,
@@ -13,13 +14,15 @@ export default function App({
 
   return (
     <>
-      <SessionProvider session={session}>
-        <QueryClientProvider client={queryClient}>
-          <Navbar />
-          <Component {...pageProps} />
-          <Footer />
-        </QueryClientProvider>
-      </SessionProvider>
+      <ErrorBoundary>
+        <SessionProvider session={session}>
+          <QueryClientProvider client={queryClient}>
+            <Navbar />
+            <Component {...pageProps} />
+            <Footer />
+          </QueryClientProvider>
+        </SessionProvider>
+      </ErrorBoundary>
     </>
   );
 }

@@ -78,18 +78,18 @@ export default function Home({ poem, poemName, authorData, authorName }: any) {
     }
 
     if (collectionsRes?.data) {
-      setCollectionsState(collectionsRes.data.collections);
+      let collection = collectionsRes.data.collections.map(
+        (collection: any) => collection.name
+      );
+      console.log(collection);
+      setCollectionsState(collection);
     }
-    console.log("collectionsState", collectionsState);
-    console.log("collectionsRes", collectionsRes);
     // console.log("selectedCollection", selectedCollection);
-  }, [
-    commentsRes,
-    comments,
-    collectionsRes,
-    collectionsState,
-    selectedCollection,
-  ]);
+  }, [commentsRes, comments, collectionsRes]);
+
+  useEffect(() => {
+    console.log("selectedCollection", selectedCollection);
+  }, [newCollectionValue, selectedCollection, collectionsState]);
 
   const handleAddComment = async () => {
     if (session?.user) {
@@ -115,6 +115,7 @@ export default function Home({ poem, poemName, authorData, authorName }: any) {
         "/api/poem/like",
         {
           poemTitle: poemName,
+          author: authorName,
         },
         {
           withCredentials: true,
@@ -188,7 +189,8 @@ export default function Home({ poem, poemName, authorData, authorName }: any) {
             </div>
           ));
         }
-      });
+      })
+      .catch((err) => console.log("smth went wrong"));
   };
 
   const handleAddToCollection = async () => {
@@ -413,10 +415,10 @@ export default function Home({ poem, poemName, authorData, authorName }: any) {
                                           "block px-4 py-2 text-sm w-full text-left"
                                         )}
                                         onClick={() =>
-                                          setSelectedCollection(collection.name)
+                                          setSelectedCollection(collection)
                                         }
                                       >
-                                        {collection.name}
+                                        {collection}
                                       </button>
                                     )}
                                   </Menu.Item>
@@ -431,7 +433,7 @@ export default function Home({ poem, poemName, authorData, authorName }: any) {
                     <div className="sm:flex justify-between items-center mb-4 gap-x-2">
                       <h1 className="basis-1/3">New Collection:</h1>
                       <input
-                        placeholder="Choose Collection"
+                        placeholder="Name of new collection"
                         value={newCollectionValue}
                         onChange={(e) => setNewCollectionValue(e.target.value)}
                         className={`

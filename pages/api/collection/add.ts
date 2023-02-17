@@ -45,6 +45,7 @@ export default async function handler(
                     User.updateOne(
                         {name: session.user.name, collections: { $elemMatch: {name: req.body.collectionName} } },
                         { $addToSet: { "collections.$.titles": req.body.poemTitle } },
+                        {new: false},
                         (err: any, user: any) => {
                             if(err) {
                                 res.status(201).send({
@@ -70,7 +71,7 @@ export default async function handler(
                     User.findOneAndUpdate(
                         {email: session.user.email},
                         {$addToSet: {collections: newCollection}},
-                        {new: true},
+                        {new: false},
                         (err, user) => {
                             if(err) {
                                 res.status(201).send({

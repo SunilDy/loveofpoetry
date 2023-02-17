@@ -5,13 +5,21 @@ export const CollectionSchema = new Schema({
   titles: [String]
 })
 
+const LikedPoemsType = new Schema({
+  title: String,
+  author: String
+})
+
 const UserSchema = new Schema({
   name: String,
   email: String,
   image: String,
   emailVerified: Boolean,
   refresh_token_expires_in: String,
-  likedPoems: [String],
+  likedPoems: {
+    type: [LikedPoemsType],
+  },
+  // likedPoems: [String],
   collections: {
     type: [CollectionSchema]
   }

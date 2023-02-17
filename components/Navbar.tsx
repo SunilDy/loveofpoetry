@@ -85,13 +85,13 @@ const Navbar = () => {
       <div className={`basis-1/4 justify-self-end flex items-center`}>
         <div className="xsm:collapse xsm:w-0 lg:visible lg:w-full">
           {session && session.user ? (
-            <Link href={"/"}>
+            <Link href={"/auth/user"}>
               <h1 className={`xsm:text-md md:text-lg lg:text-xl text-right`}>
                 Hi, {session?.user.name}
               </h1>
             </Link>
           ) : (
-            <Link href={"/login"}>
+            <Link href={"/auth/login"}>
               <h1 className={`xsm:text-md md:text-lg lg:text-xl text-right`}>
                 Login
               </h1>
@@ -132,7 +132,13 @@ const Navbar = () => {
             <MenuItem>
               <Link href={`/search?name=${searchValue}`}>Search</Link>
             </MenuItem>
-            <MenuItem>User Profile</MenuItem>
+            <MenuItem>
+              {session ? (
+                <Link href={"/auth/user"}>User Profile</Link>
+              ) : (
+                <Link href={"/auth/login"}>Login</Link>
+              )}
+            </MenuItem>
           </Menu>
         </div>
       </div>
