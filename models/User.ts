@@ -1,13 +1,25 @@
 import { Schema, model, models } from 'mongoose';
 
-export const CollectionSchema = new Schema({
-  name: String,
-  titles: [String]
-})
-
 const LikedPoemsType = new Schema({
   title: String,
   author: String
+})
+
+export const CollectionSchema = new Schema({
+  name: String,
+  titles: [LikedPoemsType]
+})
+
+const LineSchema = new Schema({
+  line: String,
+  comment: String
+})
+
+const StudySchema = new Schema({
+  title: String,
+  author: String,
+  lines: [LineSchema],
+  notes: String
 })
 
 const UserSchema = new Schema({
@@ -19,15 +31,27 @@ const UserSchema = new Schema({
   likedPoems: {
     type: [LikedPoemsType],
   },
-  // likedPoems: [String],
   collections: {
     type: [CollectionSchema]
+  },
+  studies: {
+    type: [StudySchema]
   }
 });
 
 const User = models.users || model('users', UserSchema);
 
 export default User;
+
+export type StudyType = {
+  title: string;
+  author: string;
+  lines: {
+    line: string;
+    comment: string;
+  }[],
+  notes: string;
+}
 
 export type UserType = {
   name: string;
@@ -40,5 +64,6 @@ export type UserType = {
     _id: string;
     name: string;
     titles: string[]
-  }[]
+  }[],
+  studies: StudyType[]
 }

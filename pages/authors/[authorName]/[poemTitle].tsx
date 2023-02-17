@@ -43,6 +43,7 @@ export default function Home({ poem, poemName, authorData, authorName }: any) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newCollectionValue, setNewCollectionValue] = useState("");
   const [isAddingToCollection, setisAddingToCollection] = useState(false);
+  const [isUpdatingStudies, setIsUpdatingStudies] = useState(false);
   const [selectedCollection, setSelectedCollection] = useState("Favorite");
   const [collectionsState, setCollectionsState] = useState([
     {
@@ -68,6 +69,7 @@ export default function Home({ poem, poemName, authorData, authorName }: any) {
     refetchOnWindowFocus: true,
   });
 
+  // Side Effects
   useEffect(() => {
     if (commentsRes?.data.poem) {
       if (commentsRes.data.poem.comments.length < 1) {
@@ -81,15 +83,18 @@ export default function Home({ poem, poemName, authorData, authorName }: any) {
       let collection = collectionsRes.data.collections.map(
         (collection: any) => collection.name
       );
-      console.log(collection);
+      // console.log(collection);
       setCollectionsState(collection);
     }
     // console.log("selectedCollection", selectedCollection);
   }, [commentsRes, comments, collectionsRes]);
 
-  useEffect(() => {
-    console.log("selectedCollection", selectedCollection);
-  }, [newCollectionValue, selectedCollection, collectionsState]);
+  // States
+  useEffect(() => {}, [
+    newCollectionValue,
+    selectedCollection,
+    collectionsState,
+  ]);
 
   const handleAddComment = async () => {
     if (session?.user) {
@@ -105,131 +110,38 @@ export default function Home({ poem, poemName, authorData, authorName }: any) {
       );
       await refetchComments();
     } else {
-      router.push("/login");
+      router.push("/auth/login");
     }
   };
 
   const handleLikePoem = async () => {
-    axios
-      .post(
-        "/api/poem/like",
-        {
-          poemTitle: poemName,
-          author: authorName,
-        },
-        {
-          withCredentials: true,
-        }
-      )
-      .then((res) => {
-        if (res.data.message === "updated") {
-          toast.custom((t) => (
-            <div
-              className={`${
-                t.visible ? "animate-enter" : "animate-leave"
-              } w-fit shadow-2xl rounded-lg pointer-events-auto flex items-center ring-1 ring-black ring-opacity-5 p-4 text-white
-              backdrop-blur-3xl
-              `}
-            >
-              <div className="">
-                <h1
-                  className={`${montserrat.className} xsm:text-xs md:text-sm lg:text-lg font-bold`}
-                >
-                  Poem added to your your liked-list!
-                </h1>
-              </div>
-              <div>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  className="xsm:w-4 xsm:h-4 lg:w-6 lg:h-6 xsm:mx-1 lg:mx-2 cursor-pointer"
-                  onClick={() => toast.dismiss(t.id)}
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-1.72 6.97a.75.75 0 10-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 101.06 1.06L12 13.06l1.72 1.72a.75.75 0 101.06-1.06L13.06 12l1.72-1.72a.75.75 0 10-1.06-1.06L12 10.94l-1.72-1.72z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </div>
-            </div>
-          ));
-        } else if (res.data.message === "exists") {
-          toast.custom((t) => (
-            <div
-              className={`${
-                t.visible ? "animate-enter" : "animate-leave"
-              } w-fit shadow-2xl rounded-lg pointer-events-auto flex items-center ring-1 ring-black ring-opacity-5 p-4 text-white
-              backdrop-blur-3xl
-              `}
-            >
-              <div className="">
-                <h1
-                  className={`${montserrat.className} xsm:text-xs md:text-sm lg:text-lg font-bold`}
-                >
-                  Poem is already in your list of liked poems!
-                </h1>
-              </div>
-              <div>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  className="xsm:w-4 xsm:h-4 lg:w-6 lg:h-6 xsm:mx-1 lg:mx-2 cursor-pointer"
-                  onClick={() => toast.dismiss(t.id)}
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-1.72 6.97a.75.75 0 10-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 101.06 1.06L12 13.06l1.72 1.72a.75.75 0 101.06-1.06L13.06 12l1.72-1.72a.75.75 0 10-1.06-1.06L12 10.94l-1.72-1.72z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </div>
-            </div>
-          ));
-        }
-      })
-      .catch((err) => console.log("smth went wrong"));
-  };
-
-  const handleAddToCollection = async () => {
-    setisAddingToCollection(true);
-    let collectionName = "";
-    if (newCollectionValue.length < 1) collectionName = selectedCollection;
-    else collectionName = newCollectionValue;
-    console.log(collectionName);
-
-    axios
-      .post(
-        `/api/collection/add`,
-        {
-          poemTitle: poemName,
-          collectionName,
-        },
-        {
-          withCredentials: true,
-        }
-      )
-      .then((res) => {
-        console.log(res.data);
-        if (res.data.status === "ok") {
-          setisAddingToCollection(false);
-          setIsModalOpen(!isModalOpen);
-          if (res.data.poemAlreadyInList) {
+    if (session?.user) {
+      axios
+        .post(
+          "/api/poem/like",
+          {
+            poemTitle: poemName,
+            author: authorName,
+          },
+          {
+            withCredentials: true,
+          }
+        )
+        .then((res) => {
+          if (res.data.message === "updated") {
             toast.custom((t) => (
               <div
                 className={`${
                   t.visible ? "animate-enter" : "animate-leave"
                 } w-fit shadow-2xl rounded-lg pointer-events-auto flex items-center ring-1 ring-black ring-opacity-5 p-4 text-white
-                backdrop-blur-3xl
-                `}
+              backdrop-blur-3xl
+              `}
               >
                 <div className="">
                   <h1
                     className={`${montserrat.className} xsm:text-xs md:text-sm lg:text-lg font-bold`}
                   >
-                    Poem is already in the collection!
+                    Poem added to your your liked-list!
                   </h1>
                 </div>
                 <div>
@@ -249,20 +161,20 @@ export default function Home({ poem, poemName, authorData, authorName }: any) {
                 </div>
               </div>
             ));
-          } else {
+          } else if (res.data.message === "exists") {
             toast.custom((t) => (
               <div
                 className={`${
                   t.visible ? "animate-enter" : "animate-leave"
                 } w-fit shadow-2xl rounded-lg pointer-events-auto flex items-center ring-1 ring-black ring-opacity-5 p-4 text-white
-                backdrop-blur-3xl
-                `}
+              backdrop-blur-3xl
+              `}
               >
                 <div className="">
                   <h1
                     className={`${montserrat.className} xsm:text-xs md:text-sm lg:text-lg font-bold`}
                   >
-                    Poem added to your collection.
+                    Poem is already in your list of liked poems!
                   </h1>
                 </div>
                 <div>
@@ -283,8 +195,202 @@ export default function Home({ poem, poemName, authorData, authorName }: any) {
               </div>
             ));
           }
-        }
-      });
+        })
+        .catch((err) => console.log("smth went wrong"));
+    } else {
+      router.push("/auth/login");
+    }
+  };
+
+  const handleAddToCollection = async () => {
+    setisAddingToCollection(true);
+    let collectionName = "";
+    if (newCollectionValue.length < 1) collectionName = selectedCollection;
+    else collectionName = newCollectionValue;
+
+    if (session?.user) {
+      axios
+        .post(
+          `/api/collection/add`,
+          {
+            poemTitle: poemName,
+            collectionName,
+            author: authorName,
+          },
+          {
+            withCredentials: true,
+          }
+        )
+        .then((res) => {
+          // console.log(res.data);
+          if (res.data.status === "ok") {
+            setisAddingToCollection(false);
+            setIsModalOpen(!isModalOpen);
+            if (res.data.poemAlreadyInList) {
+              toast.custom((t) => (
+                <div
+                  className={`${
+                    t.visible ? "animate-enter" : "animate-leave"
+                  } w-fit shadow-2xl rounded-lg pointer-events-auto flex items-center ring-1 ring-black ring-opacity-5 p-4 text-white
+                backdrop-blur-3xl
+                `}
+                >
+                  <div className="">
+                    <h1
+                      className={`${montserrat.className} xsm:text-xs md:text-sm lg:text-lg font-bold`}
+                    >
+                      Poem is already in the collection!
+                    </h1>
+                  </div>
+                  <div>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      className="xsm:w-4 xsm:h-4 lg:w-6 lg:h-6 xsm:mx-1 lg:mx-2 cursor-pointer"
+                      onClick={() => toast.dismiss(t.id)}
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-1.72 6.97a.75.75 0 10-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 101.06 1.06L12 13.06l1.72 1.72a.75.75 0 101.06-1.06L13.06 12l1.72-1.72a.75.75 0 10-1.06-1.06L12 10.94l-1.72-1.72z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              ));
+            } else {
+              toast.custom((t) => (
+                <div
+                  className={`${
+                    t.visible ? "animate-enter" : "animate-leave"
+                  } w-fit shadow-2xl rounded-lg pointer-events-auto flex items-center ring-1 ring-black ring-opacity-5 p-4 text-white
+                backdrop-blur-3xl
+                `}
+                >
+                  <div className="">
+                    <h1
+                      className={`${montserrat.className} xsm:text-xs md:text-sm lg:text-lg font-bold`}
+                    >
+                      Poem added to your collection.
+                    </h1>
+                  </div>
+                  <div>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      className="xsm:w-4 xsm:h-4 lg:w-6 lg:h-6 xsm:mx-1 lg:mx-2 cursor-pointer"
+                      onClick={() => toast.dismiss(t.id)}
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-1.72 6.97a.75.75 0 10-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 101.06 1.06L12 13.06l1.72 1.72a.75.75 0 101.06-1.06L13.06 12l1.72-1.72a.75.75 0 10-1.06-1.06L12 10.94l-1.72-1.72z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              ));
+            }
+          }
+          setNewCollectionValue("");
+        })
+        .catch((err) => console.log(err));
+    } else {
+      router.push("/auth/login");
+    }
+  };
+
+  const handleAddToStudy = () => {
+    setIsUpdatingStudies(true);
+    if (session?.user) {
+      axios
+        .post(
+          `/api/study/add`,
+          {
+            title: poemName,
+          },
+          {
+            withCredentials: true,
+          }
+        )
+        .then((res) => {
+          if (res.data.status === "ok") {
+            setIsUpdatingStudies(false);
+            if (res.data.alreadyExists) {
+              toast.custom((t) => (
+                <div
+                  className={`${
+                    t.visible ? "animate-enter" : "animate-leave"
+                  } w-fit shadow-2xl rounded-lg pointer-events-auto flex items-center ring-1 ring-black ring-opacity-5 p-4 text-white
+                backdrop-blur-3xl
+                `}
+                >
+                  <div className="">
+                    <h1
+                      className={`${montserrat.className} xsm:text-xs md:text-sm lg:text-lg font-bold`}
+                    >
+                      Poem is already in your studies!
+                    </h1>
+                  </div>
+                  <div>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      className="xsm:w-4 xsm:h-4 lg:w-6 lg:h-6 xsm:mx-1 lg:mx-2 cursor-pointer"
+                      onClick={() => toast.dismiss(t.id)}
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-1.72 6.97a.75.75 0 10-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 101.06 1.06L12 13.06l1.72 1.72a.75.75 0 101.06-1.06L13.06 12l1.72-1.72a.75.75 0 10-1.06-1.06L12 10.94l-1.72-1.72z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              ));
+            } else if (!res.data.alreadyExists) {
+              toast.custom((t) => (
+                <div
+                  className={`${
+                    t.visible ? "animate-enter" : "animate-leave"
+                  } w-fit shadow-2xl rounded-lg pointer-events-auto flex items-center ring-1 ring-black ring-opacity-5 p-4 text-white
+                backdrop-blur-3xl
+                `}
+                >
+                  <div className="">
+                    <h1
+                      className={`${montserrat.className} xsm:text-xs md:text-sm lg:text-lg font-bold`}
+                    >
+                      Poem added to your studies.
+                    </h1>
+                  </div>
+                  <div>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      className="xsm:w-4 xsm:h-4 lg:w-6 lg:h-6 xsm:mx-1 lg:mx-2 cursor-pointer"
+                      onClick={() => toast.dismiss(t.id)}
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-1.72 6.97a.75.75 0 10-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 101.06 1.06L12 13.06l1.72 1.72a.75.75 0 101.06-1.06L13.06 12l1.72-1.72a.75.75 0 10-1.06-1.06L12 10.94l-1.72-1.72z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              ));
+            }
+          }
+        })
+        .catch((err) => console.log(err));
+    } else {
+      router.push("/auth/login");
+    }
   };
 
   return (
@@ -350,7 +456,22 @@ export default function Home({ poem, poemName, authorData, authorName }: any) {
                 >
                   Add To Collection
                 </SecondaryButton>
-                <PrimaryButton handleOnClick={() => {}}>Study</PrimaryButton>
+                <PrimaryButton handleOnClick={handleAddToStudy}>
+                  {isUpdatingStudies ? (
+                    <Oval
+                      height={15}
+                      width={15}
+                      color="#A855F7"
+                      visible={true}
+                      ariaLabel="oval-loading"
+                      secondaryColor="tr"
+                      strokeWidth={4}
+                      strokeWidthSecondary={4}
+                    />
+                  ) : (
+                    <p>Add To Study</p>
+                  )}
+                </PrimaryButton>
               </div>
               {/* Add to collection MODAL */}
               {isModalOpen && (
@@ -469,7 +590,10 @@ export default function Home({ poem, poemName, authorData, authorName }: any) {
                         )}
                       </PrimaryButton>
                       <SecondaryButton
-                        handleOnClick={() => setIsModalOpen(!isModalOpen)}
+                        handleOnClick={function () {
+                          setIsModalOpen(!isModalOpen);
+                          setNewCollectionValue("");
+                        }}
                       >
                         Close
                       </SecondaryButton>
@@ -484,7 +608,7 @@ export default function Home({ poem, poemName, authorData, authorName }: any) {
               {/* Author Details ===========*/}
               <div
                 className={`my-10 mx-auto
-              xsm:w-[90%] md:w-[80%] lg:w-[70%] xl:w-[60%]
+              xsm:w-[90%] md:w-[80%]
               `}
               >
                 {/* Author Image */}
@@ -508,16 +632,20 @@ export default function Home({ poem, poemName, authorData, authorName }: any) {
                   )}
                   <div>
                     <p
-                      className={`${alegreya.className} text-md underline underline-offset-4 decoration-white`}
+                      className={`${alegreya.className} text-md underline underline-offset-4 decoration-white
+                      xsm:text-sm md:text-lg lg:text-lg
+                      `}
                     >
                       {authorName}
                     </p>
-                    <p className={`${alegreya.className} text-md`}>
+                    <p
+                      className={`${alegreya.className} xsm:text-sm md:text-md lg:text-lg`}
+                    >
                       {authorData.description}
                     </p>
                     <Link href={`/authors/${authorName}`}>
                       <p
-                        className={`${alegreya.className} text-md flex items-center`}
+                        className={`${alegreya.className} xsm:text-sm md:text-md lg:text-lg flex items-center`}
                       >
                         See more works
                         <svg
@@ -538,7 +666,7 @@ export default function Home({ poem, poemName, authorData, authorName }: any) {
                 </div>
                 {/* Author extract */}
                 <div className="">
-                  <p className={`${alegreya.className} text-md`}>
+                  <p className={`${alegreya.className} xsm:text-sm md:text-xl`}>
                     {authorData.extract}
                   </p>
                 </div>

@@ -39,12 +39,12 @@ export default async function handler(
                 if(alreadyexists) {
                     let poemAlreadyInList = false
                     if(session.user)
-                    for(let i = 0; i < user.collections.length; i++) {
-                        if(user.collections[i].titles.includes(req.body.poemTitle)) poemAlreadyInList = true
-                    }
+                    // for(let i = 0; i < user.collections.length; i++) {
+                    //     if(user.collections[i].titles.includes(req.body.poemTitle)) poemAlreadyInList = true
+                    // }
                     User.updateOne(
                         {name: session.user.name, collections: { $elemMatch: {name: req.body.collectionName} } },
-                        { $addToSet: { "collections.$.titles": req.body.poemTitle } },
+                        { $addToSet: { "collections.$.titles": {title: req.body.poemTitle, author: req.body.author} } },
                         {new: false},
                         (err: any, user: any) => {
                             if(err) {
@@ -65,7 +65,10 @@ export default async function handler(
                 } else if(!alreadyexists) {
                     let newCollection = {
                         name: req.body.collectionName,
-                        titles: [req.body.poemTitle]
+                        titles: [{
+                            title: req.body.poemTitle,
+                            author: req.body.author
+                        }]
                     }
                     if(session.user)
                     User.findOneAndUpdate(

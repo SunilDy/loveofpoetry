@@ -20,6 +20,8 @@ export const PrimaryButton = ({
               hover:scale-95
               transition-transform
               lg:text-md xsm:text-sm
+              border-2 border-white
+              font-semibold
               ${buttonClassNames}
             `}
         onClick={handleOnClick}
@@ -46,6 +48,7 @@ export const SecondaryButton = ({
               transition-transform
               border-2 border-white border-opacity-30
               lg:text-md xsm:text-sm
+              font-semibold
               ${buttonClassNames}
             `}
         onClick={handleOnClick}

@@ -40,7 +40,7 @@ export default async function handler(
                           if(session.user)
                           User.findOneAndUpdate(
                             {email: session.user.email},
-                            {$push: {collections: newCollection}},
+                            {$addToSet: {collections: newCollection}},
                             {new: true},
                             (err, user) => {
                               if(err) {

@@ -4,13 +4,13 @@ import Image from "next/image";
 import { Montserrat } from "@next/font/google";
 import axios from "axios";
 import { useQuery } from "react-query";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import Link from "next/link";
 // import "react-tabs/style/react-tabs.css";
 import { XCircleIcon } from "@heroicons/react/20/solid";
 import { useRouter } from "next/router";
-import { PrimaryButton } from "@/components/Buttons";
+import { PrimaryButton, SecondaryButton } from "@/components/Buttons";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -20,7 +20,25 @@ const getLikedPoems = async () => {
   });
 };
 
+const getUserCollections = async () => {
+  return await axios.get(`/api/collection/get`, {
+    withCredentials: true,
+  });
+};
+
+const getUserStudies = async () => {
+  return await axios.get(`/api/study/get`, {
+    withCredentials: true,
+  });
+};
+
 const User = () => {
+  //  States
+  const [userCollectionsState, setUserCollectionsState] = useState(null);
+  const [userStudiesState, setUserStudiesState] = useState(null);
+  const [userStudiesLength, setUserStudiesLength] = useState(null);
+  const [isUpdatingCollection, setIsUpdatingCollection] = useState(false);
+
   const router = useRouter();
   const { data: session, status } = useSession({
     required: true,
@@ -38,9 +56,45 @@ const User = () => {
     refetchOnWindowFocus: false,
   });
 
+  const {
+    data: userCollectionsRes,
+    isLoading: loadingCollections,
+    isFetching: fetchingCollections,
+    refetch: refetchCollections,
+  } = useQuery("user-collections", getUserCollections, {
+    refetchOnWindowFocus: false,
+  });
+
+  const {
+    data: userStudiesRes,
+    isLoading: loadingStudies,
+    isFetching: fetchingStudies,
+    refetch: refetchStudies,
+  } = useQuery("user-studies", getUserStudies, {
+    refetchOnWindowFocus: false,
+  });
+
+  // For Side Effects
   useEffect(() => {
-    // console.log(likedPoems?.data.likedPoems);
-  }, [likedPoems]);
+    if (userCollectionsRes?.data) {
+      setUserCollectionsState(userCollectionsRes?.data.collections);
+    }
+
+    if (userStudiesRes?.data) {
+      setUserStudiesState(userStudiesRes.data.studies);
+      setUserStudiesLength(userStudiesRes.data.studiesLength);
+    }
+
+    // console.log("userStudiesRes", userStudiesRes);
+  }, [likedPoems, userCollectionsRes, userStudiesRes]);
+
+  // For States
+  useEffect(() => {
+    console.log("userStudiesState", userStudiesState);
+    console.log("userStudiesLength", userStudiesLength);
+  }, [userCollectionsState, userStudiesState, userStudiesLength]);
+
+  useEffect(() => {}, []);
 
   const handleDeleteLikedPoem = async (title: string) => {
     console.log(title);
@@ -63,6 +117,52 @@ const User = () => {
       });
   };
 
+  const handleDeleteTitleFromCollection = (
+    collection: string,
+    title: string
+  ) => {
+    setIsUpdatingCollection(true);
+    axios
+      .patch(
+        `/api/collection/update`,
+        {
+          collection,
+          title,
+        },
+        {
+          withCredentials: true,
+        }
+      )
+      .then(async (res) => {
+        if (res.data.status === "ok") {
+          await refetchCollections();
+          setIsUpdatingCollection(false);
+        }
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const handleDeleteCollection = (collectionName: string) => {
+    setIsUpdatingCollection(true);
+    axios
+      .post(
+        `/api/collection/update`,
+        {
+          collectionName,
+        },
+        {
+          withCredentials: true,
+        }
+      )
+      .then(async (res) => {
+        if (res.data.status === "ok") {
+          await refetchCollections();
+          setIsUpdatingCollection(false);
+        }
+      })
+      .catch((err) => console.log(err));
+  };
+
   if (status === "loading") {
     return (
       <div className="min-h-screen flex justify-center items-center">
@@ -81,13 +181,13 @@ const User = () => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col justify-between items-center">
-      <div>
+    <div className="min-h-screen flex flex-col justify-between items-center xsm:w-[90%] lg:w-[80%] mx-auto">
+      <div className="w-full mx-auto">
         {/* User Details */}
         <div
           className={`flex my-10 items-center
-        xsm:px-6 md:px-10 lg:px-20
-    `}
+            xsm:px-6 md:px-10 lg:px-20
+          `}
         >
           <div>
             <Image
@@ -101,10 +201,14 @@ const User = () => {
             />
           </div>
           <div>
-            <h1 className={`${montserrat.className} text-white text-md`}>
+            <h1
+              className={`${montserrat.className} text-white xsm:text-sm md:text-md`}
+            >
               {session?.user?.name}
             </h1>
-            <h1 className={`${montserrat.className} text-white text-md`}>
+            <h1
+              className={`${montserrat.className} text-white xsm:text-sm md:text-md`}
+            >
               {session?.user?.email}
             </h1>
           </div>
@@ -112,12 +216,8 @@ const User = () => {
         {/* User Details */}
 
         {/* Tabs */}
-        <div className={`flex justify-center`}>
-          <Tabs
-            className={`box-border
-          xsm:w-[90%] lg:w-[80%]
-        `}
-          >
+        <div className={`mx-auto`}>
+          <Tabs className={`box-border`}>
             <TabList
               className={`flex justify-center xsm:gap-x-2 lg:gap-x-10
               text-white font-bold ${montserrat.className} xsm:text-sm lg:text-lg
@@ -133,15 +233,16 @@ const User = () => {
               <Tab className={`xsm:px-2 lg:px-4 cursor-pointer`}>Studies</Tab>
             </TabList>
 
+            {/* Liked Poems */}
             {likedPoems?.data && likedPoems.data.likedPoems.length > 0 ? (
-              <TabPanel className={`xsm:m-2 lg:m-6`}>
+              <TabPanel className={`xsm:m-2 lg:m-6 p-4`}>
                 {likedPoems?.data.likedPoems ||
                 !loadingPoems ||
                 !fetchingPoems ? (
                   likedPoems?.data.likedPoems.map((poem: any, i: number) => (
                     <div
                       key={i}
-                      className={`flex justify-between items-center border-b-2 border-white border-opacity-20 mb-2 gap-x-2`}
+                      className={`flex justify-between items-center border-b-2 border-white border-opacity-20 gap-x-2 mb-2 pb-2`}
                     >
                       <Link href={`/authors/${poem.author}/${poem.title}`}>
                         <p
@@ -182,18 +283,141 @@ const User = () => {
                 <p>No liked poems!</p>
               </TabPanel>
             )}
-            <TabPanel className={`xsm:m-2 lg:m-6 border-white box-border`}>
-              <h2>Collections</h2>
+            {/* Liked Poems */}
+            {/* Collections */}
+
+            <TabPanel
+              className={`xsm:m-2 lg:m-6 border-white box-border md:grid grid-cols-new4 gap-x-6`}
+            >
+              {userCollectionsState && !isUpdatingCollection ? (
+                userCollectionsState &&
+                // @ts-ignore
+                userCollectionsState?.map((collection: any, i: number) => (
+                  <div
+                    key={i}
+                    className={`bg-rose-100 border-2 border-slate-100 border-opacity-40 bg-opacity-20 rounded-xl shadow-2xl my-6 text-white p-4 ${montserrat.className}`}
+                  >
+                    {/* Header */}
+                    <div className="flex justify-between border-b-2 border-white border-opacity-40 pb-1 mb-2">
+                      <h1 className="font-bold">{collection.name}</h1>
+                      <button
+                        onClick={() => handleDeleteCollection(collection.name)}
+                      >
+                        <XCircleIcon
+                          className={`xsm:w-4 xsm:h-4 md:w-5 md:h-5 text-white`}
+                        />
+                      </button>
+                    </div>
+                    {/* Titles */}
+                    <div>
+                      {collection.titles.length > 0 ? (
+                        collection.titles.map((poem: any, i: number) => (
+                          <div key={i} className="flex justify-between my-2">
+                            <div className="flex gap-x-2 items-center">
+                              <Link
+                                href={`/authors/${poem.author}/${poem.title}`}
+                              >
+                                <p
+                                  className={`text-white font-bold xsm:text-sm lg:text-md ${montserrat.className}`}
+                                >
+                                  {poem.title}
+                                </p>
+                              </Link>
+                              <Link href={`/authors/${poem.author}`}>
+                                <span
+                                  className={`italic text-slate-200 font-light xsm:text-sm lg:text-md`}
+                                >
+                                  by {poem.author}
+                                </span>
+                              </Link>
+                            </div>
+                            <button
+                              onClick={() =>
+                                handleDeleteTitleFromCollection(
+                                  collection.name,
+                                  poem.title
+                                )
+                              }
+                            >
+                              <XCircleIcon
+                                className={`xsm:w-4 xsm:h-4 md:w-5 md:h-5 text-white`}
+                              />
+                            </button>
+                          </div>
+                        ))
+                      ) : (
+                        <p>No item</p>
+                      )}
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="flex justify-center py-20">
+                  <Oval
+                    height={60}
+                    width={60}
+                    color="#fff"
+                    visible={true}
+                    ariaLabel="oval-loading"
+                    secondaryColor="tr"
+                    strokeWidth={2}
+                    strokeWidthSecondary={2}
+                  />
+                </div>
+              )}
             </TabPanel>
-            <TabPanel className={`xsm:m-2 lg:m-6 border-white box-border`}>
-              <h2>Studies</h2>
+            {/* Collections */}
+
+            {/* Study */}
+            <TabPanel className={`${montserrat.className} my-6 text-white`}>
+              {userStudiesState &&
+              userStudiesLength &&
+              userStudiesLength > 0 ? (
+                // @ts-ignore
+                userStudiesState.map((study: any, i: number) => (
+                  <div
+                    key={i}
+                    className={`md:flex justify-between gap-x-2 border-b-2 border-white border-opacity-40 pb-2 mb-2`}
+                  >
+                    {/* Title */}
+                    <div className="flex gap-x-2 items-center">
+                      <Link href={`/authors/${study.author}/${study.title}`}>
+                        <p
+                          className={`text-white font-bold xsm:text-sm lg:text-md ${montserrat.className}`}
+                        >
+                          {study.title}
+                        </p>
+                      </Link>
+                      <Link href={`/authors/${study.author}`}>
+                        <span
+                          className={`italic text-slate-200 font-light xsm:text-sm lg:text-md`}
+                        >
+                          by {study.author}
+                        </span>
+                      </Link>
+                    </div>
+                    {/* Action Buttons */}
+                    <div className="flex gap-x-2 items-center">
+                      <PrimaryButton handleOnClick={() => {}}>
+                        Study
+                      </PrimaryButton>
+                      <SecondaryButton handleOnClick={() => {}}>
+                        Delete
+                      </SecondaryButton>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <p>No items in the studies!</p>
+              )}
             </TabPanel>
+            {/* Study */}
           </Tabs>
         </div>
         {/* Tabs */}
       </div>
       {/* User Actions */}
-      <div className="my-4 xsm:w-[90%] md:w-[80%] lg:w-[70%] xl:w-[60%] text-white">
+      <div className="my-4 w-full text-white">
         <h1
           className={`${montserrat.className} xsm:text-md md:text-lg font-bold border-b-2 border-white border-opacity-40 mb-4`}
         >
