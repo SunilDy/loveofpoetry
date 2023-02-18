@@ -4,7 +4,16 @@
 
 @layer {
   html {
-    @apply bg-gradient-to-tr from-purple-500 to-pink-500;
+    @apply bg-gradient-to-tr from-purple-500 to-pink-500 selection:bg-white selection:text-[hotpink];
+  }
+}
+
+@layer components {
+  .accent-border {
+    @apply border-2 border-white border-opacity-40;
+  }
+  .accent-border-bottom {
+    @apply border-b-2 border-white border-opacity-40;
   }
 }
 

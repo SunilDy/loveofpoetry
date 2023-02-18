@@ -41,7 +41,9 @@ export default async function handler(
                             studies = user.studies.map(study => {
                                 return {
                                     title: study.title,
-                                    author: study.author
+                                    author: study.author,
+                                    lastUpdatedAt: study.lastUpdatedAt,
+                                    notes: study.notes
                                 }
                             })
                         }

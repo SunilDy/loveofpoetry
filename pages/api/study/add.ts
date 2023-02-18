@@ -33,7 +33,8 @@ export default async function handler(
             title: poem.data[0].title,
             author: poem.data[0].author,
             lines: [],
-            notes: ""
+            notes: "",
+            lastUpdatedAt: new Date()
         }
 
         for(let i = 0; i < poem.data[0].lines.length; i++) {
@@ -49,8 +50,6 @@ export default async function handler(
         if(session?.user)
             User.findOne(
                 {email: session.user.email},
-                // { $addToSet: { studies: newStudy } },
-                // {new: false},
                 async (err: any, user: UserType) => {
 
                     let alreadyExists = false

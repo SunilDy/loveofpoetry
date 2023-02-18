@@ -76,6 +76,7 @@ export default function Home({ poem, poemName, authorData, authorName }: any) {
         setComments(null);
       } else {
         setComments(commentsRes.data.poem.comments);
+        console.log(commentsRes.data.poem.comments[0]);
       }
     }
 
@@ -695,7 +696,7 @@ export default function Home({ poem, poemName, authorData, authorName }: any) {
             <textarea
               value={comment}
               onChange={(e) => setComment(e.target.value)}
-              placeholder="Comment please 😃"
+              placeholder="Comment please 😇"
               className={`
                 bg-inherit text-white 
                 xsm:text-sm md:text-lg lg:text-xl font-semibold

@@ -7,7 +7,6 @@ import { useQuery } from "react-query";
 import { useEffect, useState } from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import Link from "next/link";
-// import "react-tabs/style/react-tabs.css";
 import { XCircleIcon } from "@heroicons/react/20/solid";
 import { useRouter } from "next/router";
 import { PrimaryButton, SecondaryButton } from "@/components/Buttons";
@@ -236,8 +235,8 @@ const User = () => {
             {/* Liked Poems */}
             {likedPoems?.data && likedPoems.data.likedPoems.length > 0 ? (
               <TabPanel className={`xsm:m-2 lg:m-6 p-4`}>
-                {likedPoems?.data.likedPoems ||
-                !loadingPoems ||
+                {likedPoems?.data.likedPoems &&
+                !loadingPoems &&
                 !fetchingPoems ? (
                   likedPoems?.data.likedPoems.map((poem: any, i: number) => (
                     <div
@@ -262,10 +261,10 @@ const User = () => {
                     </div>
                   ))
                 ) : (
-                  <div className="flex justify-center items-center">
+                  <div className="flex justify-center items-center mt-10">
                     <Oval
-                      height={100}
-                      width={100}
+                      height={80}
+                      width={80}
                       color="#fff"
                       visible={true}
                       ariaLabel="oval-loading"
@@ -398,18 +397,22 @@ const User = () => {
                     </div>
                     {/* Action Buttons */}
                     <div className="flex gap-x-2 items-center">
-                      <PrimaryButton handleOnClick={() => {}}>
+                      <PrimaryButton
+                        handleOnClick={() =>
+                          router.push(`user/studies/${study.title}`)
+                        }
+                      >
                         Study
                       </PrimaryButton>
-                      <SecondaryButton handleOnClick={() => {}}>
-                        Delete
-                      </SecondaryButton>
                     </div>
                   </div>
                 ))
               ) : (
                 <p>No items in the studies!</p>
               )}
+              <PrimaryButton handleOnClick={() => router.push(`user/studies`)}>
+                Go To Studies
+              </PrimaryButton>
             </TabPanel>
             {/* Study */}
           </Tabs>

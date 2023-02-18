@@ -19,7 +19,8 @@ const StudySchema = new Schema({
   title: String,
   author: String,
   lines: [LineSchema],
-  notes: String
+  notes: String,
+  lastUpdatedAt: Date
 })
 
 const UserSchema = new Schema({
@@ -43,6 +44,11 @@ const User = models.users || model('users', UserSchema);
 
 export default User;
 
+export type LineType = {
+  line: string;
+  comment: string;
+}
+
 export type StudyType = {
   title: string;
   author: string;
@@ -51,6 +57,7 @@ export type StudyType = {
     comment: string;
   }[],
   notes: string;
+  lastUpdatedAt: Date;
 }
 
 export type UserType = {
