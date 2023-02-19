@@ -12,27 +12,35 @@ const montserrat = Montserrat({ subsets: ["latin"] });
 const Search = () => {
   const router = useRouter();
   const [searchValue, setSearchValue] = useState(router.query.name);
+  const [searchState, setSearchState] = useState<any[] | null>(null);
 
-  console.log(router);
-
-  const getPoetry = async () => {
-    return await axios.get(`https://poetrydb.org/title/${searchValue}`);
+  const getSearch = async () => {
+    return await axios.post(`/api/search/get`, { searchValue });
   };
 
   const {
-    data: searchRes,
-    isLoading: loadingPoems,
-    isFetching: fetchingPoems,
+    data: searchData,
+    isLoading: loadingSearch,
+    isFetching: fetchingSearch,
+    isRefetching: refetchingSearch,
     refetch,
-  } = useQuery(`search-poem-${searchValue}`, getPoetry, {
+  } = useQuery(`search-data-${searchValue}`, getSearch, {
     refetchOnWindowFocus: false,
     // @ts-ignore
     enabled: searchValue?.length > 0,
   });
 
+  // Side effects
   useEffect(() => {
-    console.log(searchRes);
-  }, [searchRes, searchValue]);
+    if (searchData?.data) {
+      setSearchState(searchData.data.titles);
+    }
+  }, [searchValue, searchData]);
+
+  // States
+  useEffect(() => {
+    console.log("searchState", searchState);
+  }, [searchValue, searchState]);
 
   const handleSearchKeyDown = (e: any) => {
     if (e.key === "Enter") refetch();
@@ -59,7 +67,7 @@ const Search = () => {
       </div>
       {/* Poems */}
       <div className="xsm:w-[90%] md:w-[80%] lg:w-[70%] xl:w-[60%] mx-auto">
-        {loadingPoems || fetchingPoems ? (
+        {loadingSearch || fetchingSearch || refetchingSearch ? (
           <div className="flex justify-center my-20">
             <Oval
               height={60}
@@ -74,9 +82,9 @@ const Search = () => {
               strokeWidthSecondary={2}
             />
           </div>
-        ) : searchRes && searchRes.data.length > 0 ? (
+        ) : searchState && searchState?.length > 0 ? (
           <div className="text-white mx-10 mb-20">
-            {searchRes.data.map((poem: any, i: number) => (
+            {searchState.map((poem: any, i: number) => (
               <Link href={`/authors/${poem.author}/${poem.title}`} key={i}>
                 <p
                   className={`font-bold xsm:lg:text-md lg:text-lg border-b-2 border-white border-opacity-20 mb-2 ${montserrat.className}`}
