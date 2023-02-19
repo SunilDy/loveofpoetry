@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import connectMongo from '@/lib/connectMongo';
 import Poem from '@/models/Poem'
+import Title from '@/models/Title';
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]";
 
@@ -29,41 +30,20 @@ export default async function handler(
           avatar: session.user.image,
           comment: req.body.comment
         }
-        console.log(comment)
-      let poem = await Poem.findOne({name: poemName})
-      if(!poem) {
-        // Create a new poem
-        let newPoem = new Poem({
-          name: poemName,
-          comments: [comment]
-        })
-        await newPoem.save()
-        res.send({
-          message: "new poem created",
-          status: "ok",
-          comments: newPoem.comments
-        })
-      } else {
-        // Push the comment
-        Poem.findOneAndUpdate(
-          {name: poemName},
-          {$push: {comments: comment}},
-          {new: true},
-          (err, poem) => {
-            if(err) {
-              res.send({
-                message: "err"
-              })
-            } else {
-              res.send({
-                message: "pushed",
-                status: "ok",
-                comments: poem.comments
-              })
-            }
-          }
-        )
-      }
+
+      // console.log(comment)
+      let poem = await Title.findOneAndUpdate(
+        { title: poemName },
+        { $push: { comments: comment } },
+        { new: true }
+      )
+
+      res.send({
+        message: "pushed",
+        status: "ok",
+        comments: poem.comments
+      })
+
     }
 
 }

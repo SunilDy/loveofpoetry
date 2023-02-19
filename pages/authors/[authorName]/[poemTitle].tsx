@@ -69,6 +69,7 @@ export default function Home(props: any) {
     isFetching: fetchingComments,
     isFetched: areCommentsFetched,
     refetch: refetchComments,
+    isRefetching: isRefetchingComments,
   } = useQuery(`comments-${title.title}`, getComments, {
     refetchOnWindowFocus: true,
   });
@@ -84,7 +85,6 @@ export default function Home(props: any) {
         setComments(null);
       } else {
         setComments(commentsRes.data.poem.comments);
-        console.log(commentsRes.data.poem.comments[0]);
       }
     }
 
@@ -95,7 +95,6 @@ export default function Home(props: any) {
       // console.log(collection);
       setCollectionsState(collection);
     }
-    // console.log("selectedCollection", selectedCollection);
   }, [commentsRes, collectionsRes]);
 
   // States
@@ -232,7 +231,6 @@ export default function Home(props: any) {
           }
         )
         .then((res) => {
-          // console.log(res.data);
           if (res.data.status === "ok") {
             setisAddingToCollection(false);
             setIsModalOpen(!isModalOpen);
@@ -714,7 +712,10 @@ export default function Home(props: any) {
                 p-2 w-full
                 `}
             />
-            <PrimaryButton handleOnClick={handleAddComment}>
+            <PrimaryButton
+              handleOnClick={handleAddComment}
+              isDisabled={isRefetchingComments || comment.length < 1}
+            >
               Comment
             </PrimaryButton>
           </div>
@@ -745,7 +746,6 @@ export const getServerSideProps = async (context: any) => {
 
   let author = await Author.findOne({ name: params.authorName });
   let title = await Title.findOne({ title: params.poemTitle });
-  console.log(title);
 
   return {
     props: {

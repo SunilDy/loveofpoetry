@@ -4,6 +4,7 @@ import User, {StudyType, UserType} from '@/models/User';
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]";
 import axios from 'axios';
+import Title from '@/models/Title';
 
 type Data = {
   message: string,
@@ -25,22 +26,21 @@ export default async function handler(
         await connectMongo();
         console.log("CONNECTED TO MONGO");
 
-        let poem = await axios.get(`https://poetrydb.org/title/${req.body.title}`)
-
+        let poem = await Title.findOne({ title: req.body.title })
 
 
         let newStudy: StudyType = {
-            title: poem.data[0].title,
-            author: poem.data[0].author,
+            title: poem.title,
+            author: poem.author,
             lines: [],
             notes: "",
             lastUpdatedAt: new Date()
         }
 
-        for(let i = 0; i < poem.data[0].lines.length; i++) {
-            if(poem.data[0].lines[i] !== "") {
+        for(let i = 0; i < poem.lines.length; i++) {
+            if(poem.lines[i] !== "") {
                 let newLine = {
-                    line: poem.data[0].lines[i],
+                    line: poem.lines[i],
                     comment: ""
                 }
                 newStudy.lines.push(newLine)

@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import connectMongo from '@/lib/connectMongo';
-import Poem from '@/models/Poem'
+import Title from '@/models/Title';
 
 type Data = {
   message: string,
@@ -16,27 +16,16 @@ export default async function handler(
         console.log("CONNECTING TO MONGO");
         await connectMongo();
         console.log("CONNECTED TO MONGO");
-      let poemName = req.body.poemName;
-      console.log(poemName)
-      try {
-        let poem = await Poem.findOne({name: poemName})
-        if(!poem) {
-          res.status(200).send({
-              message: 'non',
-              status: 'err'
-          })
-        } else {
-          res.status(200).send({
-              message: 'ok',
-              status: 'ok',
-              poem
-          })
-        }
-      } catch(err) {
+        let poemName = req.body.title;
+        // console.log(poemName)
+
+        let title = await Title.findOne({ title: poemName })
+
         res.status(200).send({
-            message: 'err',
-            status: 'err',
+          message: 'ok',
+          status: 'ok',
+          poem: title
         })
-      }
+
     }
 }

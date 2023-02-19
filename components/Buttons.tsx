@@ -1,8 +1,11 @@
+import { isPropertyAccessChain } from "typescript";
+
 type PrimaryButtonProps = {
   children: React.ReactNode;
   handleOnClick: () => void;
   classNames?: string;
   buttonClassNames?: string;
+  isDisabled?: boolean;
 };
 
 export const PrimaryButton = ({
@@ -10,6 +13,7 @@ export const PrimaryButton = ({
   handleOnClick,
   classNames,
   buttonClassNames,
+  isDisabled,
 }: PrimaryButtonProps) => {
   return (
     <div className={`${classNames}`}>
@@ -23,8 +27,10 @@ export const PrimaryButton = ({
               border-2 border-white
               md:font-semibold
               ${buttonClassNames}
+              disabled:cursor-not-allowed
             `}
         onClick={handleOnClick}
+        disabled={isDisabled}
       >
         {children}
       </button>
