@@ -124,16 +124,15 @@ export default function Home({ responseObject }: any) {
 }
 
 // export const getStaticPaths = async () => {
-//   let response = await fetch("https://poetrydb.org/author", {
-//     method: "GET",
-//   });
-//   // let data = await response.json();
-//   let data = await axios.get("https://poetrydb.org/author");
+//   console.log("CONNECTING TO MONGO");
+//   await connectMongo();
+//   console.log("CONNECTED TO MONGO");
+//   let authors = await Author.find({});
 
-//   let pathNames = data.data.authors.map((author: any) => {
+//   let pathNames = authors.map((author: any) => {
 //     return {
 //       params: {
-//         authorName: author,
+//         authorName: author.name,
 //       },
 //     };
 //   });
