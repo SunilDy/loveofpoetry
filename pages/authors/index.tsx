@@ -5,6 +5,8 @@ import { useState, useEffect } from "react";
 import { Montserrat } from "@next/font/google";
 import { useRouter } from "next/router";
 import { PrimaryButton } from "@/components/Buttons";
+import Author from "@/models/Author";
+import connectMongo from "@/lib/connectMongo";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -15,7 +17,7 @@ type NameBlock = {
   matchingNames: string[];
 };
 
-export default function Home({ data, nameBlocks }: any) {
+export default function Home({ nameBlocks }: any) {
   const [searchValue, setSearchValue] = useState("");
   const [nameBlocksState, setNameBlocksState] = useState(nameBlocks);
   const router = useRouter();
@@ -135,9 +137,11 @@ export default function Home({ data, nameBlocks }: any) {
 }
 
 export const getStaticProps = async () => {
-  let response = await fetch("https://poetrydb.org/author", {
-    method: "GET",
-  });
+  console.log("CONNECTING TO MONGO");
+  await connectMongo();
+  console.log("CONNECTED TO MONGO");
+  let authors = await Author.find({});
+  let authorNames = authors.map((author) => author.name);
 
   const alphabets = [
     "A",
@@ -168,8 +172,6 @@ export const getStaticProps = async () => {
     "Z",
   ];
 
-  let data = await response.json();
-
   let nameBlocks = [];
 
   for (let i = 0; i < alphabets.length; i++) {
@@ -181,12 +183,12 @@ export const getStaticProps = async () => {
   }
 
   for (let i = 0; i < alphabets.length; i++) {
-    for (let j = 0; j < data.authors.length; j++) {
+    for (let j = 0; j < authorNames.length; j++) {
       if (
-        data.authors[j].toLowerCase().charAt(0) === alphabets[i].toLowerCase()
+        authorNames[j].toLowerCase().charAt(0) === alphabets[i].toLowerCase()
       ) {
         // @ts-ignore
-        nameBlocks[i].matchingNames.push(data.authors[j]);
+        nameBlocks[i].matchingNames.push(authorNames[j]);
       }
     }
   }
@@ -197,7 +199,6 @@ export const getStaticProps = async () => {
 
   return {
     props: {
-      data,
       nameBlocks,
     },
   };
