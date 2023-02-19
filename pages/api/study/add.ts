@@ -26,7 +26,7 @@ export default async function handler(
         await connectMongo();
         console.log("CONNECTED TO MONGO");
 
-        let poem = await Title.findOne({ title: req.body.title })
+        let poem = await Title.findOne({ title: req.body.title, author: req.body.author })
 
 
         let newStudy: StudyType = {
@@ -54,7 +54,7 @@ export default async function handler(
 
                     let alreadyExists = false
                     for(let i = 0; i < user.studies.length; i++) {
-                        if(user.studies[i].title === req.body.title) {
+                        if(user.studies[i].title === req.body.title && user.studies[i].author === req.body.author) {
                             alreadyExists = true
                         }
                     }

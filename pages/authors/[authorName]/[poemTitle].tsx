@@ -318,6 +318,7 @@ export default function Home(props: any) {
           `/api/study/add`,
           {
             title: title.title,
+            author: title.author,
           },
           {
             withCredentials: true,
@@ -745,7 +746,10 @@ export const getServerSideProps = async (context: any) => {
   console.log("CONNECTED TO MONGO");
 
   let author = await Author.findOne({ name: params.authorName });
-  let title = await Title.findOne({ title: params.poemTitle });
+  let title = await Title.findOne({
+    title: params.poemTitle,
+    author: params.authorName,
+  });
 
   return {
     props: {

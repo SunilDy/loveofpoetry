@@ -9,7 +9,8 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import Link from "next/link";
 import { XCircleIcon } from "@heroicons/react/20/solid";
 import { useRouter } from "next/router";
-import { PrimaryButton, SecondaryButton } from "@/components/Buttons";
+import { PrimaryButton } from "@/components/Buttons";
+import UserDetails from "@/components/User/UserDetails";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -31,12 +32,19 @@ const getUserStudies = async () => {
   });
 };
 
+const getAdditionalUserInfo = async () => {
+  return await axios.get(`/api/user/get`, { withCredentials: true });
+};
+
 const User = () => {
   //  States
   const [userCollectionsState, setUserCollectionsState] = useState(null);
   const [userStudiesState, setUserStudiesState] = useState(null);
   const [userStudiesLength, setUserStudiesLength] = useState(null);
   const [isUpdatingCollection, setIsUpdatingCollection] = useState(false);
+  const [additionalUserDetailsState, setAdditionalUserDetailsState] = useState<
+    any | null
+  >(null);
 
   const router = useRouter();
   const { data: session, status } = useSession({
@@ -45,6 +53,8 @@ const User = () => {
       router.push("/auth/login");
     },
   });
+
+  // console.log(session?.user);
 
   const {
     data: likedPoems,
@@ -73,6 +83,14 @@ const User = () => {
     refetchOnWindowFocus: false,
   });
 
+  const { data: additionalUserInfoRes } = useQuery(
+    `additional-user-info`,
+    getAdditionalUserInfo,
+    {
+      refetchOnWindowFocus: false,
+    }
+  );
+
   // For Side Effects
   useEffect(() => {
     if (userCollectionsRes?.data) {
@@ -83,20 +101,22 @@ const User = () => {
       setUserStudiesState(userStudiesRes.data.studies);
       setUserStudiesLength(userStudiesRes.data.studiesLength);
     }
-
-    // console.log("userStudiesRes", userStudiesRes);
-  }, [likedPoems, userCollectionsRes, userStudiesRes]);
+    if (additionalUserInfoRes?.data) {
+      setAdditionalUserDetailsState(additionalUserInfoRes?.data.user);
+    }
+    console.log("additionalUserInfoRes", additionalUserInfoRes?.data);
+  }, [likedPoems, userCollectionsRes, userStudiesRes, additionalUserInfoRes]);
 
   // For States
-  useEffect(() => {
-    console.log("userStudiesState", userStudiesState);
-    console.log("userStudiesLength", userStudiesLength);
-  }, [userCollectionsState, userStudiesState, userStudiesLength]);
+  useEffect(() => {}, [
+    userCollectionsState,
+    userStudiesState,
+    userStudiesLength,
+  ]);
 
   useEffect(() => {}, []);
 
   const handleDeleteLikedPoem = async (title: string) => {
-    console.log(title);
     axios
       .patch(
         `/api/poem/like`,
@@ -108,7 +128,6 @@ const User = () => {
         }
       )
       .then((res) => {
-        console.log(res.data);
         refetchLikedPoems();
       })
       .catch((err) => {
@@ -183,35 +202,13 @@ const User = () => {
     <div className="min-h-screen flex flex-col justify-between items-center xsm:w-[90%] lg:w-[80%] mx-auto">
       <div className="w-full mx-auto">
         {/* User Details */}
-        <div
-          className={`flex my-10 items-center
-            xsm:px-6 md:px-10 lg:px-20
-          `}
-        >
-          <div>
-            <Image
-              className="xsm:w-14 lg:w-20 aspect-square object-cover object-center rounded-full mr-4 self-start"
-              // @ts-ignore
-              src={session?.user?.image}
-              // @ts-ignore
-              alt={session?.user?.name}
-              height={300}
-              width={300}
-            />
-          </div>
-          <div>
-            <h1
-              className={`${montserrat.className} text-white xsm:text-sm md:text-md`}
-            >
-              {session?.user?.name}
-            </h1>
-            <h1
-              className={`${montserrat.className} text-white xsm:text-sm md:text-md`}
-            >
-              {session?.user?.email}
-            </h1>
-          </div>
-        </div>
+        <UserDetails
+          profileImage={session?.user?.image}
+          username={session?.user?.name}
+          email={session?.user?.email}
+          bio={additionalUserDetailsState?.bio}
+          personalSite={additionalUserDetailsState?.personalSite}
+        />
         {/* User Details */}
 
         {/* Tabs */}
@@ -223,15 +220,20 @@ const User = () => {
               xsm:my-4 lg:my-6
               `}
             >
+              <Tab className={`xsm:px-2 lg:px-4 cursor-pointer`}>Posts</Tab>
               <Tab className={`xsm:px-2 lg:px-4 cursor-pointer`}>
                 Liked Poems
               </Tab>
               <Tab className={`xsm:px-2 lg:px-4 cursor-pointer`}>
                 Collections
               </Tab>
-              <Tab className={`xsm:px-2 lg:px-4 cursor-pointer`}>Studies</Tab>
             </TabList>
 
+            {/* Posts */}
+            <TabPanel className={`${montserrat.className} my-6 text-white`}>
+              <h1>Posts</h1>
+            </TabPanel>
+            {/* Posts */}
             {/* Liked Poems */}
             {likedPoems?.data && likedPoems.data.likedPoems.length > 0 ? (
               <TabPanel className={`xsm:m-2 lg:m-6 p-4`}>
@@ -366,55 +368,6 @@ const User = () => {
               )}
             </TabPanel>
             {/* Collections */}
-
-            {/* Study */}
-            <TabPanel className={`${montserrat.className} my-6 text-white`}>
-              {userStudiesState &&
-              userStudiesLength &&
-              userStudiesLength > 0 ? (
-                // @ts-ignore
-                userStudiesState.map((study: any, i: number) => (
-                  <div
-                    key={i}
-                    className={`md:flex justify-between gap-x-2 border-b-2 border-white border-opacity-40 pb-2 mb-2`}
-                  >
-                    {/* Title */}
-                    <div className="flex gap-x-2 items-center">
-                      <Link href={`/authors/${study.author}/${study.title}`}>
-                        <p
-                          className={`text-white font-bold xsm:text-sm lg:text-md ${montserrat.className}`}
-                        >
-                          {study.title}
-                        </p>
-                      </Link>
-                      <Link href={`/authors/${study.author}`}>
-                        <span
-                          className={`italic text-slate-200 font-light xsm:text-sm lg:text-md`}
-                        >
-                          by {study.author}
-                        </span>
-                      </Link>
-                    </div>
-                    {/* Action Buttons */}
-                    <div className="flex gap-x-2 items-center">
-                      <PrimaryButton
-                        handleOnClick={() =>
-                          router.push(`user/studies/${study.title}`)
-                        }
-                      >
-                        Study
-                      </PrimaryButton>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <p>No items in the studies!</p>
-              )}
-              <PrimaryButton handleOnClick={() => router.push(`user/studies`)}>
-                Go To Studies
-              </PrimaryButton>
-            </TabPanel>
-            {/* Study */}
           </Tabs>
         </div>
         {/* Tabs */}

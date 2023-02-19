@@ -31,17 +31,30 @@ const UserSchema = new Schema({
   refresh_token_expires_in: String,
   likedPoems: {
     type: [LikedPoemsType],
+    default: []
   },
   collections: {
     type: [CollectionSchema]
   },
   studies: {
-    type: [StudySchema]
+    type: [StudySchema],
+    default: []
+  },
+  bio: {
+    type: String,
+    default: ""
+  },
+  personalSite: {
+    type: String,
+    default: ""
+  },
+  posts: {
+    type: [String],
+    default: []
   }
 });
 
 const User = models.users || model('users', UserSchema);
-
 export default User;
 
 export type LineType = {
@@ -72,5 +85,8 @@ export type UserType = {
     name: string;
     titles: string[]
   }[],
-  studies: StudyType[]
+  studies: StudyType[],
+  personalSite: string,
+  bio: string,
+  posts: string[]
 }
