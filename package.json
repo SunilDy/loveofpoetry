@@ -33,6 +33,7 @@
     "react-query": "^3.39.3",
     "react-tabs": "^6.0.0",
     "sharp": "^0.31.3",
+    "tailwind-scrollbar": "^2.1.0",
     "typescript": "4.9.5"
   },
   "devDependencies": {

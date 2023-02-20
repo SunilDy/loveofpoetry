@@ -308,7 +308,9 @@ const User = () => {
             <Modal>
               <div
                 className={`bg-rose-100 bg-opacity-20 accent-border rounded-md p-6 text-white 
-                xsm:w-[90%] md:w-[60%]`}
+                xsm:w-[100%] md:w-[60%]
+                max-h-[90%] overflow-y-scroll scrollbar-thumb-white scrollbar-corner-pink-300 scrollbar-track-transparent scrollbar-thin
+                `}
               >
                 {/* Header */}
                 <h1

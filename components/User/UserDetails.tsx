@@ -34,9 +34,9 @@ const UserDetails = ({
         <div className="">
           {/* Image Transform */}
           <div className="grid grid-cols-1 grid-rows-1 place-items-center">
-            <div className="z-40 col-span-full row-span-full xsm:ring-2 lg:ring-4 ring-rose-200 ring-opacity-40 rounded-full xsm:w-20 md:w-28 lg:w-32 h-full"></div>
+            <div className="z-30 col-span-full row-span-full xsm:ring-2 lg:ring-4 ring-rose-200 ring-opacity-40 rounded-full xsm:w-20 md:w-28 lg:w-32 h-full"></div>
             <Image
-              className={`xsm:w-20 md:w-28 lg:w-32 aspect-square object-cover object-center rounded-full self-start z-50 col-span-full row-span-full 
+              className={`xsm:w-20 md:w-28 lg:w-32 aspect-square object-cover object-center rounded-full self-start z-40 col-span-full row-span-full 
             hover:translate-x-0 hover:translate-y-0 -translate-x-4 transition-transform
             `}
               // @ts-ignore

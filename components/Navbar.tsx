@@ -33,7 +33,8 @@ const Navbar = () => {
       flex items-center lg:gap-x-2
       xsm:py-0 lg:py-4 
       xsm:px-6 md:px-16 lg:px-20 xl:px-32 
-      justify-between text-white backdrop-blur-3xl z-50 sticky top-0 border-b-2 border-white border-opacity-10`}
+      justify-between text-white backdrop-blur-3xl z-50 sticky top-0 border-b-2 border-white border-opacity-10
+      `}
     >
       {/* Primary Links */}
       <div
