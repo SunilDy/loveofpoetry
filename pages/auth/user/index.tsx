@@ -1,16 +1,17 @@
 import { useSession, signOut } from "next-auth/react";
 import { Oval } from "react-loader-spinner";
-import Image from "next/image";
 import { Montserrat } from "@next/font/google";
 import axios from "axios";
 import { useQuery } from "react-query";
 import { useEffect, useState } from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import Link from "next/link";
-import { XCircleIcon } from "@heroicons/react/20/solid";
+import { XCircleIcon, InformationCircleIcon } from "@heroicons/react/20/solid";
 import { useRouter } from "next/router";
-import { PrimaryButton } from "@/components/Buttons";
+import { PrimaryButton, SecondaryButton } from "@/components/Buttons";
 import UserDetails from "@/components/User/UserDetails";
+import Modal from "@/components/Modal";
+import toast, { Toaster } from "react-hot-toast";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -36,15 +37,34 @@ const getAdditionalUserInfo = async () => {
   return await axios.get(`/api/user/get`, { withCredentials: true });
 };
 
+type AdditionalUserDetailsStateType = {
+  bio: string | null;
+  likedPoems: any;
+  personalSite: string | null;
+  studies: any;
+};
+
+type ProfileUpdateStateType = {
+  bio: string | null;
+  personalSite: string | null;
+};
+
 const User = () => {
   //  States
   const [userCollectionsState, setUserCollectionsState] = useState(null);
   const [userStudiesState, setUserStudiesState] = useState(null);
   const [userStudiesLength, setUserStudiesLength] = useState(null);
   const [isUpdatingCollection, setIsUpdatingCollection] = useState(false);
-  const [additionalUserDetailsState, setAdditionalUserDetailsState] = useState<
-    any | null
-  >(null);
+  const [additionalUserDetailsState, setAdditionalUserDetailsState] =
+    useState<AdditionalUserDetailsStateType | null>(null);
+  const [isProfileSettingModalOpen, setIsProfileSettingModalOpen] =
+    useState(false);
+  const [profileUpdateState, setProfileUpdateState] =
+    useState<ProfileUpdateStateType>({
+      bio: "",
+      personalSite: "",
+    });
+  const [isUpdatingProfile, setIsUpdatingProfile] = useState(false);
 
   const router = useRouter();
   const { data: session, status } = useSession({
@@ -83,13 +103,10 @@ const User = () => {
     refetchOnWindowFocus: false,
   });
 
-  const { data: additionalUserInfoRes } = useQuery(
-    `additional-user-info`,
-    getAdditionalUserInfo,
-    {
+  const { data: additionalUserInfoRes, refetch: refetchAdditionalUserInfo } =
+    useQuery(`additional-user-info`, getAdditionalUserInfo, {
       refetchOnWindowFocus: false,
-    }
-  );
+    });
 
   // For Side Effects
   useEffect(() => {
@@ -103,8 +120,12 @@ const User = () => {
     }
     if (additionalUserInfoRes?.data) {
       setAdditionalUserDetailsState(additionalUserInfoRes?.data.user);
+      setProfileUpdateState({
+        bio: additionalUserInfoRes?.data.user.bio,
+        personalSite: additionalUserInfoRes?.data.user.personalSite,
+      });
     }
-    console.log("additionalUserInfoRes", additionalUserInfoRes?.data);
+    // console.log("additionalUserInfoRes", additionalUserInfoRes?.data);
   }, [likedPoems, userCollectionsRes, userStudiesRes, additionalUserInfoRes]);
 
   // For States
@@ -181,6 +202,78 @@ const User = () => {
       .catch((err) => console.log(err));
   };
 
+  const handleProfileEditButtonClick = () => {
+    setIsProfileSettingModalOpen(!isProfileSettingModalOpen);
+  };
+
+  const handleCancelProfileUpdate = () => {
+    if (additionalUserDetailsState !== null)
+      setProfileUpdateState({
+        bio: additionalUserDetailsState?.bio,
+        personalSite: additionalUserDetailsState?.personalSite,
+      });
+    // console.log(additionalUserDetailsState);
+    setIsProfileSettingModalOpen(!isProfileSettingModalOpen);
+  };
+
+  const handleProfileUpdate = () => {
+    setIsUpdatingProfile(true);
+    axios
+      .post(
+        `/api/user/update`,
+        {
+          bio: profileUpdateState.bio,
+          personalSite: profileUpdateState.personalSite,
+        },
+        {
+          withCredentials: true,
+        }
+      )
+      .then(async (res) => {
+        console.log(res.data);
+        if (res.data.status === "ok") {
+          await refetchAdditionalUserInfo();
+          setIsUpdatingProfile(false);
+          setIsProfileSettingModalOpen(false);
+          toast.custom((t) => (
+            <div
+              className={`${
+                t.visible ? "animate-enter" : "animate-leave"
+              } w-fit shadow-2xl rounded-lg pointer-events-auto flex items-center ring-1 ring-black ring-opacity-5 p-4 text-white
+            backdrop-blur-3xl
+            `}
+            >
+              <div className="">
+                <h1
+                  className={`${montserrat.className} xsm:text-xs md:text-sm lg:text-lg font-bold`}
+                >
+                  Profile Updated Successfully.
+                </h1>
+              </div>
+              <div>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  className="xsm:w-4 xsm:h-4 lg:w-6 lg:h-6 xsm:mx-1 lg:mx-2 cursor-pointer"
+                  onClick={() => toast.dismiss(t.id)}
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-1.72 6.97a.75.75 0 10-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 101.06 1.06L12 13.06l1.72 1.72a.75.75 0 101.06-1.06L13.06 12l1.72-1.72a.75.75 0 10-1.06-1.06L12 10.94l-1.72-1.72z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
+            </div>
+          ));
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   if (status === "loading") {
     return (
       <div className="min-h-screen flex justify-center items-center">
@@ -202,13 +295,119 @@ const User = () => {
     <div className="min-h-screen flex flex-col justify-between items-center xsm:w-[90%] lg:w-[80%] mx-auto">
       <div className="w-full mx-auto">
         {/* User Details */}
-        <UserDetails
-          profileImage={session?.user?.image}
-          username={session?.user?.name}
-          email={session?.user?.email}
-          bio={additionalUserDetailsState?.bio}
-          personalSite={additionalUserDetailsState?.personalSite}
-        />
+        <div>
+          <UserDetails
+            profileImage={session?.user?.image}
+            username={session?.user?.name}
+            email={session?.user?.email}
+            bio={additionalUserDetailsState?.bio}
+            personalSite={additionalUserDetailsState?.personalSite}
+            handleProfileEdit={handleProfileEditButtonClick}
+          />
+          {isProfileSettingModalOpen && (
+            <Modal>
+              <div
+                className={`bg-rose-100 bg-opacity-20 accent-border rounded-md p-6 text-white 
+                xsm:w-[90%] md:w-[60%]`}
+              >
+                {/* Header */}
+                <h1
+                  className={`${montserrat.className} font-bold accent-border-bottom pb-2 mb-2`}
+                >
+                  Edit Profile
+                </h1>
+                {/* <PrimaryButton
+                  handleOnClick={() =>
+                    setIsProfileSettingModalOpen(!isProfileSettingModalOpen)
+                  }
+                >
+                  Close
+                </PrimaryButton> */}
+                {/* Header */}
+                {/* Information */}
+                <div className={`flex justify-between space-x-2`}>
+                  <InformationCircleIcon
+                    className={`xsm:w-12 xsm:h-12 md:w-8 md:h-8 text-white`}
+                  />
+                  <p>
+                    As of now we do not offer the option to change the Name and
+                    Email of a user, as we currently using only authrntication
+                    providers to authenticate our users.
+                  </p>
+                </div>
+                {/* Information */}
+                {/* Update */}
+                <div className="my-6">
+                  {/* Bio */}
+                  <div className={`md:flex justify-between my-6`}>
+                    <h1 className="basis-1/4 font-semibold xsm:text-sm md:text-lg">
+                      Bio:{" "}
+                    </h1>
+                    {profileUpdateState.bio && (
+                      <textarea
+                        value={profileUpdateState.bio}
+                        onChange={(e) =>
+                          setProfileUpdateState({
+                            ...profileUpdateState,
+                            bio: e.target.value,
+                          })
+                        }
+                        placeholder="Empty"
+                        className={`accent-textarea basis-3/4 min-h-60 resize-none h-[200px] xsm:my-2 md:my-0`}
+                        // style="overflow:hidden"
+                      />
+                    )}
+                  </div>
+                  {/* Personal Site */}
+                  <div className={`md:flex justify-between`}>
+                    <h1 className="basis-1/4 font-semibold xsm:text-sm md:text-lg">
+                      Personal Site:{" "}
+                    </h1>
+                    {profileUpdateState.personalSite && (
+                      <input
+                        placeholder="Empty"
+                        value={profileUpdateState.personalSite}
+                        onChange={(e) =>
+                          setProfileUpdateState({
+                            ...profileUpdateState,
+                            personalSite: e.target.value,
+                          })
+                        }
+                        className={`accent-input basis-3/4 w-full xsm:my-2 md:my-0 font-semibold`}
+                      />
+                    )}
+                  </div>
+                </div>
+                {/* Update */}
+                {/* Action Buttons */}
+                <div
+                  className={`accent-border-top py-2 my-2 flex justify-end space-x-2`}
+                >
+                  <PrimaryButton handleOnClick={handleProfileUpdate}>
+                    {isUpdatingProfile ? (
+                      <Oval
+                        height={15}
+                        width={15}
+                        color="#A855F7"
+                        visible={true}
+                        ariaLabel="oval-loading"
+                        secondaryColor="tr"
+                        strokeWidth={4}
+                        strokeWidthSecondary={4}
+                      />
+                    ) : (
+                      <p>Update</p>
+                    )}
+                  </PrimaryButton>
+                  <SecondaryButton handleOnClick={handleCancelProfileUpdate}>
+                    Cancel
+                  </SecondaryButton>
+                </div>
+                {/* Action Buttons */}
+              </div>
+            </Modal>
+          )}
+        </div>
         {/* User Details */}
 
         {/* Tabs */}
@@ -381,6 +580,7 @@ const User = () => {
         </h1>
         <PrimaryButton handleOnClick={() => signOut()}>Logout</PrimaryButton>
       </div>
+      <Toaster position="bottom-center" reverseOrder={false} />
     </div>
   );
 };
