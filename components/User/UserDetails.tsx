@@ -56,7 +56,7 @@ const UserDetails = ({
         </div>
         {/* User name and Avatar ============*/}
       </div>
-      <div className="basis-4/5 mx-10">
+      <div className="basis-4/5 md:mx-10">
         <h1
           className={`${montserrat.className} text-white xsm:text-sm md:text-lg accent-border-bottom py-2 my-2`}
         >

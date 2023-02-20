@@ -6,12 +6,17 @@ import { useQuery } from "react-query";
 import { useEffect, useState } from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import Link from "next/link";
-import { XCircleIcon, InformationCircleIcon } from "@heroicons/react/20/solid";
+import {
+  XCircleIcon,
+  InformationCircleIcon,
+  PlusCircleIcon,
+} from "@heroicons/react/20/solid";
 import { useRouter } from "next/router";
 import { PrimaryButton, SecondaryButton } from "@/components/Buttons";
 import UserDetails from "@/components/User/UserDetails";
 import Modal from "@/components/Modal";
 import toast, { Toaster } from "react-hot-toast";
+import NewPost from "@/components/Post/NewPost";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -65,6 +70,7 @@ const User = () => {
       personalSite: "",
     });
   const [isUpdatingProfile, setIsUpdatingProfile] = useState(false);
+  const [isNewPostModalOpen, setIsNewPostModalOpen] = useState(false);
 
   const router = useRouter();
   const { data: session, status } = useSession({
@@ -278,8 +284,8 @@ const User = () => {
     return (
       <div className="min-h-screen flex justify-center items-center">
         <Oval
-          height={100}
-          width={100}
+          height={80}
+          width={80}
           color="#fff"
           visible={true}
           ariaLabel="oval-loading"
@@ -416,7 +422,7 @@ const User = () => {
 
         {/* Tabs */}
         <div className={`mx-auto`}>
-          <Tabs className={`box-border`}>
+          <Tabs className={`box-border min-h-screen`}>
             <TabList
               className={`flex justify-center xsm:gap-x-2 lg:gap-x-10
               text-white font-bold ${montserrat.className} xsm:text-sm lg:text-lg
@@ -434,7 +440,26 @@ const User = () => {
 
             {/* Posts */}
             <TabPanel className={`${montserrat.className} my-6 text-white`}>
-              <h1>Posts</h1>
+              <div className={`flex flex-col items-center py-10`}>
+                <h1 className="xsm:text-lg md:text-xl font-semibold my-4">
+                  No Posts!
+                </h1>
+                <PrimaryButton
+                  handleOnClick={() =>
+                    setIsNewPostModalOpen(!isNewPostModalOpen)
+                  }
+                  buttonClassNames="flex gap-x-2 items-center font-semibold px-2"
+                >
+                  Add post{" "}
+                  <PlusCircleIcon className={`xsm:w-4 xsm:h-4 md:w-5 md:h-5`} />
+                </PrimaryButton>
+              </div>
+              <NewPost
+                isOpen={isNewPostModalOpen}
+                handleCloseModal={() =>
+                  setIsNewPostModalOpen(!isNewPostModalOpen)
+                }
+              />
             </TabPanel>
             {/* Posts */}
             {/* Liked Poems */}

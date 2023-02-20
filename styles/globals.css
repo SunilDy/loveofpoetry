@@ -24,6 +24,9 @@
   .accent-textarea {
     @apply bg-inherit text-white xsm:text-sm md:text-lg font-semibold placeholder:text-white border-2 border-white focus:outline-none border-opacity-40 rounded-md p-2 w-full;
   }
+  .accent-modal-bg {
+    @apply bg-rose-100 bg-opacity-20;
+  }
 }
 
 .react-tabs__tab--selected {
