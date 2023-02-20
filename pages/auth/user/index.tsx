@@ -10,6 +10,7 @@ import {
   XCircleIcon,
   InformationCircleIcon,
   PlusCircleIcon,
+  ArrowUpCircleIcon,
 } from "@heroicons/react/20/solid";
 import { useRouter } from "next/router";
 import { PrimaryButton, SecondaryButton } from "@/components/Buttons";
@@ -17,6 +18,8 @@ import UserDetails from "@/components/User/UserDetails";
 import Modal from "@/components/Modal";
 import toast, { Toaster } from "react-hot-toast";
 import NewPost from "@/components/Post/NewPost";
+import PostTile from "@/components/Post/PostTile";
+import IntermediatePost from "@/components/Post/IntermediatePost";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -40,6 +43,10 @@ const getUserStudies = async () => {
 
 const getAdditionalUserInfo = async () => {
   return await axios.get(`/api/user/get`, { withCredentials: true });
+};
+
+const getUserPosts = async () => {
+  return await axios.get(`/api/posts/userposts`, { withCredentials: true });
 };
 
 type AdditionalUserDetailsStateType = {
@@ -71,6 +78,9 @@ const User = () => {
     });
   const [isUpdatingProfile, setIsUpdatingProfile] = useState(false);
   const [isNewPostModalOpen, setIsNewPostModalOpen] = useState(false);
+  const [userPosts, setUserPosts] = useState<any[] | null>(null);
+  const [intermediatePostBodyState, setIntermediatePostBodyState] =
+    useState("");
 
   const router = useRouter();
   const { data: session, status } = useSession({
@@ -114,6 +124,13 @@ const User = () => {
       refetchOnWindowFocus: false,
     });
 
+  const { data: userPostsRes, isLoading: loadingUserPosts } = useQuery(
+    "user-posts",
+    getUserPosts,
+    {
+      refetchOnWindowFocus: false,
+    }
+  );
   // For Side Effects
   useEffect(() => {
     if (userCollectionsRes?.data) {
@@ -131,14 +148,29 @@ const User = () => {
         personalSite: additionalUserInfoRes?.data.user.personalSite,
       });
     }
-    // console.log("additionalUserInfoRes", additionalUserInfoRes?.data);
-  }, [likedPoems, userCollectionsRes, userStudiesRes, additionalUserInfoRes]);
+
+    if (userPostsRes?.data) {
+      setUserPosts(userPostsRes?.data.userPosts);
+    }
+
+    // console.log("userPostsRes", userPostsRes?.data);
+  }, [
+    likedPoems,
+    userCollectionsRes,
+    userStudiesRes,
+    additionalUserInfoRes,
+    userPostsRes,
+  ]);
 
   // For States
-  useEffect(() => {}, [
+  useEffect(() => {
+    // console.log("intermediatePostBodyState x1", intermediatePostBodyState);
+  }, [
     userCollectionsState,
     userStudiesState,
     userStudiesLength,
+    userPosts,
+    intermediatePostBodyState,
   ]);
 
   useEffect(() => {}, []);
@@ -280,7 +312,7 @@ const User = () => {
       });
   };
 
-  if (status === "loading") {
+  if (status === "loading" || loadingUserPosts) {
     return (
       <div className="min-h-screen flex justify-center items-center">
         <Oval
@@ -440,25 +472,30 @@ const User = () => {
 
             {/* Posts */}
             <TabPanel className={`${montserrat.className} my-6 text-white`}>
-              <div className={`flex flex-col items-center py-10`}>
-                <h1 className="xsm:text-lg md:text-xl font-semibold my-4">
-                  No Posts!
-                </h1>
-                <PrimaryButton
-                  handleOnClick={() =>
-                    setIsNewPostModalOpen(!isNewPostModalOpen)
-                  }
-                  buttonClassNames="flex gap-x-2 items-center font-semibold px-2"
-                >
-                  Add post{" "}
-                  <PlusCircleIcon className={`xsm:w-4 xsm:h-4 md:w-5 md:h-5`} />
-                </PrimaryButton>
-              </div>
+              <IntermediatePost
+                bodyState={intermediatePostBodyState}
+                handleAddPost={() => setIsNewPostModalOpen(!isNewPostModalOpen)}
+                handleBodyChange={(e) =>
+                  setIntermediatePostBodyState(e.target.value)
+                }
+              />
+              {userPosts && userPosts.length > 0 ? (
+                <>
+                  <PostTile userPosts={userPosts} />
+                </>
+              ) : (
+                <div className={`flex flex-col items-center py-10`}>
+                  <h1 className="xsm:text-lg md:text-xl font-semibold my-4">
+                    No Posts!
+                  </h1>
+                </div>
+              )}
               <NewPost
                 isOpen={isNewPostModalOpen}
                 handleCloseModal={() =>
                   setIsNewPostModalOpen(!isNewPostModalOpen)
                 }
+                intermediateBody={intermediatePostBodyState}
               />
             </TabPanel>
             {/* Posts */}
@@ -516,7 +553,7 @@ const User = () => {
             {/* Collections */}
 
             <TabPanel
-              className={`xsm:m-2 lg:m-6 border-white box-border md:grid grid-cols-new4 gap-x-6`}
+              className={`xsm:m-2 lg:m-6 box-border md:grid grid-cols-new4 gap-x-6`}
             >
               {userCollectionsState && !isUpdatingCollection ? (
                 userCollectionsState &&

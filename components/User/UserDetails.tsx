@@ -74,7 +74,10 @@ const UserDetails = ({
           <span className="font-semibold">Personal Site:</span> {personalSite}
         </Link>
         <div className="my-4">
-          <SecondaryButton handleOnClick={handleProfileEdit}>
+          <SecondaryButton
+            handleOnClick={handleProfileEdit}
+            buttonClassNames={`font-semibold`}
+          >
             Edit Profile
           </SecondaryButton>
         </div>
