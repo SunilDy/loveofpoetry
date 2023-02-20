@@ -343,39 +343,41 @@ const User = () => {
                     <h1 className="basis-1/4 font-semibold xsm:text-sm md:text-lg">
                       Bio:{" "}
                     </h1>
-                    {profileUpdateState.bio && (
-                      <textarea
-                        value={profileUpdateState.bio}
-                        onChange={(e) =>
-                          setProfileUpdateState({
-                            ...profileUpdateState,
-                            bio: e.target.value,
-                          })
-                        }
-                        placeholder="Empty"
-                        className={`accent-textarea basis-3/4 min-h-60 resize-none h-[200px] xsm:my-2 md:my-0`}
-                        // style="overflow:hidden"
-                      />
-                    )}
+                    <textarea
+                      value={
+                        profileUpdateState.bio ? profileUpdateState.bio : ""
+                      }
+                      onChange={(e) =>
+                        setProfileUpdateState({
+                          ...profileUpdateState,
+                          bio: e.target.value,
+                        })
+                      }
+                      placeholder="Empty"
+                      className={`accent-textarea basis-3/4 min-h-60 resize-none h-[200px] xsm:my-2 md:my-0`}
+                      // style="overflow:hidden"
+                    />
                   </div>
                   {/* Personal Site */}
                   <div className={`md:flex justify-between`}>
                     <h1 className="basis-1/4 font-semibold xsm:text-sm md:text-lg">
                       Personal Site:{" "}
                     </h1>
-                    {profileUpdateState.personalSite && (
-                      <input
-                        placeholder="Empty"
-                        value={profileUpdateState.personalSite}
-                        onChange={(e) =>
-                          setProfileUpdateState({
-                            ...profileUpdateState,
-                            personalSite: e.target.value,
-                          })
-                        }
-                        className={`accent-input basis-3/4 w-full xsm:my-2 md:my-0 font-semibold`}
-                      />
-                    )}
+                    <input
+                      placeholder="Empty"
+                      value={
+                        profileUpdateState.personalSite
+                          ? profileUpdateState.personalSite
+                          : ""
+                      }
+                      onChange={(e) =>
+                        setProfileUpdateState({
+                          ...profileUpdateState,
+                          personalSite: e.target.value,
+                        })
+                      }
+                      className={`accent-input basis-3/4 w-full xsm:my-2 md:my-0 font-semibold`}
+                    />
                   </div>
                 </div>
                 {/* Update */}
