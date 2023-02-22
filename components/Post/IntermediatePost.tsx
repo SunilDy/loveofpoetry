@@ -22,6 +22,7 @@ const IntermediatePost = ({
       className={`mx-auto w-full
               xsm:w-[95%] md:w-[70%] lg:w-[60%]
               accent-modal-bg accent-border rounded-xl p-6
+              shadow-2xl
               `}
     >
       {/* Header + Action Button */}

@@ -6,12 +6,7 @@ import { useQuery } from "react-query";
 import { useEffect, useState } from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import Link from "next/link";
-import {
-  XCircleIcon,
-  InformationCircleIcon,
-  PlusCircleIcon,
-  ArrowUpCircleIcon,
-} from "@heroicons/react/20/solid";
+import { XCircleIcon, InformationCircleIcon } from "@heroicons/react/20/solid";
 import { useRouter } from "next/router";
 import { PrimaryButton, SecondaryButton } from "@/components/Buttons";
 import UserDetails from "@/components/User/UserDetails";
@@ -128,7 +123,8 @@ const User = () => {
     "user-posts",
     getUserPosts,
     {
-      refetchOnWindowFocus: false,
+      refetchOnWindowFocus: true,
+      refetchOnMount: true,
     }
   );
   // For Side Effects
@@ -481,7 +477,7 @@ const User = () => {
               />
               {userPosts && userPosts.length > 0 ? (
                 <>
-                  <PostTile userPosts={userPosts} />
+                  <PostTile userPosts={userPosts} user={session?.user} />
                 </>
               ) : (
                 <div className={`flex flex-col items-center py-10`}>

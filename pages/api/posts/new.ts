@@ -43,8 +43,8 @@ export default async function handler(
           avatar: session?.user?.image,
           lines: linesArray,
           linesCount: linesArray.length,
-          created_on: Date.now(),
-          likes: 0,
+          created_on: new Date(),
+          likes: [],
           comments: []
          }
 

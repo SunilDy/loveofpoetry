@@ -16,8 +16,8 @@ const UserTitleSchema = new Schema({
   linesCount: Number,
   created_on: Date,
   likes: {
-    type: Number,
-    default: 0
+    type: [String],
+    default: []
   },
   comments: {
     type: [Comment],
@@ -26,6 +26,7 @@ const UserTitleSchema = new Schema({
 });
 
 export type UserTitleType = {
+    _id: string,
     title: string,
     author_name: string,
     author_email: string,
@@ -33,8 +34,9 @@ export type UserTitleType = {
     lines: string[],
     linesCount: number,
     created_on: Date,
-    likes: number,
-    comments: string[]
+    likes: string[],
+    comments: string[],
+    isLiked: boolean
 }
 
 const UserTitle = models.usertitles || model('usertitles', UserTitleSchema);

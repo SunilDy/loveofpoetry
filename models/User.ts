@@ -5,6 +5,11 @@ const LikedPoemsType = new Schema({
   author: String
 })
 
+const LikedUserTitles = new Schema({
+  author_email: String,
+  title: String
+})
+
 export const CollectionSchema = new Schema({
   name: String,
   titles: [LikedPoemsType]
@@ -50,6 +55,10 @@ const UserSchema = new Schema({
   },
   posts: {
     type: [String],
+    default: []
+  },
+  likedUserTitles: {
+    type: [LikedUserTitles],
     default: []
   }
 });

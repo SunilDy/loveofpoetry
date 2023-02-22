@@ -81,11 +81,11 @@ export default function Home(props: any) {
   // Side Effects
   useEffect(() => {
     if (commentsRes?.data.poem) {
-      if (commentsRes.data.poem.comments.length < 1) {
-        setComments(null);
-      } else {
-        setComments(commentsRes.data.poem.comments);
-      }
+      // if (commentsRes.data.poem.comments.length < 1) {
+      //   setComments(null);
+      // } else {
+      setComments(commentsRes.data.poem.comments);
+      // }
     }
 
     if (collectionsRes?.data) {

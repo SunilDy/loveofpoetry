@@ -21,10 +21,24 @@ export default async function handler(
         await connectMongo();
         console.log("CONNECTED TO MONGO");
 
+        let user = await User.findOne({
+            email: session?.user?.email
+        })
+
         let userPosts = await UserTitle.find({
             author_email: session?.user?.email,
             author_name: session?.user?.name
         })
+
+        let mappedPosts = [...userPosts]
+        if(user.likedUserTitles.length > 0)
+          mappedPosts = userPosts.map((post: any) => {
+            let isLiked = user.likedUserTitles.find((likedPost: any) => {
+              return likedPost.title === post.title && likedPost.author_email === post.author_email
+            }) !== undefined
+        
+            return {...post._doc, isLiked}
+          })
 
         let responseObject = {}
         if(userPosts.length < 1) {
@@ -37,7 +51,7 @@ export default async function handler(
             responseObject = {
                 message: "ok",
                 status: 'ok',
-                userPosts
+                userPosts: mappedPosts
             }
         }
 

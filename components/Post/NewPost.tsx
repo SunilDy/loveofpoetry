@@ -22,13 +22,14 @@ const NewPost = ({
   intermediateBody,
 }: NewPostType) => {
   const [postTitle, setPostTitle] = useState("");
-  const [postState, setPostState] = useState(intermediateBody);
+  const [postState, setPostState] = useState(intermediateBody || "");
   const [isUploadingPost, setIsUploadingPost] = useState(false);
 
   const router = useRouter();
 
   useEffect(() => {
-    console.log("postState", postState);
+    // console.log("postState", postState);
+    // console.log("intermediateBody", intermediateBody);
   }, [isUploadingPost, intermediateBody, postState]);
 
   const handleNewPost = () => {
@@ -45,9 +46,9 @@ const NewPost = ({
         }
       )
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         if (res.data.status === "ok") {
-          setIsUploadingPost(!isUploadingPost);
+          setIsUploadingPost(false);
           toast.custom((t) => (
             <div
               className={`${

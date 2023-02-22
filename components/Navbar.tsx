@@ -6,6 +6,8 @@ import { Menu, MenuItem, MenuButton } from "@szhsin/react-menu";
 import "@szhsin/react-menu/dist/index.css";
 import "@szhsin/react-menu/dist/transitions/slide.css";
 import { useRouter } from "next/router";
+import Image from "next/image";
+import Placeholder from "@/public/placeholder/ph2.png";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -31,7 +33,7 @@ const Navbar = () => {
     <nav
       className={`
       flex items-center lg:gap-x-2
-      xsm:py-0 lg:py-4 
+      xsm:py-0 md:py-2 lg:py-4 
       xsm:px-6 md:px-16 lg:px-20 xl:px-32 
       justify-between text-white backdrop-blur-3xl z-50 sticky top-0 border-b-2 border-white border-opacity-10
       `}
@@ -76,25 +78,36 @@ const Navbar = () => {
           border-b-2 border-white border-opacity-40
           grow focus:outline-none 
           xsm:text-sm md:text-lg lg:text-xl mx-auto
-           font-semibold`}
+           font-semibold
+           accent-input
+           `}
           // onFocus={() => router.push("/search")}
           onKeyDown={(e) => handleSearchKeyDown(e)}
           type="search"
         />
       </div>
       {/* User */}
-      <div className={`basis-1/4 justify-self-end flex items-center`}>
-        <div className="xsm:collapse xsm:w-0 lg:visible lg:w-full">
-          {session && session.user ? (
+      <div className={`basis-1/4 flex`}>
+        <div className="xsm:collapse xsm:w-0 lg:visible lg:w-full flex justify-end">
+          {session &&
+          session.user &&
+          session.user.image &&
+          session.user.name ? (
             <Link href={"/auth/user"}>
-              <h1 className={`xsm:text-md md:text-lg lg:text-xl text-right`}>
-                Hi, {session?.user.name}
-              </h1>
+              <Image
+                className="w-16 aspect-square object-cover object-center rounded-full mr-4"
+                src={session.user.image}
+                alt={session.user.name}
+                height={300}
+                width={300}
+              />
             </Link>
           ) : (
             <Link href={"/auth/login"}>
-              <h1 className={`xsm:text-md md:text-lg lg:text-xl text-right`}>
-                Login
+              <h1
+                className={`xsm:text-md md:text-lg lg:text-xl text-right ${montserrat.className}`}
+              >
+                Sign In
               </h1>
             </Link>
           )}
