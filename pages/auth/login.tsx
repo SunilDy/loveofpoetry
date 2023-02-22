@@ -4,10 +4,38 @@ import { Montserrat } from "@next/font/google";
 import Image from "next/image";
 import GithubIcon from "@/public/icons/github.svg";
 import GoogleIcon from "@/public/icons/google.svg";
+import { useSession, signOut } from "next-auth/react";
+import { useRouter } from "next/router";
+import { Oval } from "react-loader-spinner";
+import { useEffect } from "react";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
 const Login = () => {
+  const router = useRouter();
+  const { data: session, status } = useSession();
+
+  useEffect(() => {
+    if (session?.user) router.push("/");
+  }, [session, router]);
+
+  if (status === "loading") {
+    return (
+      <div className="min-h-screen flex justify-center items-center">
+        <Oval
+          height={80}
+          width={80}
+          color="#fff"
+          visible={true}
+          ariaLabel="oval-loading"
+          secondaryColor="tr"
+          strokeWidth={2}
+          strokeWidthSecondary={2}
+        />
+      </div>
+    );
+  }
+
   return (
     <div
       className={`${montserrat.className} min-h-screen w-full my-20 flex justify-center text-white`}
