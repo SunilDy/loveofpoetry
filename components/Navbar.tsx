@@ -41,14 +41,14 @@ const Navbar = () => {
       {/* Primary Links */}
       <div
         className={`flex items-center
-        xsm:gap-x-0 md:gap-x-4 lg:gap-x-6 
+        xsm:gap-x-2 md:gap-x-4 lg:gap-x-6 
         xsm:text-md md:text-lg lg:text-xl
         basis-1/4`}
       >
         <Link href={"/"}>
           <h1
             className={`${montserrat.className} font-bold 
-            xsm:text-md md:text-lg lg:text-xl 
+            xsm:text-md md:text-lg lg:text-xl
           `}
           >
             Poetry<span className="text-pink-300">.</span>
@@ -87,7 +87,7 @@ const Navbar = () => {
         />
       </div>
       {/* User */}
-      <div className={`basis-1/4 flex`}>
+      <div className={`basis-1/4 flex items-center`}>
         <div className="xsm:collapse xsm:w-0 lg:visible lg:w-full flex justify-end">
           {session &&
           session.user &&

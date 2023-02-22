@@ -188,90 +188,100 @@ const Post = ({ userTitle }: any) => {
             text-white rounded-xl
             m-6 p-6 mx-auto
             xsm:w-[95%] md:w-[70%] lg:w-[50%]
-            
+            ${montserrat.className}
             `}
       >
-        {/* User avatar + details */}
-        <div className={`flex gap-x-2 items-center`}>
-          {/* Avatar */}
-          <div>
-            {titleState.avatar !== ("" || undefined) ? (
-              <Image
-                className="w-16 aspect-square object-cover object-center rounded-full mr-4 self-start"
-                src={titleState.avatar}
-                alt={titleState.author_name}
-                height={300}
-                width={300}
-              />
-            ) : (
-              <Image
-                className="xsm:w-14 lg:w-20 aspect-square object-cover object-center rounded-full mr-4 self-start"
-                src={Placeholder}
-                alt={titleState.author_name}
-                height={300}
-                width={300}
-              />
-            )}
+        <div className="accent-border p-4 accent-modal-bg rounded-xl shadow-2xl">
+          {/* User avatar + details */}
+          <div className={`flex gap-x-2 items-center`}>
+            {/* Avatar */}
+            <div>
+              {titleState.avatar !== ("" || undefined) ? (
+                <Image
+                  className="xsm:w-10 lg:w-16 aspect-square object-cover object-center rounded-full xsm:mr-2 lg:mr-4 self-start"
+                  src={titleState.avatar}
+                  alt={titleState.author_name}
+                  height={300}
+                  width={300}
+                />
+              ) : (
+                <Image
+                  className="xsm:w-10 lg:w-16 aspect-square object-cover object-center rounded-full xsm:mr-2 lg:mr-4 self-start"
+                  src={Placeholder}
+                  alt={titleState.author_name}
+                  height={300}
+                  width={300}
+                />
+              )}
+            </div>
+            {/* Avatar */}
+            {/* Details */}
+            <div>
+              <p className="xsm:text-sm md:text-lg font-semibold">
+                {titleState.author_name}
+              </p>
+              <p className="xsm:text-xs md:text-md text-slate-200">
+                {new Date(titleState.created_on).toDateString()}
+              </p>
+            </div>
+            {/* Details */}
           </div>
-          {/* Avatar */}
-          {/* Details */}
-          <div>
-            <p>{titleState.author_name}</p>
-            <p>{new Date(titleState.created_on).toDateString()}</p>
-          </div>
-          {/* Details */}
-        </div>
-        {/* Body */}
-        <div className="py-6 accent-border-bottom  xsm:text-sm md:text-md">
-          <Link href={`/posts/${titleState._id}`}>
-            <h1
-              className={`
+          {/* Body */}
+          <div className="py-6 accent-border-bottom  xsm:text-sm md:text-md">
+            <Link href={`/posts/${titleState._id}`}>
+              <h1
+                className={`
                 font-semibold pb-2
                 xsm:text-xl md:text-2xl lg:text-3xl 
             `}
-            >
-              {titleState.title}
-            </h1>
-          </Link>
-          {titleState.lines.map((line: string, i: number) => (
-            <div
-              key={Math.random()}
-              className={`xsm:text-md md:text-lg lg:text-lg`}
-            >
-              {line === "" ? <br /> : <p>{line}</p>}
+              >
+                {titleState.title}
+              </h1>
+            </Link>
+            <div className="xsm:px-2 md:px-4">
+              {titleState.lines.map((line: string, i: number) => (
+                <div
+                  key={Math.random()}
+                  className={`xsm:text-md md:text-lg lg:text-lg`}
+                >
+                  {line === "" ? <br /> : <p>{line}</p>}
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-        {/* Body */}
-        {/* Icons Buttons */}
-        <div className="flex gap-x-6 items-center mt-2">
-          <div className="flex gap-x-2 items-center">
-            <PrimaryButton
-              handleOnClick={handlePostLike}
-              buttonClassNames={`${
-                // @ts-ignore
-                isLiked
-                  ? `flex items-center gap-x-2 border-none`
-                  : `flex items-center gap-x-2 bg-opacity-30 border-none text-white`
-              } xsm:px-2`}
-            >
-              <HeartIcon className={`xsm:w-4 xsm:h-4 md:w-6 md:h-6`} />
-              <p>{likesCount}</p>
-            </PrimaryButton>
           </div>
-          <div className="flex items-center gap-x-2">
-            <PrimaryButton
-              handleOnClick={() => {}}
-              buttonClassNames={`flex items-center gap-x-2 bg-opacity-30 border-none text-white xsm:px-2`}
-            >
-              <ChatBubbleLeftEllipsisIcon
-                className={`xsm:w-4 xsm:h-4 md:w-6 md:h-6`}
-              />
-              <p>{titleState.comments.length}</p>
-            </PrimaryButton>
+          {/* Body */}
+          {/* Icons Buttons */}
+          <div className="flex gap-x-6 items-center xsm:mt-2 lg:mt-4">
+            <div className="flex gap-x-2 items-center">
+              <PrimaryButton
+                handleOnClick={handlePostLike}
+                buttonClassNames={`${
+                  // @ts-ignore
+                  isLiked
+                    ? `flex items-center gap-x-2 border-none`
+                    : `flex items-center gap-x-2 bg-opacity-30 border-none text-white`
+                } xsm:px-2 font-bold`}
+              >
+                <HeartIcon
+                  className={`xsm:w-4 xsm:h-4 md:w-6 md:h-6 stroke-2`}
+                />
+                <p>{likesCount}</p>
+              </PrimaryButton>
+            </div>
+            <div className="flex items-center gap-x-2">
+              <PrimaryButton
+                handleOnClick={() => {}}
+                buttonClassNames={`flex items-center gap-x-2 bg-opacity-30 border-none text-white xsm:px-2 font-bold`}
+              >
+                <ChatBubbleLeftEllipsisIcon
+                  className={`xsm:w-4 xsm:h-4 md:w-6 md:h-6 stroke-2`}
+                />
+                <p>{titleState.comments.length}</p>
+              </PrimaryButton>
+            </div>
           </div>
+          {/* Icons Buttons */}
         </div>
-        {/* Icons Buttons */}
         {/* Comments Section */}
         <div className={`my-10`}>
           <textarea
@@ -280,7 +290,10 @@ const Post = ({ userTitle }: any) => {
             onChange={(e) => setCommentValue(e.target.value)}
             className={`accent-textarea`}
           />
-          <PrimaryButton handleOnClick={handleAddComment}>
+          <PrimaryButton
+            handleOnClick={handleAddComment}
+            buttonClassNames={`font-bold`}
+          >
             Comment
           </PrimaryButton>
           <Comments
