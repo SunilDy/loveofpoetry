@@ -7,12 +7,19 @@ import "@szhsin/react-menu/dist/index.css";
 import "@szhsin/react-menu/dist/transitions/slide.css";
 import { useRouter } from "next/router";
 import Image from "next/image";
-import Placeholder from "@/public/placeholder/ph2.png";
+
+import {
+  SparklesIcon,
+  UserGroupIcon,
+  BookmarkIcon,
+  FolderIcon,
+} from "@heroicons/react/24/solid";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
 const Navbar = () => {
   const [searchValue, setSearchValue] = useState("");
+  const [isShowingMenu, setIsShowingMenu] = useState(false);
   const { data: session } = useSession();
   const router = useRouter();
 
@@ -20,7 +27,8 @@ const Navbar = () => {
     if (router.pathname.includes("/search")) {
       setSearchValue("");
     }
-  }, [router]);
+    console.log({ isShowingMenu });
+  }, [router, isShowingMenu]);
 
   const handleSearchKeyDown = (e: any) => {
     if (e.key === "Enter") router.push(`/search?name=${searchValue}`);
@@ -32,9 +40,9 @@ const Navbar = () => {
   return (
     <nav
       className={`
-      flex items-center lg:gap-x-2
-      xsm:py-0 md:py-2 lg:py-4 
-      xsm:px-6 md:px-16 lg:px-20 xl:px-32 
+      flex items-center gap-x-2
+      xsm:py-2 md:py-2 lg:py-4 
+      xsm:px-2 md:px-16 lg:px-20 xl:px-32 
       justify-between text-white backdrop-blur-3xl z-50 sticky top-0 border-b-2 border-white border-opacity-10
       `}
     >
@@ -68,18 +76,16 @@ const Navbar = () => {
         </Link>
       </div>
       {/* Search Bar */}
-      <div className="justify-center flex-grow-0">
+      <div className="">
         <input
           placeholder="Search Poetry"
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
           className={`
-          bg-inherit text-white placeholder:text-white 
-          border-b-2 border-white border-opacity-40
-          grow focus:outline-none 
-          xsm:text-sm md:text-lg lg:text-xl mx-auto
-           font-semibold
-           accent-input
+            accent-input
+            focus:outline-none 
+            xsm:text-sm md:text-lg lg:text-xl w-auto
+            font-semibold
            `}
           // onFocus={() => router.push("/search")}
           onKeyDown={(e) => handleSearchKeyDown(e)}
@@ -87,23 +93,32 @@ const Navbar = () => {
         />
       </div>
       {/* User */}
-      <div className={`basis-1/4 flex items-center`}>
-        <div className="xsm:collapse xsm:w-0 lg:visible lg:w-full flex justify-end">
+      <div className={`basis-1/4 flex items-center justify-end`}>
+        <div className="flex justify-end">
           {session &&
           session.user &&
           session.user.image &&
           session.user.name ? (
-            <Link href={"/auth/user"}>
-              <Image
-                className="w-10 aspect-square object-cover object-center rounded-full mr-4"
-                src={session.user.image}
-                alt={session.user.name}
-                height={300}
-                width={300}
-              />
-            </Link>
+            // <Link
+            //   href={"/auth/user"}
+            //   onMouseEnter={() => setIsShowingMenu(true)}
+            //   // onMouseLeave={() => setIsShowingMenu(false)}
+            // >
+            <Image
+              className={`xsm:w-10 lg:w-14 aspect-square object-cover object-center rounded-full mr-4 accent-border`}
+              src={session.user.image}
+              alt={session.user.name}
+              height={300}
+              width={300}
+              onMouseEnter={() => setIsShowingMenu(true)}
+            />
           ) : (
-            <Link href={"/auth/login"}>
+            // </Link>
+            <Link
+              href={"/auth/login"}
+              onMouseEnter={() => setIsShowingMenu(true)}
+              // onMouseLeave={() => setIsShowingMenu(false)}
+            >
               <h1
                 className={`xsm:text-md md:text-lg lg:text-xl text-right ${montserrat.className}`}
               >
@@ -112,8 +127,117 @@ const Navbar = () => {
             </Link>
           )}
         </div>
+        {/* Menu Modal */}
+        {isShowingMenu && (
+          <div
+            className={`fixed inset-0 z-50 flex flex-col justify-center items-center xsm:px-6 lg:px-20 h-[100vh]
+          bg-black bg-opacity-20 backdrop-blur-2xl
+            ${montserrat.className}
+            `}
+          >
+            {/* Menu */}
+            <div
+              className={`
+                bg-pink-500 text-white
+                fixed h-full right-0
+                flex flex-col justify-between
+                xsm:p-6 md:p-10
+                `}
+              onMouseLeave={() => setIsShowingMenu(false)}
+            >
+              {/* Profile */}
+              <div
+                className={`
+                accent-modal-bg accent-border rounded-xl
+                xsm:p-2 lg:p-4
+              `}
+              >
+                {session &&
+                  session.user &&
+                  session.user.image &&
+                  session.user.name && (
+                    <Link
+                      href={"/auth/user"}
+                      onMouseEnter={() => setIsShowingMenu(true)}
+                      // onMouseLeave={() => setIsShowingMenu(false)}
+                      className={`flex items-center gap-x-2`}
+                    >
+                      <Image
+                        className={`xsm:w-10 lg:w-14 aspect-square object-cover object-center rounded-full accent-border
+                        `}
+                        src={session.user.image}
+                        alt={session.user.name}
+                        height={300}
+                        width={300}
+                      />
+                      <div>
+                        <p className="accent-link">{session.user.name}</p>
+                        <p className="accent-link">{session.user.email}</p>
+                      </div>
+                    </Link>
+                  )}
+              </div>
+              {/* Profile */}
+              {/* Menu Links */}
+              <div className="flex flex-col gap-y-2">
+                <Link
+                  className={`flex gap-x-2 items-center 
+                    accent-link p-2 
+                    hover:accent-modal-bg rounded-xl transition
+                  `}
+                  href={`/posts`}
+                >
+                  <SparklesIcon className="w-5 h-5" />
+                  Posts
+                </Link>
+                <Link
+                  className={`flex gap-x-2 items-center 
+                    accent-link p-2 
+                    hover:accent-modal-bg rounded-xl transition
+                  `}
+                  href={`/authors`}
+                >
+                  <UserGroupIcon className="w-5 h-5" />
+                  Authors
+                </Link>
+                <Link
+                  className={`flex gap-x-2 items-center 
+                    accent-link p-2 
+                    hover:accent-modal-bg rounded-xl transition
+                  `}
+                  href={`/auth/user`}
+                >
+                  <BookmarkIcon className="w-5 h-5" />
+                  Your Collections
+                </Link>
+                <Link
+                  className={`flex gap-x-2 items-center 
+                    accent-link p-2 
+                    hover:accent-modal-bg rounded-xl transition
+                  `}
+                  href={`/auth/user/studies`}
+                >
+                  <FolderIcon className="w-5 h-5" />
+                  Your Studies
+                </Link>
+              </div>
+              {/* Menu Links */}
+              {/* More Link */}
+              <div className="flex justify-between">
+                <p className="font-semibold xsm:text-xs md:text-base">
+                  Request a Poem Title
+                </p>
+                <p className="font-semibold xsm:text-xs md:text-base">About</p>
+              </div>
+              {/* More Link */}
+            </div>
+            {/* Menu*/}
+          </div>
+        )}
+        {/* Menu Modal */}
+
         {/* Menu */}
-        <div className="xsm:visible xsm:w-full lg:collapse lg:w-0 flex-1 text-right">
+        {/* <div className="xsm:visible xsm:w-full lg:collapse lg:w-0 flex-1 text-right">
           <Menu
             align="end"
             offsetY={10}
@@ -154,7 +278,7 @@ const Navbar = () => {
               )}
             </MenuItem>
           </Menu>
-        </div>
+        </div> */}
       </div>
     </nav>
   );

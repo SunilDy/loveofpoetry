@@ -27,6 +27,9 @@
   .accent-modal-bg {
     @apply bg-rose-100 bg-opacity-20;
   }
+  .accent-link {
+    @apply font-semibold xsm:text-sm md:text-base lg:text-lg;
+  }
 }
 
 .react-tabs__tab--selected {
