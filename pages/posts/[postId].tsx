@@ -2,10 +2,8 @@ import { useRouter } from "next/router";
 import UserTitle, { UserTitleType } from "@/models/UserTitles";
 import { useSession } from "next-auth/react";
 import { Oval } from "react-loader-spinner";
-import {
-  HeartIcon,
-  ChatBubbleLeftEllipsisIcon,
-} from "@heroicons/react/24/outline";
+import { HeartIcon, ChatBubbleOvalLeftIcon } from "@heroicons/react/24/outline";
+import { HeartIcon as HeartIconSolid } from "@heroicons/react/24/solid";
 import Image from "next/image";
 import Placeholder from "@/public/placeholder/ph2.png";
 import { Montserrat } from "@next/font/google";
@@ -15,6 +13,7 @@ import Comments from "@/components/Comments";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { useQuery } from "react-query";
+import Modal from "@/components/Modal";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -26,11 +25,6 @@ const Post = ({ userTitle }: any) => {
       router.push("/auth/login");
     },
   });
-
-  //   let title = JSON.parse(userTitle);
-  //   if (title.likes.includes(session?.user?.email)) title.isLiked = true;
-  //   else title.isLiked = false;
-  //   console.log(title);
 
   const getUserTitle = async () => {
     return await axios.post(
@@ -82,12 +76,12 @@ const Post = ({ userTitle }: any) => {
     if (comments?.data) {
       setCommentsState(comments?.data.userTitle.comments);
     }
-    console.log("title", title?.data);
+    // console.log("title", title?.data);
   }, [comments, title]);
 
   //   State
   useEffect(() => {
-    console.log("commentsState", commentsState);
+    // console.log("commentsState", commentsState);
   }, [commentsState, titleState, isLiked]);
 
   //   useEffect(() => {}, []);
@@ -106,7 +100,8 @@ const Post = ({ userTitle }: any) => {
         }
       )
       .then(async (res) => {
-        console.log(res.data);
+        // console.log(res.data);
+        setCommentValue("");
         await refetchComments();
         setIsUploadingComment(false);
       })
@@ -138,7 +133,7 @@ const Post = ({ userTitle }: any) => {
         .catch((err) => {
           console.log(err);
         });
-      console.log("post already liked");
+      // console.log("post already liked");
     } else if (titleState && !titleState.isLiked) {
       // like
       axios
@@ -187,7 +182,7 @@ const Post = ({ userTitle }: any) => {
         className={`
             text-white rounded-xl
             m-6 p-6 mx-auto
-            xsm:w-[95%] md:w-[70%] lg:w-[50%]
+            xsm:w-full md:w-[80%] lg:w-[70%] xl:w-[50%]
             ${montserrat.className}
             `}
       >
@@ -262,9 +257,15 @@ const Post = ({ userTitle }: any) => {
                     : `flex items-center gap-x-2 bg-opacity-30 border-none text-white`
                 } xsm:px-2 font-bold`}
               >
-                <HeartIcon
-                  className={`xsm:w-4 xsm:h-4 md:w-6 md:h-6 stroke-2`}
-                />
+                {isLiked ? (
+                  <HeartIconSolid
+                    className={`xsm:w-4 xsm:h-4 md:w-6 md:h-6 stroke-2`}
+                  />
+                ) : (
+                  <HeartIcon
+                    className={`xsm:w-4 xsm:h-4 md:w-6 md:h-6 stroke-2`}
+                  />
+                )}
                 <p>{likesCount}</p>
               </PrimaryButton>
             </div>
@@ -273,7 +274,7 @@ const Post = ({ userTitle }: any) => {
                 handleOnClick={() => {}}
                 buttonClassNames={`flex items-center gap-x-2 bg-opacity-30 border-none text-white xsm:px-2 font-bold`}
               >
-                <ChatBubbleLeftEllipsisIcon
+                <ChatBubbleOvalLeftIcon
                   className={`xsm:w-4 xsm:h-4 md:w-6 md:h-6 stroke-2`}
                 />
                 <p>{titleState.comments.length}</p>

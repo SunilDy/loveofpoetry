@@ -18,7 +18,15 @@ export default async function handler(
         await connectMongo();
         console.log("CONNECTED TO MONGO");
 
-        let userTitle = await UserTitle.findById(req.body.postId).select('comments').sort({date: -1})
+        let userTitle = await UserTitle.findById(req.body.postId).select('comments')
+        // userTitle.comments.sort((a: any, b:any) => b.date - a.date);
+
+        userTitle.comments.sort((a: any, b:any) => {
+            // sort the subcomments by date
+            b.subcomments.sort((c: any, d: any) => d.date - c.date)
+            // sort the comments by date
+            return b.date - a.date
+          });
 
         console.log("userTitle", userTitle)
 

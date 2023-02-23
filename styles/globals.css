@@ -22,7 +22,7 @@
     @apply xsm:py-1 md:py-2 px-4 border-2 border-white border-opacity-40 rounded-md outline-none xsm:text-sm md:text-lg bg-transparent text-white placeholder:text-white;
   }
   .accent-textarea {
-    @apply bg-inherit text-white xsm:text-sm md:text-lg font-semibold placeholder:text-white border-2 border-white focus:outline-none border-opacity-40 rounded-md p-2 w-full;
+    @apply bg-inherit text-white xsm:text-sm md:text-base font-semibold placeholder:text-white border-2 border-white focus:outline-none border-opacity-40 rounded-md p-2 w-full h-32;
   }
   .accent-modal-bg {
     @apply bg-rose-100 bg-opacity-20;

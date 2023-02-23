@@ -2,13 +2,12 @@ import UserTitle from '@/models/UserTitles';
 import type { NextApiRequest, NextApiResponse } from 'next'
 import connectMongo from '@/lib/connectMongo';
 import { getServerSession } from "next-auth";
-import { authOptions } from "../../auth/[...nextauth]";
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
 type Data = {
   message: string,
   status?: string,
-  poems?: any,
-  comments?: any;
+  comment?: any;
 }
 
 export default async function handler(
@@ -21,32 +20,28 @@ export default async function handler(
       await connectMongo();
       console.log("CONNECTED TO MONGO");
 
-      let titleId = req.body.titleId;
+      let commentId = req.body.commentId;
       let commentBody = req.body.commentBody;
-    //   console.log(titleId)
 
-      let comment = {}
-      if(session?.user)
-        comment = {
-          date: new Date(),
-          username: session.user.name,
-          avatar: session.user.image,
-          comment: commentBody,
-          likes: [],
-          subcomments: []
+      let subcomment = {
+        date: new Date(),
+        username: session?.user?.name,
+        avatar: session?.user?.image,
+        comment: commentBody
+      }
+
+      let comment = await UserTitle.findOneAndUpdate(
+        { 'comments._id': commentId },
+        {
+          $push: {
+            'comments.$.subcomments': subcomment
+          }
         }
-
-      // console.log(comment)
-      let title = await UserTitle.findByIdAndUpdate(
-        titleId,
-        { $push: { comments: comment } },
-        { new: true }
-      )
+      );
 
       res.send({
         message: "pushed",
         status: "ok",
-        comments: title.comments
       })
 
     }

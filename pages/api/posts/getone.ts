@@ -39,8 +39,8 @@ export default async function handler(
             })
         else
             res.send({
-                message: "Post Could Not Be Found",
-                status: 'err',
+                message: "ok",
+                status: 'ok',
                 userTitle: title
             })
 

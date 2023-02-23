@@ -469,11 +469,11 @@ const User = () => {
             {/* Posts */}
             <TabPanel className={`${montserrat.className} my-6 text-white`}>
               <IntermediatePost
-                bodyState={intermediatePostBodyState}
+                // bodyState={intermediatePostBodyState}
                 handleAddPost={() => setIsNewPostModalOpen(!isNewPostModalOpen)}
-                handleBodyChange={(e) =>
-                  setIntermediatePostBodyState(e.target.value)
-                }
+                // handleBodyChange={(e) =>
+                //   setIntermediatePostBodyState(e.target.value)
+                // }
               />
               {userPosts && userPosts.length > 0 ? (
                 <>

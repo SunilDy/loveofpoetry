@@ -95,7 +95,7 @@ const Navbar = () => {
           session.user.name ? (
             <Link href={"/auth/user"}>
               <Image
-                className="w-16 aspect-square object-cover object-center rounded-full mr-4"
+                className="w-10 aspect-square object-cover object-center rounded-full mr-4"
                 src={session.user.image}
                 alt={session.user.name}
                 height={300}

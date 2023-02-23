@@ -1,10 +1,22 @@
 import { Schema, model, models } from 'mongoose';
 
+const SubComment = new Schema({
+  date: Date,
+  username: String,
+  avatar: String,
+  comment: String,
+})
+
 const Comment = new Schema({
     date: Date,
     username: String,
     avatar: String,
     comment: String,
+    likes: [String],
+    subcomments: {
+      type: [SubComment],
+      default: []
+    }
 })
 
 const UserTitleSchema = new Schema({
@@ -21,7 +33,7 @@ const UserTitleSchema = new Schema({
   },
   comments: {
     type: [Comment],
-    default: []
+    default: [],
   }
 });
 

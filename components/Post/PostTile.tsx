@@ -2,6 +2,7 @@ import { UserTitleType } from "@/models/UserTitles";
 import {
   HeartIcon,
   ChatBubbleLeftEllipsisIcon,
+  ChatBubbleOvalLeftIcon,
 } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import Placeholder from "@/public/placeholder/ph2.png";
@@ -146,14 +147,17 @@ const PostTile = ({ userPosts, user }: PostTileType) => {
             <Link href={`/posts/${post._id}`}>
               <h1
                 className={`
-                text-lg font-semibold pb-2
+                xsm:text-lg md:text-xl lg:text-2xl font-semibold pb-2
             `}
               >
                 {post.title}
               </h1>
             </Link>
             {post.lines.map((line: string, i: number) => (
-              <div key={Math.random()}>
+              <div
+                key={Math.random()}
+                className="xsm:text-sm md:text-base lg:text-lg text-"
+              >
                 {line === "" ? <br /> : <p>{line}</p>}
               </div>
             ))}
@@ -181,7 +185,7 @@ const PostTile = ({ userPosts, user }: PostTileType) => {
                 handleOnClick={() => {}}
                 buttonClassNames={`flex items-center gap-x-2 bg-opacity-30 border-none text-white xsm:px-2`}
               >
-                <ChatBubbleLeftEllipsisIcon
+                <ChatBubbleOvalLeftIcon
                   className={`xsm:w-4 xsm:h-4 md:w-6 md:h-6`}
                 />
                 <p>{post.comments.length}</p>
