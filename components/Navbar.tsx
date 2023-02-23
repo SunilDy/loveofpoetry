@@ -235,7 +235,6 @@ const Navbar = () => {
           </div>
         )}
         {/* Menu Modal */}
-
         {/* Menu */}
         {/* <div className="xsm:visible xsm:w-full lg:collapse lg:w-0 flex-1 text-right">
           <Menu
@@ -279,6 +278,7 @@ const Navbar = () => {
             </MenuItem>
           </Menu>
         </div> */}
+        gi{" "}
       </div>
     </nav>
   );
