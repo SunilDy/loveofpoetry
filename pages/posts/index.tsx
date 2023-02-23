@@ -131,9 +131,9 @@ export default function Home() {
           Discover What&rsquo;s Going On!
         </h1>
         <IntermediatePost
-          bodyState={intermediateBodyState}
+          // bodyState={intermediateBodyState}
           handleAddPost={() => setIsNewPostModalOpen(!isNewPostModalOpen)}
-          handleBodyChange={(e) => setIntermediateBodyState(e.target.value)}
+          // handleBodyChange={(e) => setIntermediateBodyState(e.target.value)}
         />
         <NewPost
           isOpen={isNewPostModalOpen}
