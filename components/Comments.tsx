@@ -108,11 +108,11 @@ const Comments = (props: CommentsProps) => {
                   </p>
                   {/* Action Buttons */}
                   <div className="flex xsm:gap-x-2 md:gap-x-3 text-sm items-center">
-                    <button className={`font-semibold text-slate-200`}>
+                    {/* <button className={`font-semibold text-slate-200`}>
                       <HeartIcon
                         className={`xsm:w-4 xsm:h-4 md:w-5 md:h-5 stroke-2`}
                       />
-                    </button>
+                    </button> */}
                     <button
                       className={`text-xs text-slate-200 flex items-center`}
                       onClick={() => {
