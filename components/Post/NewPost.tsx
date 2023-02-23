@@ -7,6 +7,8 @@ import { Montserrat } from "@next/font/google";
 import { Oval } from "react-loader-spinner";
 import toast, { Toaster } from "react-hot-toast";
 import { XCircleIcon, ArrowUpCircleIcon } from "@heroicons/react/20/solid";
+import { useContext } from "react";
+import { IntermediateBodyContext } from "@/context/IntermediatePostBody";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -22,7 +24,8 @@ const NewPost = ({
   intermediateBody,
 }: NewPostType) => {
   const [postTitle, setPostTitle] = useState("");
-  const [postState, setPostState] = useState(intermediateBody || "");
+  // @ts-ignore
+  const { postBody, setPostBody } = useContext(IntermediateBodyContext);
   const [isUploadingPost, setIsUploadingPost] = useState(false);
 
   const router = useRouter();
@@ -30,7 +33,7 @@ const NewPost = ({
   useEffect(() => {
     // console.log("postState", postState);
     // console.log("intermediateBody", intermediateBody);
-  }, [isUploadingPost, intermediateBody, postState]);
+  }, [isUploadingPost, intermediateBody, postBody]);
 
   const handleNewPost = () => {
     setIsUploadingPost(!isUploadingPost);
@@ -39,7 +42,7 @@ const NewPost = ({
         `/api/posts/new`,
         {
           title: postTitle,
-          body: postState,
+          body: postBody,
         },
         {
           withCredentials: true,
@@ -140,11 +143,11 @@ const NewPost = ({
           </h1>
           <textarea
             placeholder="Write a post"
-            value={postState}
-            onChange={(e) => setPostState(e.target.value)}
+            value={postBody}
+            onChange={(e) => setPostBody(e.target.value)}
             className={`accent-textarea xsm:w-[100%] xsm:h-56 md:h-60 w-full p-4 placeholder:font-normal font-normal`}
           />
-          {postState && postState.length <= 20 && (
+          {postBody && postBody.length <= 20 && (
             <p className="xsm:text-xs md:text-sm mb-6">
               Min. length of title is 20.
             </p>
@@ -157,7 +160,7 @@ const NewPost = ({
             buttonClassNames={`font-semibold flex gap-x-2 justify-between items-center`}
             handleOnClick={handleNewPost}
             // @ts-ignore
-            isDisabled={postState.length < 20 || postTitle.length < 4}
+            isDisabled={postBody.length < 20 || postTitle.length < 4}
           >
             {isUploadingPost ? (
               <Oval

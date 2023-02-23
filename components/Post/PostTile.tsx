@@ -40,9 +40,7 @@ const PostTile = ({ userPosts, user }: PostTileType) => {
     // console.log(user);
   }, [userPosts, user]);
 
-  useEffect(() => {
-    console.log(likesCount);
-  }, [likesCount, likesStateBoolean]);
+  useEffect(() => {}, [likesCount, likesStateBoolean]);
 
   const handlePostLike = (title: string, author_email: string, i: number) => {
     console.log(i);

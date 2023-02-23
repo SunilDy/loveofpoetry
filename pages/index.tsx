@@ -12,6 +12,11 @@ import IntermediatePost from "@/components/Post/IntermediatePost";
 import NewPost from "@/components/Post/NewPost";
 import { PlusIcon } from "@heroicons/react/20/solid";
 import { Oval } from "react-loader-spinner";
+// import { useIntermediateContext } from "@/context/IntermediatePostBody";
+// import { IntermediateBodyContext } from "@/context/IntermediatePostBody";
+import { useContext } from "react";
+
+import { IntermediateBodyContext } from "@/context/IntermediatePostBody";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -26,8 +31,14 @@ export default function Home() {
 
   // States
   const [posts, setPosts] = useState<UserTitleType[] | null>(null);
-  const [intermediateBodyState, setIntermediateBodyState] = useState("");
+  // const [intermediateBodyState, setIntermediateBodyState] = useState("");
   const [isNewPostModalOpen, setIsNewPostModalOpen] = useState(false);
+  const {
+    // @ts-ignore
+    postBody: intermediateBodyState,
+    // @ts-ignore
+    setPostBody: setIntermediateBodyState,
+  } = useContext(IntermediateBodyContext);
 
   const {
     status: queryStatus,
@@ -62,10 +73,12 @@ export default function Home() {
       });
       setPosts(posts.flat());
     }
-    console.log(data?.pages);
+    // console.log(data?.pages);
   }, [data, hasNextPage]);
 
-  useEffect(() => {}, [posts]);
+  useEffect(() => {
+    console.log(intermediateBodyState);
+  }, [posts, intermediateBodyState]);
 
   const handleNextPageClick = () => {
     fetchNextPage();
