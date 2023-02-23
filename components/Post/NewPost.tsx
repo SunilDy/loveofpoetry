@@ -18,11 +18,7 @@ type NewPostType = {
   intermediateBody?: string;
 };
 
-const NewPost = ({
-  isOpen,
-  handleCloseModal,
-  intermediateBody,
-}: NewPostType) => {
+const NewPost = ({ isOpen, handleCloseModal }: NewPostType) => {
   const [postTitle, setPostTitle] = useState("");
   // @ts-ignore
   const { postBody, setPostBody } = useContext(IntermediateBodyContext);
@@ -33,7 +29,7 @@ const NewPost = ({
   useEffect(() => {
     // console.log("postState", postState);
     // console.log("intermediateBody", intermediateBody);
-  }, [isUploadingPost, intermediateBody, postBody]);
+  }, [isUploadingPost, postBody]);
 
   const handleNewPost = () => {
     setIsUploadingPost(!isUploadingPost);

@@ -12,11 +12,6 @@ import IntermediatePost from "@/components/Post/IntermediatePost";
 import NewPost from "@/components/Post/NewPost";
 import { PlusIcon } from "@heroicons/react/20/solid";
 import { Oval } from "react-loader-spinner";
-// import { useIntermediateContext } from "@/context/IntermediatePostBody";
-// import { IntermediateBodyContext } from "@/context/IntermediatePostBody";
-import { useContext } from "react";
-
-import { IntermediateBodyContext } from "@/context/IntermediatePostBody";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -33,12 +28,6 @@ export default function Home() {
   const [posts, setPosts] = useState<UserTitleType[] | null>(null);
   // const [intermediateBodyState, setIntermediateBodyState] = useState("");
   const [isNewPostModalOpen, setIsNewPostModalOpen] = useState(false);
-  const {
-    // @ts-ignore
-    postBody: intermediateBodyState,
-    // @ts-ignore
-    setPostBody: setIntermediateBodyState,
-  } = useContext(IntermediateBodyContext);
 
   const {
     status: queryStatus,
@@ -77,8 +66,8 @@ export default function Home() {
   }, [data, hasNextPage]);
 
   useEffect(() => {
-    console.log(intermediateBodyState);
-  }, [posts, intermediateBodyState]);
+    // console.log(intermediateBodyState);
+  }, [posts]);
 
   const handleNextPageClick = () => {
     fetchNextPage();
@@ -144,14 +133,11 @@ export default function Home() {
           Discover What&rsquo;s Going On!
         </h1>
         <IntermediatePost
-          bodyState={intermediateBodyState}
           handleAddPost={() => setIsNewPostModalOpen(!isNewPostModalOpen)}
-          handleBodyChange={(e) => setIntermediateBodyState(e.target.value)}
         />
         <NewPost
           isOpen={isNewPostModalOpen}
           handleCloseModal={() => setIsNewPostModalOpen(!isNewPostModalOpen)}
-          intermediateBody={intermediateBodyState}
         />
         {posts && <PostTile userPosts={posts} user={session?.user} />}
 

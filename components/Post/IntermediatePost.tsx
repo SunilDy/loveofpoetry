@@ -1,21 +1,18 @@
 import { PrimaryButton } from "../Buttons";
 import { Montserrat } from "@next/font/google";
 import { ArrowUpCircleIcon } from "@heroicons/react/20/solid";
+import { useContext } from "react";
+import { IntermediateBodyContext } from "@/context/IntermediatePostBody";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
 type IntermediatePostType = {
   handleAddPost: () => void;
-  bodyState: string;
-  handleBodyChange: (e: any) => void;
 };
 
-const IntermediatePost = ({
-  handleAddPost,
-  bodyState,
-  handleBodyChange,
-}: IntermediatePostType) => {
-  //   console.log("intermediatePostBodyState x2", bodyState);
+const IntermediatePost = ({ handleAddPost }: IntermediatePostType) => {
+  // @ts-ignore
+  const { postBody, setPostBody } = useContext(IntermediateBodyContext);
 
   return (
     <div
@@ -41,8 +38,8 @@ const IntermediatePost = ({
       {/* Header + Action Button */}
       {/* Body */}
       <input
-        value={bodyState}
-        onChange={(e) => handleBodyChange(e)}
+        value={postBody}
+        onChange={(e) => setPostBody(e.target.value)}
         placeholder={`What's on your mind?`}
         className={`accent-input w-full my-4`}
       />
