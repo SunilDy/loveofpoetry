@@ -1,9 +1,6 @@
 import { UserTitleType } from "@/models/UserTitles";
-import {
-  HeartIcon,
-  ChatBubbleLeftEllipsisIcon,
-  ChatBubbleOvalLeftIcon,
-} from "@heroicons/react/24/outline";
+import { HeartIcon, ChatBubbleOvalLeftIcon } from "@heroicons/react/24/outline";
+import { HeartIcon as HeartIconSolid } from "@heroicons/react/24/solid";
 import Image from "next/image";
 import Placeholder from "@/public/placeholder/ph2.png";
 import { Montserrat } from "@next/font/google";
@@ -12,6 +9,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { format, parseISO, formatDistanceToNow } from "date-fns";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -118,7 +116,7 @@ const PostTile = ({ userPosts, user }: PostTileType) => {
             <div>
               {post.avatar !== ("" || undefined) ? (
                 <Image
-                  className="w-16 aspect-square object-cover object-center rounded-full mr-4 self-start"
+                  className="xsm:w-10 lg:w-16 aspect-square object-cover object-center rounded-full xsm:mr-2 lg:mr-4 self-start"
                   src={post.avatar}
                   alt={post.author_name}
                   height={300}
@@ -126,7 +124,7 @@ const PostTile = ({ userPosts, user }: PostTileType) => {
                 />
               ) : (
                 <Image
-                  className="xsm:w-14 lg:w-20 aspect-square object-cover object-center rounded-full mr-4 self-start"
+                  className="xsm:w-10 lg:w-16 aspect-square object-cover object-center rounded-full xsm:mr-2 lg:mr-4 self-start"
                   src={Placeholder}
                   alt={post.author_name}
                   height={300}
@@ -137,8 +135,15 @@ const PostTile = ({ userPosts, user }: PostTileType) => {
             {/* Avatar */}
             {/* Details */}
             <div>
-              <p>{post.author_name}</p>
-              <p>{new Date(post.created_on).toDateString()}</p>
+              <p className="xsm:text-sm md:text-lg font-semibold">
+                {post.author_name}
+              </p>
+              <p className="xsm:text-xs md:text-md text-slate-200">
+                {/* {new Date(post.created_on).toDateString()} */}
+                {formatDistanceToNow(new Date(post.created_on), {
+                  addSuffix: true,
+                })}
+              </p>
             </div>
             {/* Details */}
           </div>
@@ -174,16 +179,24 @@ const PostTile = ({ userPosts, user }: PostTileType) => {
                   likesStateBoolean && likesStateBoolean[i]
                     ? `flex items-center gap-x-2 border-none`
                     : `flex items-center gap-x-2 bg-opacity-30 border-none text-white`
-                } xsm:px-2`}
+                } xsm:px-2 font-semibold`}
               >
-                <HeartIcon className={`xsm:w-4 xsm:h-4 md:w-6 md:h-6`} />
+                {likesStateBoolean && likesStateBoolean[i] ? (
+                  <HeartIconSolid
+                    className={`xsm:w-4 xsm:h-4 md:w-6 md:h-6 stroke-2`}
+                  />
+                ) : (
+                  <HeartIcon
+                    className={`xsm:w-4 xsm:h-4 md:w-6 md:h-6 stroke-2`}
+                  />
+                )}
                 <p>{likesCount && likesCount[i]}</p>
               </PrimaryButton>
             </div>
             <div className="flex items-center gap-x-2">
               <PrimaryButton
-                handleOnClick={() => {}}
-                buttonClassNames={`flex items-center gap-x-2 bg-opacity-30 border-none text-white xsm:px-2`}
+                handleOnClick={() => router.push(`/posts/${post._id}`)}
+                buttonClassNames={`flex items-center gap-x-2 bg-opacity-30 border-none text-white xsm:px-2 font-semibold`}
               >
                 <ChatBubbleOvalLeftIcon
                   className={`xsm:w-4 xsm:h-4 md:w-6 md:h-6`}

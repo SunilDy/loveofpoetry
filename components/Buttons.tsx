@@ -1,4 +1,6 @@
-import { isPropertyAccessChain } from "typescript";
+import { Montserrat } from "@next/font/google";
+
+const montserrat = Montserrat({ subsets: ["latin"] });
 
 type PrimaryButtonProps = {
   children: React.ReactNode;
@@ -16,7 +18,7 @@ export const PrimaryButton = ({
   isDisabled,
 }: PrimaryButtonProps) => {
   return (
-    <div className={`${classNames}`}>
+    <div className={`${classNames} ${montserrat.className}`}>
       <button
         className={`
               bg-white text-purple-500
@@ -45,7 +47,7 @@ export const SecondaryButton = ({
   buttonClassNames,
 }: PrimaryButtonProps) => {
   return (
-    <div className={`${classNames}`}>
+    <div className={`${classNames} ${montserrat.className}`}>
       <button
         className={`
               bg-transparent text-white

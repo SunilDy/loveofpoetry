@@ -29,7 +29,7 @@ const IntermediatePost = ({ handleAddPost }: IntermediatePostType) => {
         </h1>
         <PrimaryButton
           handleOnClick={handleAddPost}
-          buttonClassNames={`flex items-center gap-x-1`}
+          buttonClassNames={`flex items-center gap-x-1 font-semibold`}
         >
           <p>Post</p>
           <ArrowUpCircleIcon className={`xsm:w-5 xsm:h-5 cursor-pointer`} />

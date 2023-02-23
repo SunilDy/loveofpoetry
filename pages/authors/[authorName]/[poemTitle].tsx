@@ -694,13 +694,13 @@ export default function Home(props: any) {
         <div
           className={`
           bg-rose-100 border-2 border-slate-100 border-opacity-40 bg-opacity-20 flex flex-col items-center z-30 rounded-xl shadow-2xl text-white
-          mx-auto py-10 px-10 my-20
+          mx-auto pt-6 px-10 my-20
           xsm:w-[90%] md:w-[80%] lg:w-[70%] xl:w-[60%]
           `}
         >
           {/* Add Comment */}
           <div className="self-start w-full">
-            <h1 className="text-lg my-4 font-bold">ADD COMMENTS</h1>
+            <h1 className="text-lg mb-4 font-bold">ADD COMMENTS</h1>
             <textarea
               value={comment}
               onChange={(e) => setComment(e.target.value)}
@@ -728,6 +728,8 @@ export default function Home(props: any) {
               fetchingComments={fetchingComments}
               loadingComments={loadingComments}
               comments={comments}
+              refetch={refetchComments}
+              isPost={false}
             />
           </div>
         </div>

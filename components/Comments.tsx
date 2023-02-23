@@ -13,15 +13,24 @@ type CommentsProps = {
   loadingComments: boolean;
   areCommentsFetched: boolean;
   comments: any[] | null;
+  refetch: () => void;
+  isPost: boolean;
 };
 
 const Comments = (props: CommentsProps) => {
-  const { fetchingComments, loadingComments, areCommentsFetched, comments } =
-    props;
+  const {
+    fetchingComments,
+    loadingComments,
+    areCommentsFetched,
+    comments,
+    refetch,
+    isPost,
+  } = props;
 
   const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
   const [currentCommentIndex, setCurrentCommentIndex] = useState(0);
   const [currentCommentValue, setCurrentCommentValue] = useState("");
+  const [isUploadingComment, setIsUploadingComment] = useState(false);
 
   if (fetchingComments || loadingComments || !areCommentsFetched) {
     return (
@@ -45,7 +54,7 @@ const Comments = (props: CommentsProps) => {
   // let date = format(parseISO("2023-02-14T16:51:42.409Z"), "yyyy-LL-dd");
 
   const handleAddSubcomment = () => {
-    // if (comments) console.log(comments[currentCommentIndex]._id);
+    setIsUploadingComment(true);
     if (comments)
       axios
         .post(
@@ -58,11 +67,14 @@ const Comments = (props: CommentsProps) => {
             withCredentials: true,
           }
         )
-        .then((res) => {
+        .then(async (res) => {
           console.log(res.data);
+          await refetch();
+          setIsUploadingComment(false);
           setCurrentCommentValue("");
         })
         .catch((err) => {
+          setIsUploadingComment(false);
           console.log(err);
         });
   };
@@ -107,29 +119,31 @@ const Comments = (props: CommentsProps) => {
                     {comment.comment}
                   </p>
                   {/* Action Buttons */}
-                  <div className="flex xsm:gap-x-2 md:gap-x-3 text-sm items-center">
-                    {/* <button className={`font-semibold text-slate-200`}>
+                  {isPost && (
+                    <div className="flex xsm:gap-x-2 md:gap-x-3 text-sm items-center">
+                      {/* <button className={`font-semibold text-slate-200`}>
                       <HeartIcon
                         className={`xsm:w-4 xsm:h-4 md:w-5 md:h-5 stroke-2`}
                       />
                     </button> */}
-                    <button
-                      className={`text-xs text-slate-200 flex items-center`}
-                      onClick={() => {
-                        setCurrentCommentIndex(i);
-                        setIsCommentModalOpen(true);
-                      }}
-                    >
-                      {/* <ChatBubbleOvalLeftIcon
+                      <button
+                        className={`text-xs text-slate-200 flex items-center`}
+                        onClick={() => {
+                          setCurrentCommentIndex(i);
+                          setIsCommentModalOpen(true);
+                        }}
+                      >
+                        {/* <ChatBubbleOvalLeftIcon
                         className={`xsm:w-4 xsm:h-4 md:w-5 md:h-5 stroke-2`}
                       /> */}
-                      Reply
-                      <span className="ml-2 font-bold">
-                        {comment.subcomments.length > 0 &&
-                          comment.subcomments.length}
-                      </span>
-                    </button>
-                  </div>
+                        Reply
+                        <span className="ml-2 font-bold">
+                          {comment.subcomments.length > 0 &&
+                            comment.subcomments.length}
+                        </span>
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
@@ -157,7 +171,7 @@ const Comments = (props: CommentsProps) => {
                 height={300}
                 width={300}
               />
-              <div>
+              <div className="w-full">
                 <div className="flex justify-between items-center xsm:mb-1 md:mb-2">
                   <div className="flex gap-x-2 items-center">
                     <p className="text-sm font-semibold">
@@ -200,7 +214,20 @@ const Comments = (props: CommentsProps) => {
                     handleOnClick={handleAddSubcomment}
                     buttonClassNames={"font-semibold"}
                   >
-                    Reply
+                    {isUploadingComment ? (
+                      <Oval
+                        height={15}
+                        width={15}
+                        color="#fff"
+                        visible={true}
+                        ariaLabel="oval-loading"
+                        secondaryColor="tr"
+                        strokeWidth={4}
+                        strokeWidthSecondary={4}
+                      />
+                    ) : (
+                      <p>Reply</p>
+                    )}
                   </SecondaryButton>
                 </div>
                 {/* Comment Box */}
@@ -215,11 +242,7 @@ const Comments = (props: CommentsProps) => {
                     comments[currentCommentIndex].subcomments.map(
                       (subcomment: any, i: number) => (
                         <div key={i}>
-                          <div
-                            className={`
-                flex
-            `}
-                          >
+                          <div className={`flex`}>
                             <Image
                               className={`xsm:w-10 md:w-14 aspect-square object-cover object-center rounded-full xsm:mr-2 md:mr-4 self-start`}
                               src={subcomment.avatar}

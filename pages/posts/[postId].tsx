@@ -11,9 +11,8 @@ import { PrimaryButton } from "@/components/Buttons";
 import Link from "next/link";
 import Comments from "@/components/Comments";
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useQuery } from "react-query";
-import Modal from "@/components/Modal";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -51,6 +50,7 @@ const Post = ({ userTitle }: any) => {
   const [isUploadingComment, setIsUploadingComment] = useState(false);
   const [isLiked, setIsLiked] = useState<boolean | null>(null);
   const [likesCount, setLikesCount] = useState(0);
+  const textareaRef = useRef(null);
 
   const { data: title, isLoading: loadingTitle } = useQuery(
     `title-${router.query.postId}`,
@@ -61,7 +61,6 @@ const Post = ({ userTitle }: any) => {
     data: comments,
     isLoading: loadingComments,
     isFetched: commentsFetched,
-    isFetching: fetchingComments,
     refetch: refetchComments,
   } = useQuery(`comments-${router.query.postId}`, getComments);
 
@@ -157,6 +156,12 @@ const Post = ({ userTitle }: any) => {
           console.log(err);
         });
     }
+  };
+
+  const handleCommentClick = () => {
+    // if(textareaRef && textareaRef.current)
+    // @ts-ignore
+    textareaRef?.current?.focus();
   };
 
   if (status === "loading" || !titleState) {
@@ -271,7 +276,7 @@ const Post = ({ userTitle }: any) => {
             </div>
             <div className="flex items-center gap-x-2">
               <PrimaryButton
-                handleOnClick={() => {}}
+                handleOnClick={handleCommentClick}
                 buttonClassNames={`flex items-center gap-x-2 bg-opacity-30 border-none text-white xsm:px-2 font-bold`}
               >
                 <ChatBubbleOvalLeftIcon
@@ -290,6 +295,7 @@ const Post = ({ userTitle }: any) => {
             value={commentValue}
             onChange={(e) => setCommentValue(e.target.value)}
             className={`accent-textarea`}
+            ref={textareaRef}
           />
           <PrimaryButton
             handleOnClick={handleAddComment}
@@ -302,6 +308,8 @@ const Post = ({ userTitle }: any) => {
             comments={commentsState}
             fetchingComments={isUploadingComment}
             loadingComments={loadingComments}
+            refetch={refetchComments}
+            isPost={true}
           />
         </div>
         {/* Comments Section */}
