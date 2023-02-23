@@ -131,7 +131,7 @@ const Navbar = () => {
         {/* Menu Modal */}
         {isShowingMenu && (
           <div
-            className={`fixed inset-0 z-50 flex flex-col justify-center items-center xsm:px-6 lg:px-20 h-[100vh]
+            className={`fixed inset-0 z-50 flex flex-col justify-center items-center xsm:px-6 lg:px-20 xsm:h-[100vh] h-[100dvh]
           bg-black bg-opacity-20 backdrop-blur-2xl
             ${montserrat.className}
             `}
