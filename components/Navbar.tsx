@@ -111,6 +111,7 @@ const Navbar = () => {
               height={300}
               width={300}
               onMouseEnter={() => setIsShowingMenu(true)}
+              onClick={() => setIsShowingMenu(true)}
             />
           ) : (
             // </Link>
@@ -134,6 +135,7 @@ const Navbar = () => {
           bg-black bg-opacity-20 backdrop-blur-2xl
             ${montserrat.className}
             `}
+            onClick={() => setIsShowingMenu(false)}
           >
             {/* Menu */}
             <div
