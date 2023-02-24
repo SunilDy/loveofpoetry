@@ -13,6 +13,7 @@ type UserDetailsType = {
   bio: string | null | undefined;
   personalSite: string | null | undefined;
   handleProfileEdit: () => void;
+  showProfileEditButton: boolean;
 };
 
 const UserDetails = ({
@@ -22,6 +23,7 @@ const UserDetails = ({
   bio,
   personalSite,
   handleProfileEdit,
+  showProfileEditButton,
 }: UserDetailsType) => {
   return (
     <div
@@ -73,14 +75,16 @@ const UserDetails = ({
         >
           <span className="font-semibold">Personal Site:</span> {personalSite}
         </Link>
-        <div className="my-4">
-          <SecondaryButton
-            handleOnClick={handleProfileEdit}
-            buttonClassNames={`font-semibold`}
-          >
-            Edit Profile
-          </SecondaryButton>
-        </div>
+        {showProfileEditButton && (
+          <div className="my-4">
+            <SecondaryButton
+              handleOnClick={handleProfileEdit}
+              buttonClassNames={`font-semibold`}
+            >
+              Edit Profile
+            </SecondaryButton>
+          </div>
+        )}
       </div>
     </div>
   );

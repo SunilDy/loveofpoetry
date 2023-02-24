@@ -144,10 +144,12 @@ export default function Home() {
         {/* Add Post Button */}
         <button
           className={`
-          fixed bottom-6 right-6 z-30
+          fixed z-30
+          bottom-6 right-6 lg:bottom-10 lg:right-32
           bg-white rounded-full text-pink-400 xsm:p-3 md:p-5
           hover:scale-95 transition-transform
-          focus:ring-2 ring-pink-400
+          ring-2 ring-pink-400
+          shadow-2xl
       `}
           onClick={() => setIsNewPostModalOpen(!isNewPostModalOpen)}
         >

@@ -6,9 +6,14 @@ import { useRouter } from "next/router";
 import { Montserrat } from "@next/font/google";
 import { Oval } from "react-loader-spinner";
 import toast, { Toaster } from "react-hot-toast";
-import { XCircleIcon, ArrowUpCircleIcon } from "@heroicons/react/20/solid";
+import {
+  XCircleIcon,
+  ArrowUpCircleIcon,
+  PhotoIcon,
+} from "@heroicons/react/20/solid";
 import { useContext } from "react";
 import { IntermediateBodyContext } from "@/context/IntermediatePostBody";
+import Image from "next/image";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -23,22 +28,53 @@ const NewPost = ({ isOpen, handleCloseModal }: NewPostType) => {
   // @ts-ignore
   const { postBody, setPostBody } = useContext(IntermediateBodyContext);
   const [isUploadingPost, setIsUploadingPost] = useState(false);
+  const [imageSrc, setImageSrc] = useState<
+    string | ArrayBuffer | null | undefined
+  >(null);
+  const [imageUploadData, setImageUploadData] = useState(null);
 
   const router = useRouter();
 
   useEffect(() => {
-    // console.log("postState", postState);
-    // console.log("intermediateBody", intermediateBody);
-  }, [isUploadingPost, postBody]);
+    // console.log("from useEffect", imageUploadData);
+  }, [isUploadingPost, postBody, imageUploadData]);
 
-  const handleNewPost = () => {
+  const handleNewPost = async () => {
     setIsUploadingPost(!isUploadingPost);
+
+    // Setting Image to FormData
+
+    // let preset = "poetry-dot";
+    let imageBody = {};
+    if (imageUploadData) {
+      let image = new FormData();
+      console.log("imageUploadData", imageUploadData);
+      image.append("file", imageUploadData);
+      image.append("upload_preset", "v9drf53n");
+      // console.log(image?.values());
+      let res = await axios.post(
+        `https://api.cloudinary.com/v1_1/dgbanf9zo/image/upload`,
+        image
+      );
+      console.log(res.data);
+      imageBody = {
+        name: res.data.original_filename,
+        url: res.data.secure_url,
+        height: res.data.height,
+        width: res.data.width,
+      };
+    }
+
+    // console.log(imageBody);
+    let imageBodyStringified = JSON.stringify(imageBody);
+
     axios
       .post(
         `/api/posts/new`,
         {
           title: postTitle,
           body: postBody,
+          imageBody: imageBodyStringified,
         },
         {
           withCredentials: true,
@@ -101,12 +137,32 @@ const NewPost = ({ isOpen, handleCloseModal }: NewPostType) => {
       });
   };
 
+  const handleImageChange = (e: any) => {
+    // e.preventDefault();
+    // console.log("yyy");
+    const reader = new FileReader();
+
+    reader.readAsDataURL(e.target.files[0]);
+    reader.onload = async (onLoadEvent) => {
+      setImageSrc(onLoadEvent?.target?.result);
+    };
+    // console.log(e.currentTarget);
+    const form = e.currentTarget;
+    let imageInput: any = Array.from(form.elements).find(
+      // @ts-ignore
+      ({ name }) => name === "image-file"
+    );
+    let imageData = imageInput.files[0];
+    // console.log("imageUploadData", imageInput.files[0]);
+    setImageUploadData(imageData);
+  };
+
   if (!isOpen) return <></>;
 
   return (
     <Modal>
       <div
-        className={`accent-modal-bg accent-border px-6 py-4 rounded-md xsm:w-[100%] md:w-[70%]`}
+        className={`accent-modal-bg accent-border px-6 py-4 rounded-md xsm:w-[100%] md:w-[70%] max-h-[90%] overflow-y-scroll scrollbar-thumb-white scrollbar-corner-pink-300 scrollbar-track-transparent scrollbar-thin`}
       >
         {/* Header */}
         <h1
@@ -131,6 +187,55 @@ const NewPost = ({ isOpen, handleCloseModal }: NewPostType) => {
             </p>
           )}
         </div>
+        {/* Images -> Input */}
+        <form className={`my-4`} onChange={(e) => handleImageChange(e)}>
+          {!imageSrc && (
+            <div>
+              <label
+                htmlFor="file-upload"
+                className="flex gap-x-2 items-center cursor-pointer bg-white text-purple-500
+            md:px-2 p-1 rounded-md
+            hover:scale-95
+            transition-transform
+            lg:text-md xsm:text-sm
+            border-2 border-white
+            font-semibold w-fit"
+              >
+                <PhotoIcon
+                  className={`xsm:w-4 xsm:h-4 lg:w-6 lg:h-6 xsm:mx-1 lg:mx-2 cursor-pointer`}
+                />
+                Select Image
+              </label>
+              <input
+                id="file-upload"
+                type="file"
+                className="hidden"
+                name="image-file"
+              />
+            </div>
+          )}
+          {imageSrc && (
+            <div className="grid grid-cols-1 grid-rows-1 w-fit">
+              <Image
+                alt="image"
+                // @ts-ignore
+                src={imageSrc}
+                width={200}
+                height={200}
+                className={`aspect-square object-cover rounded-xl col-span-full row-span-full`}
+              />
+              <button
+                onClick={() => setImageSrc(null)}
+                className="col-span-full row-span-full self-start justify-self-end text-pink-400 mr-1 mt-1  rounded-full p-2 backdrop-blur-3xl"
+              >
+                <XCircleIcon
+                  className={`xsm:w-4 xsm:h-4 lg:w-6 lg:h-6 xsm:mx-1 lg:mx-2 cursor-pointer`}
+                />
+              </button>
+            </div>
+          )}
+        </form>
+        {/* Images -> Input */}
         {/* Post Title */}
         {/* Post Body */}
         <div>

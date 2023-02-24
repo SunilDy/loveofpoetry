@@ -33,8 +33,9 @@
 }
 
 .react-tabs__tab--selected {
-  color: #ff69b4;
-  background-color: white;
+  color: hotpink;
+  font-weight: bold;
   border-radius: 4px;
-  outline: none;
+  background-color: white;
+  outline: transparent;
 }

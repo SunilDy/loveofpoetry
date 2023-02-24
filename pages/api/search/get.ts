@@ -1,12 +1,16 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import connectMongo from '@/lib/connectMongo';
 import Title from '@/models/Title';
+import UserTitle from '@/models/UserTitles';
+import User from '@/models/User';
 
 type Data = {
   message: string,
   status: string,
   statusCode: number,
-  titles?: any
+  titles?: any,
+  userTitles?: any,
+  users?: any
 }
 
 export default async function handler(
@@ -25,22 +29,27 @@ export default async function handler(
             return { title: title.title, author: title.author }
         })
 
-        // console.log(titlesMapped)
+        let userTitles = await UserTitle.find({ title: { $regex: searchTerm, $options: 'i' } })
+        let users = await User.find({ name: { $regex: searchTerm, $options: 'i' } })
 
-        let responseObject: Data | {} = {}
-        if(!titles) responseObject = {
-            message: 'No Matches',
-            status: 'err',
-            statusCode: 403
+        let responseObject: Data | {} = {
+            titles: titles ? titles : null,
+            userTitles: userTitles ? userTitles : null,
+            users: users ? users : null
         }
-        else responseObject = {
-            status: 'ok',
-            titles: titlesMapped,
-            statusCode: 200
-        }
+        // if(!titles) responseObject = {
+        //     message: 'No Matches',
+        //     status: 'err',
+        //     statusCode: 403
+        // }
+        // else responseObject = {
+        //     status: 'ok',
+        //     titles: titlesMapped,
+        //     statusCode: 200
+        // }
         
         // @ts-ignore
-        res.status(responseObject.statusCode).send(responseObject)
+        res.status(200).send(responseObject)
     }
 
 }

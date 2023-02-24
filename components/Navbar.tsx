@@ -62,10 +62,7 @@ const Navbar = () => {
             Poetry<span className="text-pink-300">.</span>
           </h1>
         </Link>
-        <Link
-          href={"/authors"}
-          className="xsm:collapse xsm:w-0 lg:visible lg:w-fit"
-        >
+        <Link href={"/authors"} className="xsm:hidden lg:visible lg:w-fit">
           <h1
             className={` 
             xsm:text-md md:text-lg lg:text-xl 
@@ -76,7 +73,7 @@ const Navbar = () => {
         </Link>
       </div>
       {/* Search Bar */}
-      <div className="">
+      <div className="basis-2/4">
         <input
           placeholder="Search Poetry"
           value={searchValue}
@@ -85,7 +82,7 @@ const Navbar = () => {
             accent-input
             focus:outline-none 
             xsm:text-sm md:text-lg lg:text-xl w-auto
-            font-semibold
+            font-semibold mx-auto
            `}
           // onFocus={() => router.push("/search")}
           onKeyDown={(e) => handleSearchKeyDown(e)}
@@ -93,7 +90,7 @@ const Navbar = () => {
         />
       </div>
       {/* User */}
-      <div className={`basis-1/4 flex items-center justify-end`}>
+      <div className={`flex items-center justify-end flex-shrink-0 w-fit`}>
         <div className="flex justify-end">
           {session &&
           session.user &&
@@ -131,9 +128,10 @@ const Navbar = () => {
         {/* Menu Modal */}
         {isShowingMenu && (
           <div
-            className={`fixed inset-0 z-50 flex flex-col justify-center items-center xsm:px-6 lg:px-20 xsm:h-[100vh] h-[100dvh]
+            className={`fixed inset-0 z-50 flex flex-col justify-center items-center xsm:px-6 lg:px-20
           bg-black bg-opacity-20 backdrop-blur-2xl
             ${montserrat.className}
+            xsm:h-[100vh] h-[100dvh]
             `}
             onClick={() => setIsShowingMenu(false)}
           >

@@ -337,6 +337,7 @@ const User = () => {
             bio={additionalUserDetailsState?.bio}
             personalSite={additionalUserDetailsState?.personalSite}
             handleProfileEdit={handleProfileEditButtonClick}
+            showProfileEditButton={true}
           />
           {isProfileSettingModalOpen && (
             <Modal>

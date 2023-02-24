@@ -35,9 +35,17 @@ export default async function handler(
           title: req.body.title,
           author_email: session.user.email
          })
+         let image = JSON.parse(req.body.imageBody)
+
+         let user = await User.findOneAndUpdate(
+          { email: session?.user?.email },
+          { $push: { posts: req.body.title } },
+          { new: true }
+         )
 
          let newPostObject = {
           title: req.body.title,
+          uid: user._id,
           author_name: session?.user?.name,
           author_email: session?.user?.email,
           avatar: session?.user?.image,
@@ -45,7 +53,8 @@ export default async function handler(
           linesCount: linesArray.length,
           created_on: new Date(),
           likes: [],
-          comments: []
+          comments: [],
+          image
          }
 
          let responseObject = {}

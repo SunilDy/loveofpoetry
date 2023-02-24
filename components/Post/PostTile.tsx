@@ -9,7 +9,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import { format, parseISO, formatDistanceToNow } from "date-fns";
+import { formatDistanceToNow } from "date-fns";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -37,6 +37,7 @@ const PostTile = ({ userPosts, user }: PostTileType) => {
     setLikesCount(likesMapped);
     setLikesStateBoolean(likesBooleanMapped);
     // console.log(user);
+    console.log(userPosts);
   }, [userPosts, user]);
 
   useEffect(() => {}, [likesCount, likesStateBoolean]);
@@ -135,9 +136,11 @@ const PostTile = ({ userPosts, user }: PostTileType) => {
             {/* Avatar */}
             {/* Details */}
             <div>
-              <p className="xsm:text-sm md:text-lg font-semibold">
-                {post.author_name}
-              </p>
+              <Link href={`/profile/${post.uid}`}>
+                <p className="xsm:text-sm md:text-lg font-semibold">
+                  {post.author_name}
+                </p>
+              </Link>
               <p className="xsm:text-xs md:text-md text-slate-200">
                 {/* {new Date(post.created_on).toDateString()} */}
                 {formatDistanceToNow(new Date(post.created_on), {
@@ -145,10 +148,24 @@ const PostTile = ({ userPosts, user }: PostTileType) => {
                 })}
               </p>
             </div>
-            {/* Details */}
           </div>
+          {/* Details */}
+          {/* Image */}
+          {post.image && post.image.url && (
+            <div className="my-4">
+              <Image
+                alt={post.image.name}
+                // @ts-ignore
+                src={post.image.url}
+                width={+post.image.width}
+                height={+post.image.height}
+                className={`aspect-square object-cover rounded-xl col-span-full row-span-full max-h-80 w-fit`}
+              />
+            </div>
+          )}
+          {/* Image */}
           {/* Body */}
-          <div className="py-6 accent-border-bottom  xsm:text-sm md:text-md">
+          <div className="py-6 accent-border-bottom xsm:text-sm md:text-md">
             <Link href={`/posts/${post._id}`}>
               <h1
                 className={`
@@ -163,7 +180,7 @@ const PostTile = ({ userPosts, user }: PostTileType) => {
                 key={Math.random()}
                 className="xsm:text-sm md:text-base lg:text-lg text-"
               >
-                {line === "" ? <br /> : <p>{line}</p>}
+                {line === "" ? <br /> : <p className="break-words">{line}</p>}
               </div>
             ))}
           </div>

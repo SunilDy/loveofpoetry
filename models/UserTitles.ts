@@ -19,8 +19,16 @@ const Comment = new Schema({
     }
 })
 
+const ImageSchema = new Schema({
+  name: String,
+  url: String,
+  height: String,
+  width: String
+})
+
 const UserTitleSchema = new Schema({
   title: String,
+  uid: String,
   author_name: String,
   author_email: String,
   avatar: String,
@@ -34,11 +42,13 @@ const UserTitleSchema = new Schema({
   comments: {
     type: [Comment],
     default: [],
-  }
+  },
+  image: ImageSchema
 });
 
 export type UserTitleType = {
     _id: string,
+    uid: string,
     title: string,
     author_name: string,
     author_email: string,
@@ -48,7 +58,13 @@ export type UserTitleType = {
     created_on: Date,
     likes: string[],
     comments: string[],
-    isLiked: boolean
+    isLiked: boolean,
+    image: {
+      name: string,
+      url: string,
+      height: string,
+      width: string
+    }
 }
 
 const UserTitle = models.usertitles || model('usertitles', UserTitleSchema);
