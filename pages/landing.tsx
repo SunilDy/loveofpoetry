@@ -1,15 +1,22 @@
 import Head from "next/head";
 import { Alegreya } from "@next/font/google";
-import axios from "axios";
 import Image from "next/image";
 import LineBreak from "@/public/linebreak.svg";
 import { Montserrat } from "@next/font/google";
+import Title from "@/models/Title";
+import connectMongo from "@/lib/connectMongo";
+import { PrimaryButton } from "@/components/Buttons";
+import { useRouter } from "next/router";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 const alegreya = Alegreya({ subsets: ["latin"] });
 
-export default function Home({ poem }: any) {
-  console.log(poem);
+export default function Home({ random: randomStringified }: any) {
+  let random = JSON.parse(randomStringified);
+  let randomPoem = random[0];
+
+  const router = useRouter();
+
   return (
     <>
       <Head>
@@ -18,27 +25,47 @@ export default function Home({ poem }: any) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main>
+      <main className="text-white">
         {/* Hero =============== */}
-        <div className="text-white my-32 px-10">
+        <div className="text-white xsm:my-20 lg:my-32 px-10 lg:w-[70%] mx-auto text-center">
           <h1
-            className={`${montserrat.className} text-4xl text-center font-extrabold`}
+            className={`${montserrat.className} 
+            xsm:text-4xl md:text-4xl lg:text-6xl 
+            text-center font-extrabold leading-relaxed tracking-wide`}
           >
-            The love for poetry is never ending. 🤍
+            The love for poetry is never ending.
           </h1>
           <h1
             className={`${montserrat.className} text-2xl text-center font-bold mt-4`}
           >
-            And we uderstand that.
+            And we uderstand that. 🤍
           </h1>
           <h1
-            className={`${montserrat.className} text-xl text-center font-light w-[60%] mx-auto`}
+            className={`${montserrat.className} xsm:text-xl lg:text-2xl text-center font-light w-[60%] mx-auto mt-4`}
           >
-            Discover, Browse and Study from endless collection of poetry
-            collection from our site. We have got you all covered.
+            Discover, Browse or Study from our endless collection of classical
+            poetry right from the period of Renaissance and of The Romantics
+            from our site. We got you all covered.
           </h1>
         </div>
         {/* Hero =============== */}
+
+        {/* Sign In Prompt =============== */}
+        <div className="flex flex-col items-center">
+          <h1
+            className={`${montserrat.className} xsm:text-xl lg:text-2xl text-center w-[60%] mx-auto font-bold mb-2`}
+          >
+            Sign In To Explore
+          </h1>
+          <PrimaryButton
+            buttonClassNames={`font-bold`}
+            handleOnClick={() => router.push(`/auth/login`)}
+          >
+            Sign In
+          </PrimaryButton>
+        </div>
+        {/* Sign In Prompt =============== */}
+
         {/* Random Poem ============= */}
         <div className="xsm:mt-10 md:mt-16 lg:mt-24 text-white">
           <h1
@@ -59,7 +86,7 @@ export default function Home({ poem }: any) {
               xsm:text-lg md:text-2xl lg:text-3xl text-center
               `}
             >
-              {poem[0].title}
+              {randomPoem.title}
             </h1>
             <Image
               className="xsm:w-28 md:w-40 mb-10"
@@ -68,7 +95,7 @@ export default function Home({ poem }: any) {
               height={300}
               width={300}
             />
-            {poem[0].lines.map((line: string, i: number) => (
+            {randomPoem.lines.map((line: string, i: number) => (
               <p
                 className={`${alegreya.className} 
                 xsm:text-md md:text-lg lg:text-xl 
@@ -94,11 +121,13 @@ export default function Home({ poem }: any) {
 }
 
 export const getServerSideProps = async () => {
-  let randomPoem = await axios.get(`https://poetrydb.org//random`);
-
+  await connectMongo();
+  let random = await Title.find({
+    $expr: { $lt: [{ $size: "$lines" }, 50] },
+  });
   return {
     props: {
-      poem: randomPoem.data,
+      random: JSON.stringify(random),
     },
   };
 };

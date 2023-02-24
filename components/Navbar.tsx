@@ -73,15 +73,15 @@ const Navbar = () => {
         </Link>
       </div>
       {/* Search Bar */}
-      <div className="basis-2/4">
+      <div className="basis-2/4 flex justify-center">
         <input
-          placeholder="Search Poetry"
+          placeholder="Search for Poetry, Posts, Users..."
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
           className={`
             accent-input
             focus:outline-none 
-            xsm:text-sm md:text-lg lg:text-xl w-auto
+            xsm:text-sm md:text-lg lg:text-xl w-full
             font-semibold mx-auto
            `}
           // onFocus={() => router.push("/search")}
@@ -90,7 +90,9 @@ const Navbar = () => {
         />
       </div>
       {/* User */}
-      <div className={`flex items-center justify-end flex-shrink-0 w-fit`}>
+      <div
+        className={`flex items-center justify-end flex-shrink-0 w-fit basis-1/4`}
+      >
         <div className="flex justify-end">
           {session &&
           session.user &&
@@ -200,16 +202,22 @@ const Navbar = () => {
                   <UserGroupIcon className="w-5 h-5" />
                   Authors
                 </Link>
-                <Link
+                <button
                   className={`flex gap-x-2 items-center 
                     accent-link p-2 
                     hover:accent-modal-bg rounded-xl transition
                   `}
-                  href={`/auth/user`}
+                  onClick={() =>
+                    router.push({
+                      pathname: `/auth/user`,
+                      query: { isCollectionsTabActive: 1 },
+                    })
+                  }
+                  // href={`/auth/user`}
                 >
                   <BookmarkIcon className="w-5 h-5" />
                   Your Collections
-                </Link>
+                </button>
                 <Link
                   className={`flex gap-x-2 items-center 
                     accent-link p-2 

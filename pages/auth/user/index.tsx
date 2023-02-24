@@ -85,7 +85,7 @@ const User = () => {
     },
   });
 
-  // console.log(session?.user);
+  console.log(router?.query?.isCollectionsTabActive);
 
   const {
     data: likedPoems,
@@ -551,6 +551,10 @@ const User = () => {
 
             <TabPanel
               className={`xsm:m-2 lg:m-6 box-border md:grid grid-cols-new4 gap-x-6`}
+              default={
+                // @ts-ignore
+                +router?.query?.isCollectionsTabActive > 0 ? true : false
+              }
             >
               {userCollectionsState && !isUpdatingCollection ? (
                 userCollectionsState &&
