@@ -12,8 +12,7 @@ const montserrat = Montserrat({ subsets: ["latin"] });
 const alegreya = Alegreya({ subsets: ["latin"] });
 
 export default function Home({ random: randomStringified }: any) {
-  let random = JSON.parse(randomStringified);
-  let randomPoem = random[0];
+  let randomPoem = JSON.parse(randomStringified);
 
   const router = useRouter();
 
@@ -123,11 +122,18 @@ export default function Home({ random: randomStringified }: any) {
 export const getServerSideProps = async () => {
   await connectMongo();
   let random = await Title.find({
-    $expr: { $lt: [{ $size: "$lines" }, 50] },
+    $expr: { $lt: [{ $size: "$lines" }, 40] },
   });
+
+  function randomNumber(min: number, max: number) {
+    return Math.floor(Math.random() * (max - min) + min);
+  }
+
+  let randomPoem = random[randomNumber(0, random.length - 1)];
+
   return {
     props: {
-      random: JSON.stringify(random),
+      random: JSON.stringify(randomPoem),
     },
   };
 };
