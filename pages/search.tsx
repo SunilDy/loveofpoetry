@@ -94,11 +94,13 @@ const Search = () => {
           </TabList>
 
           {/* Posts */}
-          <TabPanel className={`${montserrat.className} my-6 text-white`}>
+          <TabPanel
+            className={`${montserrat.className} my-6 text-white xsm:w-[90%] md:w-[80%] lg:w-[70%] xl:w-[60%] mx-auto`}
+          >
             {userTitlesState && userTitlesState.length > 0 ? (
-              <>
+              <div>
                 <PostTile userPosts={userTitlesState} />
-              </>
+              </div>
             ) : (
               <div className="mx-10 mb-20 text-center">
                 <p className="text-white mb-4">Nothing found!</p>
