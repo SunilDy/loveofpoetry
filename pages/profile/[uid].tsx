@@ -84,7 +84,11 @@ const Profile = ({
               <TabPanel className={`${montserrat.className} my-6 text-primary`}>
                 {userPosts.length > 0 ? (
                   <>
-                    <PostTile userPosts={userPosts} user={profile} />
+                    <PostTile
+                      userPosts={userPosts}
+                      user={profile}
+                      shouldShowDelete={false}
+                    />
                   </>
                 ) : (
                   <div className={`flex flex-col items-center py-10`}>
