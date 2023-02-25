@@ -2,9 +2,9 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { Montserrat } from "@next/font/google";
-import { Menu, MenuItem, MenuButton } from "@szhsin/react-menu";
-import "@szhsin/react-menu/dist/index.css";
-import "@szhsin/react-menu/dist/transitions/slide.css";
+// import { Menu, MenuItem, MenuButton } from "@szhsin/react-menu";
+// import "@szhsin/react-menu/dist/index.css";
+// import "@szhsin/react-menu/dist/transitions/slide.css";
 import { useRouter } from "next/router";
 import Image from "next/image";
 

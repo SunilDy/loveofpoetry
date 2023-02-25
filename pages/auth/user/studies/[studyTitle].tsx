@@ -16,6 +16,7 @@ import { Oval } from "react-loader-spinner";
 import Modal from "@/components/Modal";
 import { useBeforeunload } from "react-beforeunload";
 import toast, { Toaster } from "react-hot-toast";
+import Head from "next/head";
 
 import LineBreak from "@/public/linebreak.svg";
 import Image from "next/image";
@@ -94,35 +95,69 @@ const StudyTitle = () => {
 
   if (loadingStudies || status === "loading" || isRefetchingStudies) {
     return (
-      <div className="min-h-screen flex justify-center items-center">
-        <Oval
-          height={80}
-          width={80}
-          color="#fff"
-          visible={true}
-          ariaLabel="oval-loading"
-          secondaryColor="tr"
-          strokeWidth={2}
-          strokeWidthSecondary={2}
-        />
-      </div>
+      <>
+        <Head>
+          <title>User Studies</title>
+          <meta
+            name="description"
+            content="Discover, Browse or Study from our endless collection of classical poetry right from the period of Renaissance and of The Romantics from our site. We got you all covered."
+          />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <meta name="theme-color" content="#F472B6" />
+          <meta name="robots" content="index,follow" />
+          <meta name="googlebot" content="index,follow" />
+          {/* Gives a general age rating based on the document's content */}
+          <meta name="rating" content="General" />
+
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
+        <div className="min-h-screen flex justify-center items-center">
+          <Oval
+            height={80}
+            width={80}
+            color="#fff"
+            visible={true}
+            ariaLabel="oval-loading"
+            secondaryColor="tr"
+            strokeWidth={2}
+            strokeWidthSecondary={2}
+          />
+        </div>
+      </>
     );
   }
 
   if (studyRes?.data.status === "err") {
     return (
-      <div className="min-h-screen flex flex-col items-center px-6">
-        <h1
-          className={`${montserrat.className} mt-32 font-bold text-primary
+      <>
+        <Head>
+          <title>Study Not Found</title>
+          <meta
+            name="description"
+            content="Discover, Browse or Study from our endless collection of classical poetry right from the period of Renaissance and of The Romantics from our site. We got you all covered."
+          />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <meta name="theme-color" content="#F472B6" />
+          <meta name="robots" content="index,follow" />
+          <meta name="googlebot" content="index,follow" />
+          {/* Gives a general age rating based on the document's content */}
+          <meta name="rating" content="General" />
+
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
+        <div className="min-h-screen flex flex-col items-center px-6">
+          <h1
+            className={`${montserrat.className} mt-32 font-bold text-primary
             my-6 text-center xsm:text-2xl md:text-4xl
           `}
-        >
-          {studyRes.data.message}
-        </h1>
-        <PrimaryButton handleOnClick={() => router.push("/")}>
-          Go Back To Studies
-        </PrimaryButton>
-      </div>
+          >
+            {studyRes.data.message}
+          </h1>
+          <PrimaryButton handleOnClick={() => router.push("/")}>
+            Go Back To Studies
+          </PrimaryButton>
+        </div>
+      </>
     );
   }
 
@@ -269,148 +304,164 @@ const StudyTitle = () => {
   };
 
   return (
-    <div>
-      {/* Study Container ============ */}
-      <div
-        className={`
+    <>
+      <Head>
+        <title>{studyState?.title}</title>
+        <meta
+          name="description"
+          content="Discover, Browse or Study from our endless collection of classical poetry right from the period of Renaissance and of The Romantics from our site. We got you all covered."
+        />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="theme-color" content="#F472B6" />
+        <meta name="robots" content="index,follow" />
+        <meta name="googlebot" content="index,follow" />
+        {/* Gives a general age rating based on the document's content */}
+        <meta name="rating" content="General" />
+
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <div>
+        {/* Study Container ============ */}
+        <div
+          className={`
     xsm:w-[90%] md:w-[80%] 
     mx-auto flex flex-col items-center mb-32 z-30 accent-rounded text-primary
     xsm:mt-10 md-16 lg:mt-24 min-h-screen
     `}
-      >
-        <h1
-          className={`${alegreya.className} font-bold mt-8
+        >
+          <h1
+            className={`${alegreya.className} font-bold mt-8
               xsm:text-[2em] md:text-[3em] lg:text-[4em] text-center
               `}
-        >
-          {studyState?.title}
-        </h1>
-        <Link
-          href={`/authors/${studyState?.author}`}
-          className={`text-primary italic text-center mb-2`}
-        >
-          {" "}
-          by {studyState?.author}
-        </Link>
-        <Image
-          className="w-40 mb-10"
-          src={LineBreak}
-          alt={"linebreak"}
-          height={300}
-          width={300}
-        />
+          >
+            {studyState?.title}
+          </h1>
+          <Link
+            href={`/authors/${studyState?.author}`}
+            className={`text-primary italic text-center mb-2`}
+          >
+            {" "}
+            by {studyState?.author}
+          </Link>
+          <Image
+            className="w-40 mb-10"
+            src={LineBreak}
+            alt={"linebreak"}
+            height={300}
+            width={300}
+          />
 
-        {/* Lines ==================*/}
-        <div className="w-full">
-          {linesState?.map((line: any, i: number) => (
-            <div
-              key={i}
-              className={`md:flex space-x-3 justify-between items-center mb-2
+          {/* Lines ==================*/}
+          <div className="w-full">
+            {linesState?.map((line: any, i: number) => (
+              <div
+                key={i}
+                className={`md:flex space-x-3 justify-between items-center mb-2
                 xsm:text-sm md:text-md lg:text-lg
                 accent-border-bottom pb-2
                 ${montserrat.className}
             `}
-            >
-              <p className={`p-2 basis-1/2 `}>{line.line}</p>
-              <button
-                className={`
+              >
+                <p className={`p-2 basis-1/2 `}>{line.line}</p>
+                <button
+                  className={`
                 accent-modal-bg p-2 rounded-md
                 flex space-x-2 justify-between items-center
                 basis-1/2
               `}
-                onClick={function () {
-                  setCurrentLineState(line.comment);
-                  setLinesModalState({
-                    isOpen: true,
-                    lineIndex: i,
-                  });
-                }}
-              >
-                <p className="text-md text-left">
-                  {line.comment === "" ? "Add Comment" : line.comment}
-                </p>
-                {line.comment === "" && (
-                  <PencilSquareIcon className="xsm:w-4 xsm:h-4 md:w-5 md:h-5" />
-                )}
-              </button>
-            </div>
-          ))}
-        </div>
-        {/* Lines Modal */}
-        {linesModalState.isOpen && (
-          <Modal>
-            <div
-              className={`text-primary p-4 accent-modal-bg accent-border accent-rounded`}
-            >
-              {/* Header + Action */}
-              <div
-                className={`flex justify-between items-center accent-border-bottom mb-2 pb-2`}
-              >
-                <h1 className={`${montserrat.className} font-semibold`}>
-                  Update Comment
-                </h1>
-                <button
-                  onClick={() => handleLinesUpdate(linesModalState.lineIndex)}
+                  onClick={function () {
+                    setCurrentLineState(line.comment);
+                    setLinesModalState({
+                      isOpen: true,
+                      lineIndex: i,
+                    });
+                  }}
                 >
-                  <XCircleIcon className="xsm:w-4 xsm:h-4 md:w-5 md:h-5" />
+                  <p className="text-md text-left">
+                    {line.comment === "" ? "Add Comment" : line.comment}
+                  </p>
+                  {line.comment === "" && (
+                    <PencilSquareIcon className="xsm:w-4 xsm:h-4 md:w-5 md:h-5" />
+                  )}
                 </button>
               </div>
-              {/* Updation */}
-              <div>
-                <p
-                  className={`${montserrat.className} xsm:text-sm sm:text-md md:text-lg md:p-2`}
+            ))}
+          </div>
+          {/* Lines Modal */}
+          {linesModalState.isOpen && (
+            <Modal>
+              <div
+                className={`text-primary p-4 accent-modal-bg accent-border accent-rounded`}
+              >
+                {/* Header + Action */}
+                <div
+                  className={`flex justify-between items-center accent-border-bottom mb-2 pb-2`}
                 >
-                  &rdquo;
-                  {linesState && linesState[linesModalState.lineIndex].line}
-                  &rdquo;
-                </p>
-                <textarea
-                  value={currentLineState}
-                  spellCheck="false"
-                  onChange={(e) => setCurrentLineState(e.target.value)}
-                  className={`
+                  <h1 className={`${montserrat.className} font-semibold`}>
+                    Update Comment
+                  </h1>
+                  <button
+                    onClick={() => handleLinesUpdate(linesModalState.lineIndex)}
+                  >
+                    <XCircleIcon className="xsm:w-4 xsm:h-4 md:w-5 md:h-5" />
+                  </button>
+                </div>
+                {/* Updation */}
+                <div>
+                  <p
+                    className={`${montserrat.className} xsm:text-sm sm:text-md md:text-lg md:p-2`}
+                  >
+                    &rdquo;
+                    {linesState && linesState[linesModalState.lineIndex].line}
+                    &rdquo;
+                  </p>
+                  <textarea
+                    value={currentLineState}
+                    spellCheck="false"
+                    onChange={(e) => setCurrentLineState(e.target.value)}
+                    className={`
                     my-4
                     accent-textarea 
                     p-2 w-full
                     xsm:h-40 md:h-32
                 `}
-                />
+                  />
+                </div>
+                {/* ActionButton */}
+                <div className="flex justify-end space-x-2">
+                  <PrimaryButton
+                    handleOnClick={() =>
+                      handleLinesUpdate(linesModalState.lineIndex)
+                    }
+                  >
+                    Add & Close
+                  </PrimaryButton>
+                  <SecondaryButton
+                    handleOnClick={() =>
+                      setLinesModalState({ ...linesModalState, isOpen: false })
+                    }
+                  >
+                    Cancel
+                  </SecondaryButton>
+                </div>
               </div>
-              {/* ActionButton */}
-              <div className="flex justify-end space-x-2">
-                <PrimaryButton
-                  handleOnClick={() =>
-                    handleLinesUpdate(linesModalState.lineIndex)
-                  }
-                >
-                  Add & Close
-                </PrimaryButton>
-                <SecondaryButton
-                  handleOnClick={() =>
-                    setLinesModalState({ ...linesModalState, isOpen: false })
-                  }
-                >
-                  Cancel
-                </SecondaryButton>
-              </div>
+            </Modal>
+          )}
+          {/* Lines Modal */}
+          {/* Lines ================*/}
+          {/* Notes */}
+          <div
+            className={`text-primary ${montserrat.className} self-start w-full mt-14`}
+          >
+            <div className={`accent-border-bottom flex space-x-2 items-center`}>
+              <h1 className="xsm:text-lg md:text-xl font-bold ">Notes</h1>
+              <PencilIcon className="xsm:w-4 xsm:h-4 md:w-5 md:h-5" />
             </div>
-          </Modal>
-        )}
-        {/* Lines Modal */}
-        {/* Lines ================*/}
-        {/* Notes */}
-        <div
-          className={`text-primary ${montserrat.className} self-start w-full mt-14`}
-        >
-          <div className={`accent-border-bottom flex space-x-2 items-center`}>
-            <h1 className="xsm:text-lg md:text-xl font-bold ">Notes</h1>
-            <PencilIcon className="xsm:w-4 xsm:h-4 md:w-5 md:h-5" />
-          </div>
-          <textarea
-            value={notesState === "" ? "No notes!" : notesState}
-            spellCheck="false"
-            onChange={(e) => setNotesState(e.target.value)}
-            className={`
+            <textarea
+              value={notesState === "" ? "No notes!" : notesState}
+              spellCheck="false"
+              onChange={(e) => setNotesState(e.target.value)}
+              className={`
                 my-4
                 bg-inherit text-primary 
                 xsm:text-sm md:text-lg font-semibold
@@ -419,16 +470,20 @@ const StudyTitle = () => {
                 p-2 w-full
                 h-60
             `}
-          />
+            />
+          </div>
+          {/* Notes */}
+          <PrimaryButton
+            handleOnClick={handleSave}
+            buttonClassNames={`text-xl`}
+          >
+            Save
+          </PrimaryButton>
         </div>
-        {/* Notes */}
-        <PrimaryButton handleOnClick={handleSave} buttonClassNames={`text-xl`}>
-          Save
-        </PrimaryButton>
+        {/* Study Container ============ */}
+        <Toaster position="bottom-center" reverseOrder={false} />
       </div>
-      {/* Study Container ============ */}
-      <Toaster position="bottom-center" reverseOrder={false} />
-    </div>
+    </>
   );
 };
 

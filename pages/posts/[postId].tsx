@@ -13,10 +13,11 @@ import Comments from "@/components/Comments";
 import axios from "axios";
 import { useState, useEffect, useRef } from "react";
 import { useQuery } from "react-query";
+import Head from "next/head";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
-const Post = ({ userTitle }: any) => {
+const Post = () => {
   const router = useRouter();
   const { data: session, status } = useSession({
     required: true,
@@ -183,6 +184,21 @@ const Post = ({ userTitle }: any) => {
 
   return (
     <div className="min-h-screen">
+      <Head>
+        <title>{titleState.title || "Post"}</title>
+        <meta
+          name="description"
+          content="Discover, Browse or Study from our endless collection of classical poetry right from the period of Renaissance and of The Romantics from our site. We got you all covered."
+        />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="theme-color" content="#F472B6" />
+        <meta name="robots" content="index,follow" />
+        <meta name="googlebot" content="index,follow" />
+        {/* Gives a general age rating based on the document's content */}
+        <meta name="rating" content="General" />
+
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <div
         className={`
             text-primary accent-rounded
@@ -319,15 +335,3 @@ const Post = ({ userTitle }: any) => {
 };
 
 export default Post;
-
-export const getServerSideProps = async (context: any) => {
-  const { params } = context;
-
-  let userTitle = await UserTitle.findById(params.postId);
-
-  return {
-    props: {
-      userTitle: JSON.stringify(userTitle),
-    },
-  };
-};

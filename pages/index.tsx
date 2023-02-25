@@ -122,9 +122,7 @@ export default function Home() {
         </title>
         <meta
           name="description"
-          content="Discover, Browse or Study from our endless collection of classical
-            poetry right from the period of Renaissance and of The Romantics
-            from our site. We got you all covered."
+          content="Discover, Browse or Study from our endless collection of classical poetry right from the period of Renaissance and of The Romantics from our site. We got you all covered."
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#F472B6" />
