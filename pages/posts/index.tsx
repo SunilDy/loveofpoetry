@@ -148,7 +148,13 @@ export default function Home() {
           isOpen={isNewPostModalOpen}
           handleCloseModal={() => setIsNewPostModalOpen(!isNewPostModalOpen)}
         />
-        {posts && <PostTile userPosts={posts} user={session?.user} />}
+        {posts && (
+          <PostTile
+            userPosts={posts}
+            user={session?.user}
+            shouldShowDelete={false}
+          />
+        )}
 
         {/* Add Post Button */}
         <button
