@@ -133,7 +133,7 @@ export default function Home() {
 
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="xsm:w-[90%] lg:w-[80%] mx-auto text-primary">
+      <main className="xsm:w-[100%] lg:w-[80%] mx-auto text-primary">
         <h1
           className={`
             ${montserrat.className} font-semibold

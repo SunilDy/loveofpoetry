@@ -203,7 +203,7 @@ const Post = () => {
         className={`
             text-primary accent-rounded
             m-6 p-6 mx-auto
-            accent-width
+            accent-width xsm:w-[100%]
             ${montserrat.className}
             `}
       >
@@ -254,6 +254,20 @@ const Post = () => {
                 {titleState.title}
               </h1>
             </Link>
+            {/* Image */}
+            {titleState.image && titleState.image.url && (
+              <div className="my-4">
+                <Image
+                  alt={titleState.image.name}
+                  // @ts-ignore
+                  src={titleState.image.url}
+                  width={+titleState.image.width}
+                  height={+titleState.image.height}
+                  className={`aspect-square object-cover rounded-xl col-span-full row-span-full max-h-80 w-fit`}
+                />
+              </div>
+            )}
+            {/* Image */}
             <div className="xsm:px-2 md:px-4">
               {titleState.lines.map((line: string, i: number) => (
                 <div

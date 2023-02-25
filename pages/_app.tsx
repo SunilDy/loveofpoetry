@@ -6,6 +6,7 @@ import { SessionProvider } from "next-auth/react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import { IntermediateBodyProvider } from "@/context/IntermediatePostBody";
+import Head from "next/head";
 
 export default function App({
   Component,
@@ -15,6 +16,9 @@ export default function App({
 
   return (
     <>
+      <Head>
+        <meta name="theme-color" content="#F472B6" />
+      </Head>
       <ErrorBoundary>
         <SessionProvider session={session}>
           <QueryClientProvider client={queryClient}>

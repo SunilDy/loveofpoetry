@@ -164,7 +164,8 @@ const PostTile = ({ userPosts, user }: PostTileType) => {
             </Link>
             {/* Image */}
             {post.image && post.image.url && (
-              <div className="my-4">
+              // <div className={`my-4 min-h-[${+post.image.height}px]`}>
+              <div className={`my-4`}>
                 <Image
                   alt={post.image.name}
                   // @ts-ignore

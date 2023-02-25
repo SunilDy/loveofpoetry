@@ -39,7 +39,7 @@ const Navbar = () => {
       className={`
       flex items-center gap-x-2
       xsm:py-2 md:py-2 lg:py-4 
-      xsm:px-2 md:px-16 lg:px-20 xl:px-32 
+      xsm:px-4 md:px-16 lg:px-20 xl:px-32 
       justify-between text-primary backdrop-blur-3xl z-50 sticky top-0 border-b-2 border-primary border-opacity-10
       `}
     >
