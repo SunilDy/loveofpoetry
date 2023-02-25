@@ -183,7 +183,7 @@ export default function Home() {
         {/* Add Post Button */}
         {/* Loader */}
         {isFetching && (
-          <div className="my-20 w-full flex justify-center">
+          <div>
             <Loader />
           </div>
         )}
