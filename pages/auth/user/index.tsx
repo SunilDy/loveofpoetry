@@ -488,7 +488,11 @@ const User = () => {
                 />
                 {userPosts && userPosts.length > 0 ? (
                   <>
-                    <PostTile userPosts={userPosts} user={session?.user} />
+                    <PostTile
+                      userPosts={userPosts}
+                      user={session?.user}
+                      shouldShowDelete={true}
+                    />
                   </>
                 ) : (
                   <div className={`flex flex-col items-center py-10`}>

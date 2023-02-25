@@ -1,5 +1,6 @@
 import { UserTitleType } from "@/models/UserTitles";
 import { HeartIcon, ChatBubbleOvalLeftIcon } from "@heroicons/react/24/outline";
+import { XCircleIcon } from "@heroicons/react/24/solid";
 import { HeartIcon as HeartIconSolid } from "@heroicons/react/24/solid";
 import Image from "next/image";
 import Placeholder from "@/public/placeholder/ph2.png";
@@ -16,9 +17,10 @@ const montserrat = Montserrat({ subsets: ["latin"] });
 type PostTileType = {
   userPosts: UserTitleType[];
   user?: any;
+  shouldShowDelete: boolean;
 };
 
-const PostTile = ({ userPosts, user }: PostTileType) => {
+const PostTile = ({ userPosts, user, shouldShowDelete }: PostTileType) => {
   const router = useRouter();
   const [likesStateBoolean, setLikesStateBoolean] = useState<boolean[] | null>(
     null
@@ -98,6 +100,27 @@ const PostTile = ({ userPosts, user }: PostTileType) => {
     }
   };
 
+  const handlePostDelete = (title: string) => {
+    console.log("title", title);
+    axios
+      .post(
+        `/api/posts/deleteone`,
+        {
+          title,
+        },
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        // console.log(res.data);
+        router.reload();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <div className={`${montserrat.className} text-primary`}>
       {userPosts.map((post: UserTitleType, i: number) => (
@@ -112,42 +135,49 @@ const PostTile = ({ userPosts, user }: PostTileType) => {
           // onClick={() => router.push(`/posts/${post._id}`)}
         >
           {/* User avatar + details */}
-          <div className={`flex gap-x-2 items-center`}>
-            {/* Avatar */}
-            <div>
-              {post.avatar !== ("" || undefined) ? (
-                <Image
-                  className="xsm:w-10 lg:w-16 aspect-square object-cover object-center rounded-full xsm:mr-2 lg:mr-4 self-start"
-                  src={post.avatar}
-                  alt={post.author_name}
-                  height={300}
-                  width={300}
-                />
-              ) : (
-                <Image
-                  className="xsm:w-10 lg:w-16 aspect-square object-cover object-center rounded-full xsm:mr-2 lg:mr-4 self-start"
-                  src={Placeholder}
-                  alt={post.author_name}
-                  height={300}
-                  width={300}
-                />
-              )}
-            </div>
-            {/* Avatar */}
-            {/* Details */}
-            <div>
-              <Link href={`/profile/${post.uid}`}>
-                <p className="xsm:text-sm md:text-lg font-semibold">
-                  {post.author_name}
+          <div className="flex justify-between items-start">
+            <div className={`flex gap-x-2 items-center`}>
+              {/* Avatar */}
+              <div>
+                {post.avatar !== ("" || undefined) ? (
+                  <Image
+                    className="xsm:w-10 lg:w-16 aspect-square object-cover object-center rounded-full xsm:mr-2 lg:mr-4 self-start"
+                    src={post.avatar}
+                    alt={post.author_name}
+                    height={300}
+                    width={300}
+                  />
+                ) : (
+                  <Image
+                    className="xsm:w-10 lg:w-16 aspect-square object-cover object-center rounded-full xsm:mr-2 lg:mr-4 self-start"
+                    src={Placeholder}
+                    alt={post.author_name}
+                    height={300}
+                    width={300}
+                  />
+                )}
+              </div>
+              {/* Avatar */}
+              {/* Details */}
+              <div>
+                <Link href={`/profile/${post.uid}`}>
+                  <p className="xsm:text-sm md:text-lg font-semibold">
+                    {post.author_name}
+                  </p>
+                </Link>
+                <p className="xsm:text-xs md:text-md text-slate-200">
+                  {/* {new Date(post.created_on).toDateString()} */}
+                  {formatDistanceToNow(new Date(post.created_on), {
+                    addSuffix: true,
+                  })}
                 </p>
-              </Link>
-              <p className="xsm:text-xs md:text-md text-slate-200">
-                {/* {new Date(post.created_on).toDateString()} */}
-                {formatDistanceToNow(new Date(post.created_on), {
-                  addSuffix: true,
-                })}
-              </p>
+              </div>
             </div>
+            {shouldShowDelete && (
+              <button onClick={() => handlePostDelete(post.title)}>
+                <XCircleIcon className={`w-6 h-6`} />
+              </button>
+            )}
           </div>
           {/* Details */}
 

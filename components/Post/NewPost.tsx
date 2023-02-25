@@ -106,6 +106,9 @@ const NewPost = ({ isOpen, handleCloseModal }: NewPostType) => {
               </div>
             </div>
           ));
+          setPostTitle("");
+          setImageSrc(null);
+          setPostBody("");
           router.reload();
         }
       })
