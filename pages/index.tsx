@@ -12,6 +12,7 @@ import IntermediatePost from "@/components/Post/IntermediatePost";
 import NewPost from "@/components/Post/NewPost";
 import { PlusIcon } from "@heroicons/react/20/solid";
 import { Oval } from "react-loader-spinner";
+import Loader from "@/components/Loader";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -98,17 +99,21 @@ export default function Home() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex justify-center items-center">
-        <Oval
-          height={80}
-          width={80}
-          color="#fff"
-          visible={true}
-          ariaLabel="oval-loading"
-          secondaryColor="tr"
-          strokeWidth={2}
-          strokeWidthSecondary={2}
+      <div className="min-h-screen xsm:w-[100%] lg:w-[80%] mx-auto text-primary">
+        <h1
+          className={`
+            ${montserrat.className} font-semibold
+            xsm:text-xl md:text-2xl lg:text-3xl
+            text-center
+            my-10
+          `}
+        >
+          Discover What&rsquo;s Going On!
+        </h1>
+        <IntermediatePost
+          handleAddPost={() => setIsNewPostModalOpen(!isNewPostModalOpen)}
         />
+        <Loader />
       </div>
     );
   }
@@ -179,16 +184,7 @@ export default function Home() {
         {/* Loader */}
         {isFetching && (
           <div className="my-20 w-full flex justify-center">
-            <Oval
-              height={80}
-              width={80}
-              color="#fff"
-              visible={true}
-              ariaLabel="oval-loading"
-              secondaryColor="tr"
-              strokeWidth={2}
-              strokeWidthSecondary={2}
-            />
+            <Loader />
           </div>
         )}
         {/* Loader */}
