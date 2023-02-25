@@ -203,7 +203,7 @@ const Post = () => {
         className={`
             text-primary accent-rounded
             m-6 p-6 mx-auto
-            accent-width xsm:w-[100%]
+            accent-width
             ${montserrat.className}
             `}
       >
