@@ -99,7 +99,10 @@ const Search = () => {
           >
             {userTitlesState && userTitlesState.length > 0 ? (
               <div>
-                <PostTile userPosts={userTitlesState} />
+                <PostTile
+                  userPosts={userTitlesState}
+                  shouldShowDelete={false}
+                />
               </div>
             ) : (
               <div className="mx-10 mb-20 text-center">
