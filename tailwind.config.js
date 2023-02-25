@@ -14,7 +14,8 @@ module.exports = {
     },
     extend: {
       colors: {
-        primary: "#E6C7BF",
+        primary: "#fff",
+        secondary: "#F472B6",
       },
       gridTemplateColumns: {
         new4: "repeat(auto-fit, minmax(400px, 1fr))",

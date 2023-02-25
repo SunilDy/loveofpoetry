@@ -99,14 +99,14 @@ const PostTile = ({ userPosts, user }: PostTileType) => {
   };
 
   return (
-    <div className={`${montserrat.className}`}>
+    <div className={`${montserrat.className} text-primary`}>
       {userPosts.map((post: UserTitleType, i: number) => (
         <div
           className={`
-            accent-modal-bg accent-border rounded-xl
+            accent-modal-bg accent-border accent-rounded
             m-6 p-6 mx-auto
             xsm:w-[95%] md:w-[70%] lg:w-[60%]
-            shadow-xl
+            accent-shadow
             `}
           key={i}
           // onClick={() => router.push(`/posts/${post._id}`)}
@@ -150,20 +150,7 @@ const PostTile = ({ userPosts, user }: PostTileType) => {
             </div>
           </div>
           {/* Details */}
-          {/* Image */}
-          {post.image && post.image.url && (
-            <div className="my-4">
-              <Image
-                alt={post.image.name}
-                // @ts-ignore
-                src={post.image.url}
-                width={+post.image.width}
-                height={+post.image.height}
-                className={`aspect-square object-cover rounded-xl col-span-full row-span-full max-h-80 w-fit`}
-              />
-            </div>
-          )}
-          {/* Image */}
+
           {/* Body */}
           <div className="py-6 accent-border-bottom xsm:text-sm md:text-md">
             <Link href={`/posts/${post._id}`}>
@@ -175,10 +162,24 @@ const PostTile = ({ userPosts, user }: PostTileType) => {
                 {post.title}
               </h1>
             </Link>
+            {/* Image */}
+            {post.image && post.image.url && (
+              <div className="my-4">
+                <Image
+                  alt={post.image.name}
+                  // @ts-ignore
+                  src={post.image.url}
+                  width={+post.image.width}
+                  height={+post.image.height}
+                  className={`aspect-square object-cover rounded-xl col-span-full row-span-full max-h-80 w-fit`}
+                />
+              </div>
+            )}
+            {/* Image */}
             {post.lines.map((line: string, i: number) => (
               <div
                 key={Math.random()}
-                className="xsm:text-sm md:text-base lg:text-lg text-"
+                className="xsm:text-sm md:text-base lg:text-lg text-primary"
               >
                 {line === "" ? <br /> : <p className="break-words">{line}</p>}
               </div>

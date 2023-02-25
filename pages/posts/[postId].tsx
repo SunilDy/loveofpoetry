@@ -185,13 +185,13 @@ const Post = ({ userTitle }: any) => {
     <div className="min-h-screen">
       <div
         className={`
-            text-white rounded-xl
+            text-primary accent-rounded
             m-6 p-6 mx-auto
-            xsm:w-full md:w-[80%] lg:w-[70%] xl:w-[50%]
+            accent-width
             ${montserrat.className}
             `}
       >
-        <div className="accent-border p-4 accent-modal-bg rounded-xl shadow-2xl">
+        <div className="accent-border p-4 accent-modal-bg accent-rounded accent-shadow">
           {/* User avatar + details */}
           <div className={`flex gap-x-2 items-center`}>
             {/* Avatar */}
@@ -220,14 +220,14 @@ const Post = ({ userTitle }: any) => {
               <p className="xsm:text-sm md:text-lg font-semibold">
                 {titleState.author_name}
               </p>
-              <p className="xsm:text-xs md:text-md text-slate-200">
+              <p className="xsm:text-xs md:text-md text-primary">
                 {new Date(titleState.created_on).toDateString()}
               </p>
             </div>
             {/* Details */}
           </div>
           {/* Body */}
-          <div className="py-6 accent-border-bottom  xsm:text-sm md:text-md">
+          <div className="py-6 accent-border-bottom xsm:text-sm md:text-md">
             <Link href={`/posts/${titleState._id}`}>
               <h1
                 className={`
@@ -258,7 +258,7 @@ const Post = ({ userTitle }: any) => {
                 buttonClassNames={`${
                   // @ts-ignore
                   isLiked
-                    ? `flex items-center gap-x-2 border-none`
+                    ? `flex items-center gap-x-2 border-none text-secondary`
                     : `flex items-center gap-x-2 bg-opacity-30 border-none text-white`
                 } xsm:px-2 font-bold`}
               >

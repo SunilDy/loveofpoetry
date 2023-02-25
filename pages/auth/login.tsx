@@ -38,13 +38,13 @@ const Login = () => {
 
   return (
     <div
-      className={`${montserrat.className} min-h-screen w-full my-20 flex justify-center text-white`}
+      className={`${montserrat.className} min-h-screen w-full my-20 flex-justify text-primary`}
     >
       {/* Container */}
       <div
         className={`
         accent-modal-bg accent-border
-        rounded-xl shadow-xl h-fit
+        accent-rounded accent-shadow h-fit
         xsm:p-6 md:p-12 lg:p-16
       `}
       >
@@ -55,7 +55,7 @@ const Login = () => {
             mb-10 text-center
           `}
         >
-          Poetry<span className="text-pink-300">.</span>
+          Poetry<span className="text-secondary">.</span>
         </h1>
         <h1
           className={`

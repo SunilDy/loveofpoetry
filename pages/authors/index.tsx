@@ -62,7 +62,7 @@ export default function Home({ nameBlocks }: any) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="m-6 text-white min-h-[100vh]">
+      <main className="m-6 text-primary min-h-screen">
         {/* Search block =========== */}
 
         <div className="flex justify-center items-center w-full xsm:my-10 md:my-14 lg:my-20">
@@ -72,10 +72,9 @@ export default function Home({ nameBlocks }: any) {
             onChange={(e) => handleSearchChange(e)}
             className={`
               xsm:py-1 md:py-3 px-4
-              border-4 border-white border-opacity-40 rounded-md outline-none
+              accent-input border-4 accent-rounded
               lg:text-3xl md:text-xl xsm:text-lg
-              bg-transparent
-              text-white placeholder:text-white
+              text-primary placeholder:text-primary
               xsm:w-[80%] md:w-fit
               ${montserrat.className}
             `}
@@ -98,7 +97,7 @@ export default function Home({ nameBlocks }: any) {
             {nameBlocksState.length > 0 ? (
               nameBlocksState.map((nameBlock: NameBlock, i: number) => (
                 <div key={i} className="w-full mb-6">
-                  <div className="w-[50%] border-b-2 border-slate-50 ">
+                  <div className="w-[50%] accent-border-bottom">
                     <p
                       className={`${montserrat.className} text-xl mb-2 font-bold`}
                     >

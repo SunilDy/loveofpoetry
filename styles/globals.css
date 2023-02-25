@@ -30,6 +30,24 @@
   .accent-link {
     @apply font-semibold xsm:text-sm md:text-base lg:text-lg;
   }
+  .flex-center {
+    @apply flex justify-center items-center;
+  }
+  .flex-justify {
+    @apply flex justify-center;
+  }
+  .accent-width {
+    @apply xsm:w-[90%] md:w-[80%] lg:w-[70%] xl:w-[60%];
+  }
+  .accent-shadow {
+    @apply shadow-xl;
+  }
+  .accent-rounded {
+    @apply rounded-xl;
+  }
+  .accent-scrollbar {
+    @apply scrollbar-thumb-primary scrollbar-corner-secondary scrollbar-track-transparent scrollbar-thin;
+  }
 }
 
 .react-tabs__tab--selected {

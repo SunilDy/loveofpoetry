@@ -21,12 +21,12 @@ export const PrimaryButton = ({
     <div className={`${classNames} ${montserrat.className}`}>
       <button
         className={`
-              bg-white text-purple-500
+              bg-primary text-secondary
               md:px-2 p-1 rounded-md
               hover:scale-95
               transition-transform
               lg:text-md xsm:text-sm
-              border-2 border-white
+              border-2 border-primary
               md:font-semibold
               ${buttonClassNames}
               disabled:cursor-not-allowed
@@ -50,11 +50,11 @@ export const SecondaryButton = ({
     <div className={`${classNames} ${montserrat.className}`}>
       <button
         className={`
-              bg-transparent text-white
+              bg-transparent text-primary
               md:px-2 p-1 rounded-md
               hover:scale-95
               transition-transform
-              border-2 border-white border-opacity-30
+              accent-border
               lg:text-md xsm:text-sm
               md:font-semibold
               ${buttonClassNames}

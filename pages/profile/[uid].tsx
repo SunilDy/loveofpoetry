@@ -54,8 +54,8 @@ const Profile = ({
         <div className={`mx-auto`}>
           <Tabs className={`box-border min-h-screen`}>
             <TabList
-              className={`flex justify-center xsm:gap-x-2 lg:gap-x-10
-              text-white font-bold ${montserrat.className} xsm:text-sm lg:text-lg
+              className={`flex-justify xsm:gap-x-2 lg:gap-x-10
+              text-primary font-bold ${montserrat.className} xsm:text-sm lg:text-lg
               xsm:my-4 lg:my-6
               `}
             >
@@ -69,7 +69,7 @@ const Profile = ({
             </TabList>
 
             {/* Posts */}
-            <TabPanel className={`${montserrat.className} my-6 text-white`}>
+            <TabPanel className={`${montserrat.className} my-6 text-primary`}>
               {userPosts.length > 0 ? (
                 <>
                   <PostTile userPosts={userPosts} user={profile} />
@@ -89,14 +89,14 @@ const Profile = ({
                 profile.likedPoems.map((poem: any, i: number) => (
                   <div
                     key={i}
-                    className={`flex justify-between items-center border-b-2 border-white border-opacity-20 gap-x-2 mb-2 pb-2`}
+                    className={`flex-center accent-border-bottom gap-x-2 mb-2 pb-2`}
                   >
                     <Link href={`/authors/${poem.author}/${poem.title}`}>
                       <p
-                        className={`text-white font-bold xsm:text-sm lg:text-lg ${montserrat.className}`}
+                        className={`text-primary font-bold xsm:text-sm lg:text-lg ${montserrat.className}`}
                       >
                         {poem.title} by{" "}
-                        <span className={`italic text-slate-200 font-light`}>
+                        <span className={`italic text-primary font-light`}>
                           {poem.author}
                         </span>
                       </p>
@@ -105,7 +105,7 @@ const Profile = ({
                 ))
               ) : (
                 <div
-                  className={`${montserrat.className} flex justify-center my-6 text-white`}
+                  className={`${montserrat.className} flex-justify my-6 text-primary`}
                 >
                   <p>No liked poems!</p>
                 </div>
@@ -121,30 +121,30 @@ const Profile = ({
                 profile.collections.map((collection: any, i: number) => (
                   <div
                     key={i}
-                    className={`bg-rose-100 border-2 border-slate-100 border-opacity-40 bg-opacity-20 rounded-xl shadow-2xl my-6 text-white p-4 ${montserrat.className}`}
+                    className={`accent-modal-bg accent-border text-primary accent-rounded accent-shadow my-6 p-4 ${montserrat.className}`}
                   >
                     {/* Header */}
-                    <div className="flex justify-between border-b-2 border-white border-opacity-40 pb-1 mb-2">
+                    <div className="flex-justify accent-border-bottom pb-1 mb-2">
                       <h1 className="font-bold">{collection.name}</h1>
                     </div>
                     {/* Titles */}
                     <div>
                       {collection.titles.length > 0 ? (
                         collection.titles.map((poem: any, i: number) => (
-                          <div key={i} className="flex justify-between my-2">
+                          <div key={i} className="flex-justify my-2">
                             <div className="flex gap-x-2 items-center">
                               <Link
                                 href={`/authors/${poem.author}/${poem.title}`}
                               >
                                 <p
-                                  className={`text-white font-bold xsm:text-sm lg:text-md ${montserrat.className}`}
+                                  className={`text-primary font-bold xsm:text-sm lg:text-md ${montserrat.className}`}
                                 >
                                   {poem.title}
                                 </p>
                               </Link>
                               <Link href={`/authors/${poem.author}`}>
                                 <span
-                                  className={`italic text-slate-200 font-light xsm:text-sm lg:text-md`}
+                                  className={`italic text-primary font-light xsm:text-sm lg:text-md`}
                                 >
                                   by {poem.author}
                                 </span>

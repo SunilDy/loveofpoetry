@@ -40,16 +40,25 @@ class ErrorBoundary extends Component {
           <div className="flex flex-col items-center my-10 px-24">
             <h1
               className={`
-        ${jose.className} text-green-400
+        ${jose.className} text-primary
         xsm:text-sm md:text-lg lg:text-2xl
         `}
             >
               {Message}
             </h1>
-            <Link href={"/"}>
-              <PrimaryButton handleOnClick={() => {}}>
-                Go Back Home
-              </PrimaryButton>
+            <Link
+              href={"/"}
+              className={`
+              bg-primary text-secondary
+              md:px-2 p-1 rounded-md
+              hover:scale-95
+              transition-transform
+              lg:text-md xsm:text-sm
+              border-2 border-primary
+              md:font-semibold
+            `}
+            >
+              Go Back Home
             </Link>
           </div>
           <Footer />

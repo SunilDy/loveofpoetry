@@ -121,7 +121,7 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="xsm:w-[90%] lg:w-[80%] mx-auto text-white">
+      <main className="xsm:w-[90%] lg:w-[80%] mx-auto text-primary">
         <h1
           className={`
             ${montserrat.className} font-semibold
@@ -146,9 +146,9 @@ export default function Home() {
           className={`
           fixed z-30
           bottom-6 right-6 lg:bottom-10 lg:right-32
-          bg-white rounded-full text-pink-400 xsm:p-3 md:p-5
+          bg-white rounded-full text-secondary xsm:p-3 md:p-5
           hover:scale-95 transition-transform
-          ring-2 ring-pink-400
+          ring-2 ring-secondary
           shadow-2xl
       `}
           onClick={() => setIsNewPostModalOpen(!isNewPostModalOpen)}

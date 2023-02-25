@@ -96,7 +96,7 @@ const Studies = () => {
   }
 
   return (
-    <div className="min-h-screen xsm:w-[90%] md:w-[80%] text-white mx-auto mt-10">
+    <div className="min-h-screen xsm:w-[90%] md:w-[80%] text-primary mx-auto mt-10">
       <h1
         className={`${montserrat.className} text-3xl font-bold pb-2 mb-2 accent-border-bottom`}
       >
@@ -109,8 +109,8 @@ const Studies = () => {
             key={i}
             className={`
                     accent-border
-                    bg-rose-100 bg-opacity-20 rounded-xl
-                    my-4 p-4 pb-2 shadow-2xl
+                    accent-modal-bg accent-rounded accent-rounded
+                    my-4 p-4 pb-2
                 `}
           >
             {/* Study title */}
@@ -120,7 +120,7 @@ const Studies = () => {
               </h1>
               <button onClick={() => handleDeleteStudy(study.title)}>
                 <XCircleIcon
-                  className={`xsm:w-4 xsm:h-4 md:w-5 md:h-5 text-white`}
+                  className={`xsm:w-4 xsm:h-4 md:w-5 md:h-5 text-primary`}
                 />
               </button>
             </div>
@@ -128,7 +128,7 @@ const Studies = () => {
             {/* Content */}
             <div className="accent-border-bottom pb-2 mb-2">
               <p>
-                <span className="font-bold bg-white bg-opacity-40 p-1 m-1 rounded-md">
+                <span className="font-bold accent-modal-bg p-1 m-1 accent-rounded">
                   Notes:{" "}
                 </span>
                 {study.notes === "" ? "No Notes Written Yet" : study.notes}
@@ -139,7 +139,9 @@ const Studies = () => {
             <div className="flex justify-between py-2">
               <p>
                 {" "}
-                <span className="slate-300 italic">Last updated at:</span>{" "}
+                <span className="text-primary italic">
+                  Last updated at:
+                </span>{" "}
                 {new Date(study.lastUpdatedAt).toDateString()}
                 {/* {format(parseISO(study.lastUpdatedAt), "yyyy-LL-dd")} */}
               </p>

@@ -34,16 +34,13 @@ const Navbar = () => {
     if (e.key === "Enter") router.push(`/search?name=${searchValue}`);
   };
 
-  const menuClassName = () =>
-    `box-border z-50 text-sm bg-white p-1.5 border rounded-md shadow-lg select-none focus:outline-none min-w-[9rem]`;
-
   return (
     <nav
       className={`
       flex items-center gap-x-2
       xsm:py-2 md:py-2 lg:py-4 
       xsm:px-2 md:px-16 lg:px-20 xl:px-32 
-      justify-between text-white backdrop-blur-3xl z-50 sticky top-0 border-b-2 border-white border-opacity-10
+      justify-between text-primary backdrop-blur-3xl z-50 sticky top-0 border-b-2 border-primary border-opacity-10
       `}
     >
       {/* Primary Links */}
@@ -59,7 +56,7 @@ const Navbar = () => {
             xsm:text-md md:text-lg lg:text-xl
           `}
           >
-            Poetry<span className="text-pink-300">.</span>
+            Poetry<span className="text-secondary">.</span>
           </h1>
         </Link>
         <Link href={"/authors"} className="xsm:hidden lg:visible lg:w-fit">
@@ -80,7 +77,6 @@ const Navbar = () => {
           onChange={(e) => setSearchValue(e.target.value)}
           className={`
             accent-input
-            focus:outline-none 
             xsm:text-sm md:text-lg lg:text-xl w-full
             font-semibold mx-auto
            `}
@@ -140,7 +136,7 @@ const Navbar = () => {
             {/* Menu */}
             <div
               className={`
-                bg-pink-500 text-white
+                bg-secondary text-primary
                 fixed h-full right-0
                 flex flex-col justify-between
                 xsm:p-6 md:p-10
@@ -185,7 +181,7 @@ const Navbar = () => {
                 <Link
                   className={`flex gap-x-2 items-center 
                     accent-link p-2 
-                    hover:accent-modal-bg rounded-xl transition
+                    hover:accent-modal-bg accent-rounded transition
                   `}
                   href={`/posts`}
                 >
@@ -195,7 +191,7 @@ const Navbar = () => {
                 <Link
                   className={`flex gap-x-2 items-center 
                     accent-link p-2 
-                    hover:accent-modal-bg rounded-xl transition
+                    hover:accent-modal-bg accent-rounded transition
                   `}
                   href={`/authors`}
                 >
@@ -205,7 +201,7 @@ const Navbar = () => {
                 <button
                   className={`flex gap-x-2 items-center 
                     accent-link p-2 
-                    hover:accent-modal-bg rounded-xl transition
+                    hover:accent-modal-bg accent-rounded transition
                   `}
                   onClick={() =>
                     router.push({
@@ -221,7 +217,7 @@ const Navbar = () => {
                 <Link
                   className={`flex gap-x-2 items-center 
                     accent-link p-2 
-                    hover:accent-modal-bg rounded-xl transition
+                    hover:accent-modal-bg accent-rounded transition
                   `}
                   href={`/auth/user/studies`}
                 >

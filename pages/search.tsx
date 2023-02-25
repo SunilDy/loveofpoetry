@@ -60,7 +60,7 @@ const Search = () => {
 
   return (
     <div className="min-h-screen">
-      <div className="flex justify-center items-center w-full md:w-[60%] xsm:my-10 md:my-14 lg:my-20 mx-auto">
+      <div className="flex-center w-full md:w-[60%] xsm:my-10 md:my-14 lg:my-20 mx-auto">
         <input
           placeholder="Search for poetry titles"
           value={searchValue}
@@ -68,10 +68,10 @@ const Search = () => {
           onKeyDown={(e) => handleSearchKeyDown(e)}
           className={`
               xsm:py-1 md:py-3 px-4
-              border-4 border-white border-opacity-40 rounded-md outline-none
+              border-4 accent-border rounded-md outline-none
               lg:text-3xl md:text-xl xsm:text-lg
               bg-transparent
-              text-white placeholder:text-white
+              text-primary placeholder:text-white
               xsm:w-[80%] md:w-full
               ${montserrat.className}
             `}
@@ -81,8 +81,8 @@ const Search = () => {
       <div className={`mx-auto`}>
         <Tabs className={`box-border min-h-screen`}>
           <TabList
-            className={`flex justify-center xsm:gap-x-2 lg:gap-x-10
-              text-white font-bold ${montserrat.className} xsm:text-sm lg:text-lg
+            className={`flex-justify xsm:gap-x-2 lg:gap-x-10
+              text-primary font-bold ${montserrat.className} xsm:text-sm lg:text-lg
               xsm:my-4 lg:my-6
               `}
           >
@@ -95,7 +95,7 @@ const Search = () => {
 
           {/* Posts */}
           <TabPanel
-            className={`${montserrat.className} my-6 text-white xsm:w-[90%] md:w-[80%] lg:w-[70%] xl:w-[60%] mx-auto`}
+            className={`${montserrat.className} my-6 text-primary accent-width mx-auto`}
           >
             {userTitlesState && userTitlesState.length > 0 ? (
               <div>
@@ -103,10 +103,10 @@ const Search = () => {
               </div>
             ) : (
               <div className="mx-10 mb-20 text-center">
-                <p className="text-white mb-4">Nothing found!</p>
+                <p className="text-primary mb-4">Nothing found!</p>
                 <PrimaryButton
                   handleOnClick={() => router.back()}
-                  classNames={`flex justify-center`}
+                  classNames={`flex-justify`}
                   buttonClassNames={`font-semibold`}
                 >
                   Go Back
@@ -120,8 +120,8 @@ const Search = () => {
             {usersState && usersState.length > 0 ? (
               usersState.map((user: any, i: number) => (
                 <div
-                  className={`flex gap-x-2 items-center accent-modal-bg accent-border rounded-xl shadow-xl my-4 p-4 text-white mx-auto
-                  xsm:w-[90%] md:w-[80%] lg:w-[70%] xl:w-[50%]
+                  className={`flex gap-x-2 items-center accent-modal-bg accent-border accent-rounded accent-shadow my-4 p-4 text-primary mx-auto
+                  accent-width
                   `}
                   key={i}
                 >
@@ -159,10 +159,10 @@ const Search = () => {
               ))
             ) : (
               <div className="mx-10 mb-20 text-center">
-                <p className="text-white mb-4">Nothing found!</p>
+                <p className="text-primary mb-4">Nothing found!</p>
                 <PrimaryButton
                   handleOnClick={() => router.back()}
-                  classNames={`flex justify-center`}
+                  classNames={`flex-justify`}
                   buttonClassNames={`font-semibold`}
                 >
                   Go Back
@@ -176,7 +176,7 @@ const Search = () => {
           <TabPanel
             className={`xsm:m-2 lg:m-6 box-border md:grid grid-cols-new4 gap-x-6`}
           >
-            <div className="xsm:w-[90%] md:w-[80%] lg:w-[70%] xl:w-[60%] mx-auto">
+            <div className="accent-width mx-auto">
               {loadingSearch || fetchingSearch || refetchingSearch ? (
                 <div className="flex justify-center my-20">
                   <Oval
@@ -193,17 +193,17 @@ const Search = () => {
                   />
                 </div>
               ) : searchState && searchState?.length > 0 ? (
-                <div className="text-white mx-10 mb-20">
+                <div className="text-primary mx-10 mb-20">
                   {searchState.map((poem: any, i: number) => (
                     <Link
                       href={`/authors/${poem.author}/${poem.title}`}
                       key={i}
                     >
                       <p
-                        className={`font-bold xsm:lg:text-md lg:text-lg border-b-2 border-white border-opacity-20 mb-2 ${montserrat.className}`}
+                        className={`font-bold xsm:lg:text-md lg:text-lg accent-border-bottom mb-2 ${montserrat.className}`}
                       >
                         {poem.title} by{" "}
-                        <span className={`italic text-slate-200 font-light`}>
+                        <span className={`italic text-primary font-light`}>
                           {poem.author}
                         </span>
                       </p>
@@ -218,7 +218,7 @@ const Search = () => {
                 </div>
               ) : (
                 <div className="mx-10 mb-20 text-center">
-                  <p className="text-white mb-4">Nothing found!</p>
+                  <p className="text-primary mb-4">Nothing found!</p>
                   <PrimaryButton
                     handleOnClick={() => router.back()}
                     classNames={`flex justify-center`}

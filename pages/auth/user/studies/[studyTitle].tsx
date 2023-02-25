@@ -113,7 +113,7 @@ const StudyTitle = () => {
     return (
       <div className="min-h-screen flex flex-col items-center px-6">
         <h1
-          className={`${montserrat.className} mt-32 font-bold text-white
+          className={`${montserrat.className} mt-32 font-bold text-primary
             my-6 text-center xsm:text-2xl md:text-4xl
           `}
         >
@@ -274,7 +274,7 @@ const StudyTitle = () => {
       <div
         className={`
     xsm:w-[90%] md:w-[80%] 
-    mx-auto flex flex-col items-center mb-32 z-30 rounded-xl text-white
+    mx-auto flex flex-col items-center mb-32 z-30 accent-rounded text-primary
     xsm:mt-10 md-16 lg:mt-24 min-h-screen
     `}
       >
@@ -287,7 +287,7 @@ const StudyTitle = () => {
         </h1>
         <Link
           href={`/authors/${studyState?.author}`}
-          className={`text-slate-200 italic text-center  mb-2`}
+          className={`text-primary italic text-center mb-2`}
         >
           {" "}
           by {studyState?.author}
@@ -307,14 +307,14 @@ const StudyTitle = () => {
               key={i}
               className={`md:flex space-x-3 justify-between items-center mb-2
                 xsm:text-sm md:text-md lg:text-lg
-                border-b-2 border-white border-opacity-20 pb-2
+                accent-border-bottom pb-2
                 ${montserrat.className}
             `}
             >
               <p className={`p-2 basis-1/2 `}>{line.line}</p>
               <button
                 className={`
-                bg-rose-100 bg-opacity-20 p-2 rounded-md
+                accent-modal-bg p-2 rounded-md
                 flex space-x-2 justify-between items-center
                 basis-1/2
               `}
@@ -326,14 +326,6 @@ const StudyTitle = () => {
                   });
                 }}
               >
-                {/* <p>{line.comment === "" ? "No Comment" : line.comment}</p> */}
-                {/* <p>{}</p> */}
-                {/* {line.comment !== "" ? (
-                  <p className="text-md text-left">{line.comment}</p>
-                ) : (
-                    <p>Add Comment</p>
-                )
-                } */}
                 <p className="text-md text-left">
                   {line.comment === "" ? "Add Comment" : line.comment}
                 </p>
@@ -348,7 +340,7 @@ const StudyTitle = () => {
         {linesModalState.isOpen && (
           <Modal>
             <div
-              className={`text-white p-4 bg-rose-100 bg-opacity-20 rounded-xl accent-border`}
+              className={`text-primary p-4 accent-modal-bg accent-border accent-rounded`}
             >
               {/* Header + Action */}
               <div
@@ -378,10 +370,7 @@ const StudyTitle = () => {
                   onChange={(e) => setCurrentLineState(e.target.value)}
                   className={`
                     my-4
-                    bg-inherit text-white 
-                    xsm:text-sm md:text-lg font-semibold
-                    placeholder:text-white 
-                    border-2 border-white focus:outline-none border-opacity-20 rounded-md 
+                    accent-textarea 
                     p-2 w-full
                     xsm:h-40 md:h-32
                 `}
@@ -411,11 +400,9 @@ const StudyTitle = () => {
         {/* Lines ================*/}
         {/* Notes */}
         <div
-          className={`text-white ${montserrat.className} self-start w-full mt-14`}
+          className={`text-primary ${montserrat.className} self-start w-full mt-14`}
         >
-          <div
-            className={`border-b-2 border-white border-opacity-40 flex space-x-2 items-center`}
-          >
+          <div className={`accent-border-bottom flex space-x-2 items-center`}>
             <h1 className="xsm:text-lg md:text-xl font-bold ">Notes</h1>
             <PencilIcon className="xsm:w-4 xsm:h-4 md:w-5 md:h-5" />
           </div>
@@ -425,10 +412,10 @@ const StudyTitle = () => {
             onChange={(e) => setNotesState(e.target.value)}
             className={`
                 my-4
-                bg-inherit text-white 
+                bg-inherit text-primary 
                 xsm:text-sm md:text-lg font-semibold
-                placeholder:text-white 
-                border-2 border-white focus:outline-none border-opacity-20 rounded-md 
+                placeholder:text-primary 
+                accent-border focus:outline-none accent-rounded
                 p-2 w-full
                 h-60
             `}

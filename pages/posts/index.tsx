@@ -20,13 +20,13 @@ export default function Home() {
   const { data: session, status } = useSession({
     required: true,
     onUnauthenticated() {
-      router.push("/landing");
+      router.push("/auth/login");
     },
   });
 
   // States
   const [posts, setPosts] = useState<UserTitleType[] | null>(null);
-  const [intermediateBodyState, setIntermediateBodyState] = useState("");
+  // const [intermediateBodyState, setIntermediateBodyState] = useState("");
   const [isNewPostModalOpen, setIsNewPostModalOpen] = useState(false);
 
   const {
@@ -62,10 +62,12 @@ export default function Home() {
       });
       setPosts(posts.flat());
     }
-    console.log(data?.pages);
+    // console.log(data?.pages);
   }, [data, hasNextPage]);
 
-  useEffect(() => {}, [posts]);
+  useEffect(() => {
+    // console.log(intermediateBodyState);
+  }, [posts]);
 
   const handleNextPageClick = () => {
     fetchNextPage();
@@ -119,7 +121,7 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="xsm:w-[90%] lg:w-[80%] mx-auto text-white">
+      <main className="xsm:w-[90%] lg:w-[80%] mx-auto text-primary">
         <h1
           className={`
             ${montserrat.className} font-semibold
@@ -131,24 +133,23 @@ export default function Home() {
           Discover What&rsquo;s Going On!
         </h1>
         <IntermediatePost
-          // bodyState={intermediateBodyState}
           handleAddPost={() => setIsNewPostModalOpen(!isNewPostModalOpen)}
-          // handleBodyChange={(e) => setIntermediateBodyState(e.target.value)}
         />
         <NewPost
           isOpen={isNewPostModalOpen}
           handleCloseModal={() => setIsNewPostModalOpen(!isNewPostModalOpen)}
-          intermediateBody={intermediateBodyState}
         />
         {posts && <PostTile userPosts={posts} user={session?.user} />}
 
         {/* Add Post Button */}
         <button
           className={`
-          fixed bottom-6 right-6 z-30
-          bg-white rounded-full text-pink-400 xsm:p-3 md:p-5
+          fixed z-30
+          bottom-6 right-6 lg:bottom-10 lg:right-32
+          bg-white rounded-full text-secondary xsm:p-3 md:p-5
           hover:scale-95 transition-transform
-          focus:ring-2 ring-pink-400
+          ring-2 ring-secondary
+          shadow-2xl
       `}
           onClick={() => setIsNewPostModalOpen(!isNewPostModalOpen)}
         >

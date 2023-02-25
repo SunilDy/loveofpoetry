@@ -342,9 +342,9 @@ const User = () => {
           {isProfileSettingModalOpen && (
             <Modal>
               <div
-                className={`bg-rose-100 bg-opacity-20 accent-border rounded-md p-6 text-white 
+                className={`accent-modal-bg accent-border accent-rounded p-6 text-primary 
                 xsm:w-[100%] md:w-[60%]
-                max-h-[90%] overflow-y-scroll scrollbar-thumb-white scrollbar-corner-pink-300 scrollbar-track-transparent scrollbar-thin
+                max-h-[90%] overflow-y-scroll accent-scrollbar
                 `}
               >
                 {/* Header */}
@@ -353,18 +353,9 @@ const User = () => {
                 >
                   Edit Profile
                 </h1>
-                {/* <PrimaryButton
-                  handleOnClick={() =>
-                    setIsProfileSettingModalOpen(!isProfileSettingModalOpen)
-                  }
-                >
-                  Close
-                </PrimaryButton> */}
-                {/* Header */}
-                {/* Information */}
-                <div className={`flex justify-between space-x-2`}>
+                <div className={`flex justify-between gap-x-2 items-center`}>
                   <InformationCircleIcon
-                    className={`xsm:w-12 xsm:h-12 md:w-8 md:h-8 text-white`}
+                    className={`w-5 h-5 text-primary flex-shrink-0`}
                   />
                   <p>
                     As of now we do not offer the option to change the Name and
@@ -454,7 +445,7 @@ const User = () => {
           <Tabs className={`box-border min-h-screen`}>
             <TabList
               className={`flex justify-center xsm:gap-x-2 lg:gap-x-10
-              text-white font-bold ${montserrat.className} xsm:text-sm lg:text-lg
+              text-primary font-bold ${montserrat.className} xsm:text-sm lg:text-lg
               xsm:my-4 lg:my-6
               `}
             >
@@ -468,7 +459,7 @@ const User = () => {
             </TabList>
 
             {/* Posts */}
-            <TabPanel className={`${montserrat.className} my-6 text-white`}>
+            <TabPanel className={`${montserrat.className} my-6 text-primary`}>
               <IntermediatePost
                 // bodyState={intermediatePostBodyState}
                 handleAddPost={() => setIsNewPostModalOpen(!isNewPostModalOpen)}
@@ -505,21 +496,21 @@ const User = () => {
                   likedPoems?.data.likedPoems.map((poem: any, i: number) => (
                     <div
                       key={i}
-                      className={`flex justify-between items-center border-b-2 border-white border-opacity-20 gap-x-2 mb-2 pb-2`}
+                      className={`flex justify-between items-center accent-border-bottom gap-x-2 mb-2 pb-2`}
                     >
                       <Link href={`/authors/${poem.author}/${poem.title}`}>
                         <p
-                          className={`text-white font-bold xsm:text-sm lg:text-lg ${montserrat.className}`}
+                          className={`text-primary font-bold xsm:text-sm lg:text-lg ${montserrat.className}`}
                         >
                           {poem.title} by{" "}
-                          <span className={`italic text-slate-200 font-light`}>
+                          <span className={`italic text-primary font-light`}>
                             {poem.author}
                           </span>
                         </p>
                       </Link>
                       <button onClick={() => handleDeleteLikedPoem(poem.title)}>
                         <XCircleIcon
-                          className={`xsm:w-4 xsm:h-4 md:w-5 md:h-5 text-white`}
+                          className={`xsm:w-4 xsm:h-4 md:w-5 md:h-5 text-primary`}
                         />
                       </button>
                     </div>
@@ -541,7 +532,7 @@ const User = () => {
               </TabPanel>
             ) : (
               <TabPanel
-                className={`${montserrat.className} flex justify-center my-6 text-white`}
+                className={`${montserrat.className} flex justify-center my-6 text-primary`}
               >
                 <p>No liked poems!</p>
               </TabPanel>
@@ -562,16 +553,16 @@ const User = () => {
                 userCollectionsState?.map((collection: any, i: number) => (
                   <div
                     key={i}
-                    className={`bg-rose-100 border-2 border-slate-100 border-opacity-40 bg-opacity-20 rounded-xl shadow-2xl my-6 text-white p-4 ${montserrat.className}`}
+                    className={`accent-modal-bg accent-border accent-rounded accent-shadow text-primary my-6 p-4 ${montserrat.className}`}
                   >
                     {/* Header */}
-                    <div className="flex justify-between border-b-2 border-white border-opacity-40 pb-1 mb-2">
+                    <div className="flex justify-between accent-border-bottom pb-1 mb-2">
                       <h1 className="font-bold">{collection.name}</h1>
                       <button
                         onClick={() => handleDeleteCollection(collection.name)}
                       >
                         <XCircleIcon
-                          className={`xsm:w-4 xsm:h-4 md:w-5 md:h-5 text-white`}
+                          className={`xsm:w-4 xsm:h-4 md:w-5 md:h-5 text-primary`}
                         />
                       </button>
                     </div>
@@ -585,14 +576,14 @@ const User = () => {
                                 href={`/authors/${poem.author}/${poem.title}`}
                               >
                                 <p
-                                  className={`text-white font-bold xsm:text-sm lg:text-md ${montserrat.className}`}
+                                  className={`text-primary font-bold xsm:text-sm lg:text-md ${montserrat.className}`}
                                 >
                                   {poem.title}
                                 </p>
                               </Link>
                               <Link href={`/authors/${poem.author}`}>
                                 <span
-                                  className={`italic text-slate-200 font-light xsm:text-sm lg:text-md`}
+                                  className={`italic text-primary font-light xsm:text-sm lg:text-md`}
                                 >
                                   by {poem.author}
                                 </span>
@@ -607,7 +598,7 @@ const User = () => {
                               }
                             >
                               <XCircleIcon
-                                className={`xsm:w-4 xsm:h-4 md:w-5 md:h-5 text-white`}
+                                className={`xsm:w-4 xsm:h-4 md:w-5 md:h-5 text-primary`}
                               />
                             </button>
                           </div>
@@ -639,9 +630,9 @@ const User = () => {
         {/* Tabs */}
       </div>
       {/* User Actions */}
-      <div className="my-4 w-full text-white">
+      <div className="my-4 w-full text-primary">
         <h1
-          className={`${montserrat.className} xsm:text-md md:text-lg font-bold border-b-2 border-white border-opacity-40 mb-4`}
+          className={`${montserrat.className} xsm:text-md md:text-lg font-bold accent-border-bottom mb-4`}
         >
           User Actions
         </h1>

@@ -16,10 +16,9 @@ const IntermediatePost = ({ handleAddPost }: IntermediatePostType) => {
 
   return (
     <div
-      className={`mx-auto w-full
+      className={`mx-auto w-full text-primary
               xsm:w-[95%] md:w-[70%] lg:w-[60%]
-              accent-modal-bg accent-border rounded-xl p-6
-              shadow-2xl
+              accent-modal-bg accent-border accent-rounded p-6 accent-shadow
               `}
     >
       {/* Header + Action Button */}

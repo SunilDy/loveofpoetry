@@ -80,7 +80,7 @@ const Comments = (props: CommentsProps) => {
   };
 
   return (
-    <div>
+    <div className="text-primary">
       {comments && comments.length < 1 ? (
         <div className="my-10">
           <p>No comments yet! Be the first to comment.</p>
@@ -94,7 +94,7 @@ const Comments = (props: CommentsProps) => {
                 className={`
                 flex w-full
                 my-4 pb-4
-                border-b-2 border-white border-opacity-30
+                accent-border-bottom
             `}
               >
                 <Image
@@ -107,7 +107,7 @@ const Comments = (props: CommentsProps) => {
                 <div>
                   <div className="flex gap-x-2 items-center xsm:mb-1 md:mb-2">
                     <p className="text-sm font-semibold">{comment.username}</p>
-                    <p className="text-sm text-slate-200">
+                    <p className="text-sm text-primary">
                       {/* {format(parseISO(comment.date), "yyyy-LL-dd")} */}
                       {formatDistanceToNow(new Date(comment.date), {
                         addSuffix: true,
@@ -127,7 +127,7 @@ const Comments = (props: CommentsProps) => {
                       />
                     </button> */}
                       <button
-                        className={`text-xs text-slate-200 flex items-center`}
+                        className={`text-xs text-primary flex items-center`}
                         onClick={() => {
                           setCurrentCommentIndex(i);
                           setIsCommentModalOpen(true);
@@ -154,9 +154,9 @@ const Comments = (props: CommentsProps) => {
         <Modal>
           <div
             className={`
-           accent-border accent-modal-bg rounded-xl p-6
-           xsm:w-full md:w-[80%] lg:w-[70%] xl:w-[50%]
-           overflow-y-scroll scrollbar-thumb-white scrollbar-corner-pink-300 scrollbar-track-transparent scrollbar-thin max-h-[90%] my-auto
+           accent-border accent-modal-bg accent-rounded p-6
+           accent-width
+           overflow-y-scroll accent-scrollbar max-h-[90%] my-auto
           `}
           >
             <div
@@ -177,7 +177,7 @@ const Comments = (props: CommentsProps) => {
                     <p className="text-sm font-semibold">
                       {comments[currentCommentIndex].username}
                     </p>
-                    <p className="text-sm text-slate-200">
+                    <p className="text-sm text-primary">
                       {/* {format(parseISO(comment.date), "yyyy-LL-dd")} */}
                       {formatDistanceToNow(
                         new Date(comments[currentCommentIndex].date),
@@ -255,7 +255,7 @@ const Comments = (props: CommentsProps) => {
                                 <p className="text-sm font-semibold">
                                   {subcomment.username}
                                 </p>
-                                <p className="text-sm text-slate-200">
+                                <p className="text-sm text-primary">
                                   {/* {format(parseISO(comment.date), "yyyy-LL-dd")} */}
                                   {formatDistanceToNow(
                                     new Date(subcomment.date),

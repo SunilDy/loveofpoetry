@@ -27,8 +27,8 @@ export default function Home({ responseObject }: any) {
       <main>
         <div
           className={`
-            xsm:w-[90%] md:w-[80%] lg:w-[70%] xl:w-[60%] 
-            mx-auto flex flex-col items-center mb-32 z-30 rounded-xl text-white
+            accent-width
+            mx-auto flex flex-col items-center mb-32 z-30 accent-rounded text-primary
             xsm:mt-10 md-16 lg:mt-24 h-auto
             `}
         >
@@ -50,15 +50,15 @@ export default function Home({ responseObject }: any) {
           {/* Author name and Linebreak ======= */}
 
           <div
-            className={`bg-rose-100 border-2 border-slate-100 border-opacity-40 bg-opacity-20 z-30 rounded-xl shadow-2xl w-full
+            className={`accent-modal-bg accent-border z-30 accent-rounded accent-shadow w-full
             md:flex items-center h-auto p-10
         `}
           >
             {/* Author Image */}
-            <div className="m-10 flex justify-center">
+            <div className="m-10 flex-justify">
               {author.images.poster !== "" ? (
                 <div className="grid grid-cols-1 grid-rows-1">
-                  <div className="z-40 col-span-full row-span-full border-2 border-white border-opacity-40 rounded-xl xsm:w-40 sm:w-60 md:w-40 h-full"></div>
+                  <div className="z-40 col-span-full row-span-full accent-border accent-rounded xsm:w-40 sm:w-60 md:w-40 h-full"></div>
                   <Image
                     src={author.images.poster}
                     alt={author.name}
@@ -72,13 +72,13 @@ export default function Home({ responseObject }: any) {
                 </div>
               ) : (
                 <div className="grid grid-cols-1 grid-rows-1">
-                  <div className="z-40 col-span-full row-span-full border-2 border-white border-opacity-40 rounded-xl xsm:w-40 sm:w-60 md:w-40 h-full"></div>
+                  <div className="z-40 col-span-full row-span-full accent-border rounded-xl xsm:w-40 sm:w-60 md:w-40 h-full"></div>
                   <Image
                     src={PlaceHolder}
                     alt={author.name}
                     height={800}
                     width={800}
-                    className={`z-50 xsm:w-40 sm:w-60 md:w-40 rounded-xl col-span-full row-span-full 
+                    className={`z-50 xsm:w-40 sm:w-60 md:w-40 accent-rounded col-span-full row-span-full 
                     hover:translate-x-0 hover:translate-y-0 -translate-x-5 -translate-y-5
                     transition-transform
                     `}

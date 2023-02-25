@@ -162,7 +162,7 @@ const NewPost = ({ isOpen, handleCloseModal }: NewPostType) => {
   return (
     <Modal>
       <div
-        className={`accent-modal-bg accent-border px-6 py-4 rounded-md xsm:w-[100%] md:w-[70%] max-h-[90%] overflow-y-scroll scrollbar-thumb-white scrollbar-corner-pink-300 scrollbar-track-transparent scrollbar-thin`}
+        className={`accent-modal-bg accent-border px-6 py-4 rounded-md xsm:w-[100%] md:w-[70%] max-h-[90%] overflow-y-scroll accent-scrollbar`}
       >
         {/* Header */}
         <h1
@@ -193,7 +193,7 @@ const NewPost = ({ isOpen, handleCloseModal }: NewPostType) => {
             <div>
               <label
                 htmlFor="file-upload"
-                className="flex gap-x-2 items-center cursor-pointer bg-white text-purple-500
+                className="flex gap-x-2 items-center cursor-pointer bg-white text-secondary
             md:px-2 p-1 rounded-md
             hover:scale-95
             transition-transform
@@ -226,7 +226,7 @@ const NewPost = ({ isOpen, handleCloseModal }: NewPostType) => {
               />
               <button
                 onClick={() => setImageSrc(null)}
-                className="col-span-full row-span-full self-start justify-self-end text-pink-400 mr-1 mt-1  rounded-full p-2 backdrop-blur-3xl"
+                className="col-span-full row-span-full self-start justify-self-end text-secondary mr-1 mt-1  rounded-full p-2 backdrop-blur-3xl"
               >
                 <XCircleIcon
                   className={`xsm:w-4 xsm:h-4 lg:w-6 lg:h-6 xsm:mx-1 lg:mx-2 cursor-pointer`}

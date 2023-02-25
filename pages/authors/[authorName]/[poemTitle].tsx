@@ -15,7 +15,10 @@ import toast, { Toaster } from "react-hot-toast";
 import Modal from "@/components/Modal";
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
-import { ChevronDownIcon } from "@heroicons/react/20/solid";
+import {
+  ChevronDownIcon,
+  ArrowTopRightOnSquareIcon,
+} from "@heroicons/react/20/solid";
 import { Oval } from "react-loader-spinner";
 import connectMongo from "@/lib/connectMongo";
 import Author from "@/models/Author";
@@ -415,8 +418,8 @@ export default function Home(props: any) {
           {/* Poem Container ====================*/}
           <div
             className={`
-            xsm:w-[90%] md:w-[80%] lg:w-[70%] xl:w-[60%] 
-            mx-auto flex flex-col items-center mb-32 z-30 rounded-xl text-white
+            accent-width 
+            mx-auto flex flex-col items-center mb-32 z-30 accent-rounded text-primary
             xsm:mt-10 md-16 lg:mt-24
             `}
           >
@@ -434,7 +437,7 @@ export default function Home(props: any) {
               height={300}
               width={300}
             />
-            <div className="bg-rose-100 border-2 border-slate-100 border-opacity-40 bg-opacity-20 mx-auto flex flex-col items-center  z-30 rounded-xl shadow-2xl w-full py-10 xsm:px-6 md:px-10">
+            <div className="accent-modal-bg accent-border mx-auto flex flex-col items-center z-30 accent-rounded accent-shadow w-full py-10 xsm:px-6 md:px-10">
               {/* <p className="italic font-xs slate-600 mb-4">
                 By: {poem[0].author}
               </p> */}
@@ -487,13 +490,13 @@ export default function Home(props: any) {
                 <Modal>
                   <div
                     className={`
-                    rounded-xl text-white
-                    bg-rose-100 border-2 border-slate-100 border-opacity-40 bg-opacity-20 shadow-2xl
+                    rounded-xl text-primary
+                    accent-modal-bg accent-border accent-shadow
                     p-4 w-fit
                   `}
                   >
                     {/* Header */}
-                    <div className="border-b-2 border-white border-opacity-40 mb-4">
+                    <div className="accent-border-bottom mb-4">
                       <h1 className="xsm:text-sm md:text-md lg:text-lg mb-2 font-bold">
                         Add To Collection
                       </h1>
@@ -507,11 +510,11 @@ export default function Home(props: any) {
                       >
                         <div>
                           <Menu.Button
-                            className={`inline-flex justify-between rounded-md 
-                          border-2 border-white border-opacity-40 w-full
-                          bg-transparent focus:outline-none
+                            className={`inline-flex justify-between rounded-md
+                          accent-input w-full
+                          focus:outline-none
                           px-4 py-1 text-sm font-medium 
-                          text-white shadow-sm
+                          text-primary shadow-sm
                           `}
                           >
                             {selectedCollection || "Options"}
@@ -531,7 +534,7 @@ export default function Home(props: any) {
                           leaveFrom="transform opacity-100 scale-100"
                           leaveTo="transform opacity-0 scale-95"
                         >
-                          <Menu.Items className="absolute right-0 z-10 mt-2 w-full origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                          <Menu.Items className="absolute right-0 z-10 mt-2 w-full origin-top-right rounded-md bg-primary accent-shadow ring-1 ring-black ring-opacity-5 focus:outline-none">
                             <div className="py-1">
                               {collectionsState.map(
                                 (collection: any, i: number) => (
@@ -540,8 +543,8 @@ export default function Home(props: any) {
                                       <button
                                         className={classNames(
                                           active
-                                            ? "bg-slate-200 bg-opacity-60 text-[hotpink]"
-                                            : "text-[hotpink]",
+                                            ? "bg-primary bg-opacity-60 text-secondary"
+                                            : "text-secondary",
                                           "block px-4 py-2 text-sm w-full text-left"
                                         )}
                                         onClick={() =>
@@ -568,10 +571,9 @@ export default function Home(props: any) {
                         onChange={(e) => setNewCollectionValue(e.target.value)}
                         className={`
                       xsm:py-1 md:py-2 px-4
-                      border-2 border-white border-opacity-40 rounded-md outline-none
+                      rounded-md accent-input
                       text-sm
-                      bg-transparent
-                      text-white placeholder:text-white
+                      text-primary placeholder:text-primary
                       ${montserrat.className}
                       basis-2/3
                     `}
@@ -621,7 +623,7 @@ export default function Home(props: any) {
               `}
               >
                 {/* Author Image */}
-                <div className="flex mb-4 pb-4 border-b-2 border-slate-200 border-opacity-25">
+                <div className="flex mb-4 pb-4 accent-border-bottom">
                   {author.images.thumbnail !== "" ? (
                     <Image
                       className="xsm:w-14 lg:w-20 aspect-square object-cover object-center rounded-full mr-4 self-start"
@@ -641,7 +643,7 @@ export default function Home(props: any) {
                   )}
                   <div>
                     <p
-                      className={`${alegreya.className} text-md underline underline-offset-4 decoration-white
+                      className={`${alegreya.className} text-md underline underline-offset-4 decoration-primary
                       xsm:text-sm md:text-lg lg:text-lg
                       `}
                     >
@@ -657,18 +659,7 @@ export default function Home(props: any) {
                         className={`${alegreya.className} xsm:text-sm md:text-md lg:text-lg flex items-center`}
                       >
                         See more works
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 24 24"
-                          fill="currentColor"
-                          className="w-4 h-4 ml-1"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M15.75 2.25H21a.75.75 0 01.75.75v5.25a.75.75 0 01-1.5 0V4.81L8.03 17.03a.75.75 0 01-1.06-1.06L19.19 3.75h-3.44a.75.75 0 010-1.5zm-10.5 4.5a1.5 1.5 0 00-1.5 1.5v10.5a1.5 1.5 0 001.5 1.5h10.5a1.5 1.5 0 001.5-1.5V10.5a.75.75 0 011.5 0v8.25a3 3 0 01-3 3H5.25a3 3 0 01-3-3V8.25a3 3 0 013-3h8.25a.75.75 0 010 1.5H5.25z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
+                        <ArrowTopRightOnSquareIcon className="w-4 h-4 ml-1" />
                       </p>
                     </Link>
                   </div>
@@ -693,9 +684,9 @@ export default function Home(props: any) {
         {/* Comments Section =================*/}
         <div
           className={`
-          bg-rose-100 border-2 border-slate-100 border-opacity-40 bg-opacity-20 flex flex-col items-center z-30 rounded-xl shadow-2xl text-white
+          accent-modal-bg accent-border flex flex-col items-center z-30 accent-rounded accent-shadow text-primary
           mx-auto pt-6 px-10 my-20
-          xsm:w-[90%] md:w-[80%] lg:w-[70%] xl:w-[60%]
+          accent-width
           `}
         >
           {/* Add Comment */}
@@ -705,13 +696,7 @@ export default function Home(props: any) {
               value={comment}
               onChange={(e) => setComment(e.target.value)}
               placeholder="Comment please 😇"
-              className={`
-                bg-inherit text-white 
-                xsm:text-sm md:text-lg lg:text-xl font-semibold
-                placeholder:text-white 
-                border-2 border-white focus:outline-none border-opacity-60 rounded-md 
-                p-2 w-full
-                `}
+              className={`accent-textarea w-full`}
             />
             <PrimaryButton
               handleOnClick={handleAddComment}
@@ -722,7 +707,7 @@ export default function Home(props: any) {
           </div>
 
           {/* Comments */}
-          <div className="my-10 text-white w-full">
+          <div className="my-10 text-primary w-full">
             <Comments
               areCommentsFetched={areCommentsFetched}
               fetchingComments={fetchingComments}
