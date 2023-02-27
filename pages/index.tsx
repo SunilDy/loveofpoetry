@@ -21,7 +21,7 @@ export default function Home() {
   const { data: session, status } = useSession({
     required: true,
     onUnauthenticated() {
-      router.push("/auth/login");
+      router.push("/landing");
     },
   });
 

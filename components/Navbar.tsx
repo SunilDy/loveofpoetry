@@ -20,7 +20,7 @@ const montserrat = Montserrat({ subsets: ["latin"] });
 const Navbar = () => {
   const [searchValue, setSearchValue] = useState("");
   const [isShowingMenu, setIsShowingMenu] = useState(false);
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const router = useRouter();
 
   useEffect(() => {
@@ -59,15 +59,17 @@ const Navbar = () => {
             Poetry<span className="text-secondary">.</span>
           </h1>
         </Link>
-        <Link href={"/authors"} className="xsm:hidden lg:visible lg:w-fit">
-          <h1
-            className={` 
-            xsm:text-md md:text-lg lg:text-xl 
-         `}
-          >
-            Authors
-          </h1>
-        </Link>
+        {status === "unauthenticated" && !session && (
+          <Link href={"/authors"} className="lg:w-fit">
+            <h1
+              className={` ${montserrat.className}
+                xsm:text-md md:text-lg lg:text-xl 
+            `}
+            >
+              Authors
+            </h1>
+          </Link>
+        )}
       </div>
       {/* Search Bar */}
       <div className="basis-2/4 flex justify-center">
@@ -112,7 +114,7 @@ const Navbar = () => {
             // </Link>
             <Link
               href={"/auth/login"}
-              onMouseEnter={() => setIsShowingMenu(true)}
+              // onMouseEnter={() => setIsShowingMenu(true)}
               // onMouseLeave={() => setIsShowingMenu(false)}
             >
               <h1
